@@ -1,10 +1,14 @@
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import TB,Indicateur,Graphe,Donnee
+
+
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render 
-from .models import TB,Indicateur,Graphe,Donnee
 
 
 
@@ -60,3 +64,30 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+
+# Create your views here.
+
+class TbListView(ListView):
+    model = Indicateur
+    template_name = 'home/indicateur_list.html'
+
+class TbDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+
+class TbCreateView(CreateView):
+    model = Indicateur
+    template_name = 'indicateur_new.html'
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+
+class TbUpdateView(UpdateView):
+    model = Indicateur
+    template_name = 'indicateur_edit.html'
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+
+class TbDeleteView(DeleteView):
+    model = Indicateur
+    template_name = 'indicateur_delete.html'
+    success_url = reverse_lazy('home')

@@ -59,7 +59,7 @@
           </button>
           <div class="dropdown-container">
             {% for tb in ListeTb %}
-            <a href="#">
+            <a href="{% url 'indicateur_list' %}">
             <i class="tim-icons icon-book-bookmark"></i>
               <p> {{ tb.Intitule }} </p>
             </a>

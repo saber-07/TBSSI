@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 #les modeles utilisés
@@ -13,7 +13,21 @@ class TB(models.Model):
         return self.Intitule
 
     
+#classe Indicateur 
+class Indicateur(models.Model):
+    Intitule_Indicateur = models.CharField(max_length=100)
+    Periodicite = models.CharField(max_length=100) #Choices
+    #cle etrangere -> Graphe + TB
+    Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE,)
+    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE,)
 
+
+    def __str__(self):
+        return self.Intitule_Indicateur
+    
+    def get_absolute_url(self):
+        return reverse("indicateur_detail", kwargs={"pk": self.pk})
+    
 
 #classe Graphe 
 class Graphe(models.Model):
@@ -23,27 +37,12 @@ class Graphe(models.Model):
     def __str__(self):
         return self.Nom 
 
-#classe Indicateur 
-class Indicateur(models.Model):
-    Intitule_Indicateur = models.CharField(max_length=100)
-    Periodicite = models.CharField(max_length=100) #Choices
-    #cle etrangere -> Graphe + TB
-    Id_Graphe = models.ForeignKey(Graphe, on_delete=models.CASCADE,)
-    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE,)
-
-
-    def __str__(self):
-        return self.Intitule_Indicateur
-
-
-
 #classe donnée
 class Donnee(models.Model):
     Date = models.DateField()
     Valeur = models.IntegerField()
-    #cle etrangere indicateur 
-    Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE,)
+    #cle etrangere indicateur
+    Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.Valeur)   
-
+        return str(self.Valeur) 
