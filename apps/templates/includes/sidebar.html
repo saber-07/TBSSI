@@ -46,16 +46,18 @@
               <p>Profil User</p>
             </a>
           </li>
+        <!--
           <li class="{% if 'tables' in segment %} active {% endif %}">
             <a href="/ui-tables.html">
               <i class="tim-icons icon-book-bookmark"></i>
               <p>Liste des Tableaux de bord</p>
             </a>
-          </li>
+          </li>-->
 
           <li>
-          <button class="dropdown-item">Dashboard List
+          <button class="dropdown-item">
             <i class="tim-icons icon-book-bookmark"></i>
+            Liste des TBs
           </button>
           <div class="dropdown-container">
             {% for tb in ListeTb %}
@@ -63,11 +65,15 @@
             <i class="tim-icons icon-book-bookmark"></i>
               <p> {{ tb.Intitule }} </p>
             </a>
-            <br>
             {% endfor %}
           </div>
-
           </li>
+
+          <li>
+            <a href="#">
+              <i class ="tim-icons icon-simple-add"></i>
+              Ajouter Tableau de bord
+         </li>
         
         <!--
           {% for tb in ListeTb %}
@@ -87,12 +93,6 @@
             </a>
           </li> 
         -->
-          <li>
-            <a href="https://www.elit.dz/">
-              <i class="tim-icons icon-align-center"></i>
-              <p>Elit SECURITE</p>
-            </a>
-          </li> 
           
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">
