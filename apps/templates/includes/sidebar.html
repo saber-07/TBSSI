@@ -1,16 +1,18 @@
-
+{% load static %}
 
     <div class="sidebar">
       <div class="sidebar-wrapper">
-        <div class="logo">
+        <div style="text-align: left;">
           <a target="_blank" rel="sponsored noopener noreferrer" 
              href="https://appseed.us/admin-dashboards/django-dashboard-black" class="simple-text logo-mini">
-            PI
-          </a>
+             
+            </a>
+        
           <a target="_blank" rel="sponsored noopener noreferrer" 
-             href="https://appseed.us/admin-dashboards/django-dashboard-black" class="simple-text logo-normal">
-            Django Black
-          </a>
+             href="https://www.elit.dz/" class="simple-text logo-normal">
+             <img src="/static/assets/img/elitLogo.png" alt="ELIT">
+
+            </a>
         </div>
 
         <ul class="nav">
@@ -19,21 +21,19 @@
           <li class="{% if 'index' in segment %} active {% endif %}">
             <a href="/">
               <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Dashboard</p>
+              <p> Tableaux de bord </p>
             </a>
           </li>
-          <li class="{% if 'icons' in segment %} active {% endif %}">
-            <a href="/ui-icons.html">
-              <i class="tim-icons icon-atom"></i>
-              <p>Icons</p>
-            </a>
-          </li>
+          
+          <!--
           <li class="{% if 'maps' in segment %} active {% endif %}">
             <a href="/ui-maps.html">
               <i class="tim-icons icon-pin"></i>
               <p>Maps</p>
             </a>
-          </li>
+          </li>-->
+
+
           <li class="{% if 'notifications' in segment %} active {% endif %}">
             <a href="/ui-notifications.html">
               <i class="tim-icons icon-bell-55"></i>
@@ -43,31 +43,73 @@
           <li class="{% if 'page-user' in segment %} active {% endif %}">
             <a href="/page-user.html">
               <i class="tim-icons icon-single-02"></i>
-              <p>User Profile</p>
+              <p>Profil User</p>
             </a>
           </li>
           <li class="{% if 'tables' in segment %} active {% endif %}">
             <a href="/ui-tables.html">
-              <i class="tim-icons icon-puzzle-10"></i>
-              <p>Table List</p>
+              <i class="tim-icons icon-book-bookmark"></i>
+              <p>Liste des Tableaux de bord</p>
             </a>
           </li>
+
+          <li>
+          <button class="dropdown-item">Dashboard List
+            <i class="tim-icons icon-book-bookmark"></i>
+          </button>
+          <div class="dropdown-container">
+            {% for tb in ListeTb %}
+            <a href="#">
+            <i class="tim-icons icon-book-bookmark"></i>
+              <p> {{ tb.Intitule }} </p>
+            </a>
+            <br>
+            {% endfor %}
+          </div>
+
+          </li>
+        
+        <!--
+          {% for tb in ListeTb %}
+          <li>
+             <a href="https://www.elit.dz/">
+               <i class ="tim-icons icon-align-center"></i>
+               <p> {{ tb.Intitule }} </p>
+
+          </li>
+          {% endfor %}
+        -->
+     <!--
           <li class="{% if 'typography' in segment %} active {% endif %}">
             <a href="/ui-typography.html">
               <i class="tim-icons icon-align-center"></i>
               <p>Typography</p>
             </a>
-          </li>
+          </li> 
+        -->
+          <li>
+            <a href="https://www.elit.dz/">
+              <i class="tim-icons icon-align-center"></i>
+              <p>Elit SECURITE</p>
+            </a>
+          </li> 
+          
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">
               <i class="tim-icons icon-world"></i>
-              <p>RTL Support</p>
+              <p>العربية</p>
+            </a>
+          </li>
+          <li class="{% if 'icons' in segment %} active {% endif %}">
+            <a href="/ui-icons.html">
+              <i class="tim-icons icon-atom"></i>
+              <p>Icons</p>
             </a>
           </li>
           <li>
             <a href="{% url 'logout' %}" >
               <i class="tim-icons icon-button-power"></i>
-              <p>Logout</p>
+              <p>Se deconnecter</p>
             </a>
           </li>
           {% else %}
@@ -84,3 +126,22 @@
         
       </div>
     </div>
+
+
+<script>
+    //* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-item");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+</script>

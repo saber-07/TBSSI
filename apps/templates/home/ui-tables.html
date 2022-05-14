@@ -11,128 +11,32 @@
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header">
-        <h4 class="card-title"> Simple Table</h4>
+        <h4 class="card-title"> Liste des tableaux de bord </h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table tablesorter " id="">
-            <thead class=" text-primary">
-              <tr>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Country
-                </th>
-                <th>
-                  City
-                </th>
-                <th class="text-center">
-                  Salary
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  Dakota Rice
-                </td>
-                <td>
-                  Niger
-                </td>
-                <td>
-                  Oud-Turnhout
-                </td>
-                <td class="text-center">
-                  $36,738
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Minerva Hooper
-                </td>
-                <td>
-                  Curaçao
-                </td>
-                <td>
-                  Sinaai-Waas
-                </td>
-                <td class="text-center">
-                  $23,789
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Sage Rodriguez
-                </td>
-                <td>
-                  Netherlands
-                </td>
-                <td>
-                  Baileux
-                </td>
-                <td class="text-center">
-                  $56,142
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Philip Chaney
-                </td>
-                <td>
-                  Korea, South
-                </td>
-                <td>
-                  Overland Park
-                </td>
-                <td class="text-center">
-                  $38,735
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Doris Greene
-                </td>
-                <td>
-                  Malawi
-                </td>
-                <td>
-                  Feldkirchen in Kärnten
-                </td>
-                <td class="text-center">
-                  $63,542
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Mason Porter
-                </td>
-                <td>
-                  Chile
-                </td>
-                <td>
-                  Gloucester
-                </td>
-                <td class="text-center">
-                  $78,615
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Jon Porter
-                </td>
-                <td>
-                  Portugal
-                </td>
-                <td>
-                  Gloucester
-                </td>
-                <td class="text-center">
-                  $98,615
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <table class="table table-bordered " border="1">
+            <tr>
+                <th>Nom TB</th>
+                <th>Intitule</th>
+                <th>Objectif</th>
+                
+                
+            </tr>
+            {% for tb in ListeTb %}
+                <tr>
+                    <td>{{tb.Intitule}}</td>
+                    <td>{{tb.Objectif}}</td>
+            {% endfor %}
+                  
+        <!--
+                       <td ><a href ="{% url 'Supprimer-Stage' s.id %}" class = "btn
+                    btn-outline-danger btn-sm">Supprimer</a></td>
+                     <td ><a href ="{% url 'Modifier-Stage' s.id %}" class = "btn btn-outline-secondary">Modifier</a> </td>
+                       -->
+        
+                </tr>
+            {% endfor %}</table>
         </div>
       </div>
     </div>
