@@ -1,5 +1,20 @@
 {% load static %}
 
+
+   <style>
+
+    ul {
+      list-style-type: none;
+    }
+
+    .sidebar>nav>ul>li{
+      width: 100px;
+      position: relative;
+      text-align : center;
+    }
+
+   </style>
+
     <div class="sidebar">
       <div class="sidebar-wrapper">
         <div style="text-align: left;">
@@ -21,7 +36,7 @@
           <li class="{% if 'index' in segment %} active {% endif %}">
             <a href="/">
               <i class="tim-icons icon-chart-pie-36"></i>
-              <p> Tableaux de bord </p>
+              <p> Acceuil </p>
             </a>
           </li>
           
@@ -51,41 +66,40 @@
 
           <li>
           <button class="dropdown-item">
-            <i class="tim-icons icon-book-bookmark"></i>
-            Liste des TBs
+            <i class="tim-icons icon-double-right"></i>
+            <p> Liste des TBs </p>
           </button>
           <div class="dropdown-container">
+           <ul>
             {% for tb in ListeTb %}
-            <a href="{% url 'indicateur_list' tb.pk%}">
-            <i class="tim-icons icon-book-bookmark"></i>
+            <li> <a href="{% url 'indicateur_list' tb.pk%}">
+            <i class="tim-icons icon-single-copy-04"></i>
               <p> {{ tb.Intitule }} </p>
-            </a>
+            </a> </li>
             {% endfor %}
+          </ul>
           </div>
           </li>
 
+          <li> <a href="">
+            <i class ="tim-icons icon-simple-add"></i>
+            <p> Ajouter Tableau de bord </p>
+          </a> </li>
+
           <li>
-            <button class="dropdown-item">
-              <i class="tim-icons icon-book-bookmark"></i>
-              Gestion des Tbs
-            </button>
-            <div class="dropdown-container">
-              <a href="{% url 'tbb_new'%}">
-                <i class ="tim-icons icon-simple-add"></i>
-                <p> Ajouter Tableau de bord </p>
-              </a>
-              <a href="#">
-                <i class ="tim-icons icon-scissors"></i>
-                <p> Modifier Tableau de bord </p>
-              </a>
+            <a href="">
+              <i class="tim-icons icon-bullet-list-67"></i>
+              <p> Liste des Indicateurs </p>
+            </a>
+            
+          </li>
 
-              <a href="{% url 'tbb_delete' tb.pk%}">
-                <i class ="tim-icons icon-simple-remove></i>
-                <p> Supprimer Tableau de bord </p>
-              </a>
+          <li> <a href="">
+            <i class ="tim-icons icon-simple-add"></i>
+            <p> Ajouter Indicateur </p>
+          </a> </li>
 
-            </div>
-            </li>
+
   
 
           
@@ -148,6 +162,9 @@
         
       </div>
     </div>
+
+
+    
 
 
 <script>
