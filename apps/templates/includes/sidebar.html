@@ -57,7 +57,7 @@
           <div class="dropdown-container">
             {% for tb in ListeTb %}
             <a href="{% url 'indicateur_list' %}">
-            <i class="tim-icons icon-book-bookmark"></i>
+            <i class="tim-icons icon-wallet-43"></i>
               <p> {{ tb.Intitule }} </p>
             </a>
             {% endfor %}
@@ -65,26 +65,30 @@
           </li>
 
           <li>
-            <a href="#">
-              <i class ="tim-icons icon-simple-add"></i>
-              Ajouter Tableau de bord
-            </a>
-         </li>
-        
-         <li>
-          <a href="#">
-            <i class ="tim-icons icon-scissors"></i>
-            Modifier Tableau de bord
-          </a>
+            <button class="dropdown-item">
+              <i class="tim-icons icon-book-bookmark"></i>
+              Gestion des Tbs
+            </button>
+            <div class="dropdown-container">
+              <a href="#">
+                <i class ="tim-icons icon-simple-add"></i>
+                <p> Ajouter Tableau de bord </p>
+              </a>
+              <a href="#">
+                <i class ="tim-icons icon-scissors"></i>
+                <p> Modifier Tableau de bord </p>
+              </a>
 
-       </li>
+              <a href="#">
+                <i class ="tim-icons icon-simple-remove"></i>
+                <p> Supprimer Tableau de bord </p>
+              </a>
 
-       <li>
-        <a href="#">
-          <i class ="tim-icons icon-simple-remove"></i>
-          Supprimer Tableau de bord
-        </a>
-       </li>
+            </div>
+            </li>
+  
+
+          
         <!--
           {% for tb in ListeTb %}
           <li>
