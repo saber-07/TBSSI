@@ -41,8 +41,7 @@
             <div class="row">
               <div class="col-sm-6 text-left">
                 <h5 class="card-category">Graphe 1 </h5>
-                <h2 class="card-title">    {{indicateur.Intitule_Indicateur}}
-                </h2>
+                <h2 class="card-title">{{indicateur.Intitule_Indicateur}}</h2>
                 
               </div>
               <div class="col-sm-6">
@@ -78,6 +77,7 @@
             </div>
           </div>
         </div>
+        
       </div>
 
     </div>
@@ -107,9 +107,15 @@
             </div>
           </div>
         </div>
+        <br>
+    
+    
+
+
       </div>
 
 
+       
 
 
 
@@ -221,6 +227,18 @@
 </script>
 
 {% endfor %}
+
+<br>
+
+<div class="row">
+    <div class="col-lg-4">
+
+        <button class="btn btn-info" id="Modifier">Modifier</button>
+        <button class="btn btn-danger" id="Supprimer">Supprimer</button>
+
+    </div>
+
+</div>
 
 </body>
 </html>
