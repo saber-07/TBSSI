@@ -2,9 +2,9 @@
 
 
 {% block content %}
-    <h1>Supprimer l'indicateur</h1>
+    <h1>Supprimer le Tableau de bord</h1>
     <form action="" method="post"> {% csrf_token %}
-        <p>Êtes vous sûr de vouloir supprimer l'indicateur "{{indicateur.Intitule_Indicateur}}"?</p>
+        <p>Êtes vous sûr de vouloir supprimer le Tableau de bord "{{tb.Intitule}}"?</p>
         <input type="submit" value="Confirmer">
     </form>
 {% endblock content %}

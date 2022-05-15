@@ -87,15 +87,15 @@ class TbDetailView(DetailView):
 
 class TbCreateView(CreateView):
     model = TB
-    template_name = 'home/indicateur_new.html'
+    template_name = 'home/tbb_new.html'
     fields = ['Intitule', 'Objectif']
 
 class TbUpdateView(UpdateView):
     model = TB
-    template_name = 'home/indicateur_edit.html'
+    template_name = 'home/tbb_edit.html'
     fields = ['Intitule', 'Objectif']
 
 class TbDeleteView(DeleteView):
     model = TB
-    template_name = 'home/indicateur_delete.html'
-    success_url = reverse_lazy('indicateur_list')
+    template_name = 'home/tbb_delete.html'
+    success_url = reverse_lazy('home/index.html')

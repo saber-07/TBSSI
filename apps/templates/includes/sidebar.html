@@ -70,7 +70,7 @@
               Gestion des Tbs
             </button>
             <div class="dropdown-container">
-              <a href="#">
+              <a href="{% url 'tbb_new'%}">
                 <i class ="tim-icons icon-simple-add"></i>
                 <p> Ajouter Tableau de bord </p>
               </a>
@@ -79,8 +79,8 @@
                 <p> Modifier Tableau de bord </p>
               </a>
 
-              <a href="#">
-                <i class ="tim-icons icon-simple-remove"></i>
+              <a href="{% url 'tbb_delete' tb.pk%}">
+                <i class ="tim-icons icon-simple-remove></i>
                 <p> Supprimer Tableau de bord </p>
               </a>
 
