@@ -40,12 +40,7 @@
               <p>Notifications</p>
             </a>
           </li>
-          <li class="{% if 'page-user' in segment %} active {% endif %}">
-            <a href="/page-user.html">
-              <i class="tim-icons icon-single-02"></i>
-              <p>Profil User</p>
-            </a>
-          </li>
+          
         <!--
           <li class="{% if 'tables' in segment %} active {% endif %}">
             <a href="/ui-tables.html">
@@ -73,8 +68,23 @@
             <a href="#">
               <i class ="tim-icons icon-simple-add"></i>
               Ajouter Tableau de bord
+            </a>
          </li>
         
+         <li>
+          <a href="#">
+            <i class ="tim-icons icon-scissors"></i>
+            Modifier Tableau de bord
+          </a>
+
+       </li>
+
+       <li>
+        <a href="#">
+          <i class ="tim-icons icon-simple-remove"></i>
+          Supprimer Tableau de bord
+        </a>
+       </li>
         <!--
           {% for tb in ListeTb %}
           <li>
@@ -94,18 +104,26 @@
           </li> 
         -->
           
+        <li class="{% if 'page-user' in segment %} active {% endif %}">
+          <a href="/page-user.html">
+            <i class="tim-icons icon-single-02"></i>
+            <p>Profil User</p>
+          </a>
+        </li>
+
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">
               <i class="tim-icons icon-world"></i>
               <p>العربية</p>
             </a>
           </li>
+        <!--
           <li class="{% if 'icons' in segment %} active {% endif %}">
             <a href="/ui-icons.html">
               <i class="tim-icons icon-atom"></i>
               <p>Icons</p>
             </a>
-          </li>
+          </li>-->
           <li>
             <a href="{% url 'logout' %}" >
               <i class="tim-icons icon-button-power"></i>
@@ -115,9 +133,9 @@
           {% else %}
           <li class="active">
             <a target="_blank" 
-               href="https://appseed.us/admin-dashboards/django-dashboard-black-pro">
-              <i class="tim-icons icon-spaceship"></i>
-              <p>PRO Version</p>
+               href="#">
+              <i class="tim-icons icon-badge"></i>
+              <p>Se Connecter</p>
             </a>
           </li>   
           {% endif %}

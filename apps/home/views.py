@@ -72,6 +72,14 @@ def pages(request):
 class TbListView(ListView):
     model = Indicateur
     template_name = 'home/indicateur_list.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(TbListView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        context['FirstTb'] = TB.objects.all().first()
+        context['ListeInd'] = Indicateur.objects.all()
+        context['ListeDonnees'] = Donnee.objects.all()
+        context['FirstInd'] = Indicateur.objects.all().first()
+        return context
 
 class TbDetailView(DetailView):
     model = Indicateur
