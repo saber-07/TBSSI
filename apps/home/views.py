@@ -86,16 +86,16 @@ class TbDetailView(DetailView):
     template_name = 'home/indicateur_detail.html'
 
 class TbCreateView(CreateView):
-    model = Indicateur
-    template_name = 'indicateur_new.html'
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    model = TB
+    template_name = 'home/indicateur_new.html'
+    fields = ['Intitule', 'Objectif']
 
 class TbUpdateView(UpdateView):
-    model = Indicateur
-    template_name = 'indicateur_edit.html'
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    model = TB
+    template_name = 'home/indicateur_edit.html'
+    fields = ['Intitule', 'Objectif']
 
 class TbDeleteView(DeleteView):
-    model = Indicateur
-    template_name = 'indicateur_delete.html'
-    success_url = reverse_lazy('home')
+    model = TB
+    template_name = 'home/indicateur_delete.html'
+    success_url = reverse_lazy('indicateur_list')
