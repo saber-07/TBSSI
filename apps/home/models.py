@@ -12,6 +12,10 @@ class TB(models.Model):
     def __str__(self):
         return self.Intitule
 
+    def get_absolute_url(self):
+        return reverse("indicateur_list", kwargs={"pk": self.pk})
+    
+
     
 #classe Indicateur 
 class Indicateur(models.Model):
@@ -45,4 +49,4 @@ class Donnee(models.Model):
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.Valeur) 
+        return str(self.Valeur)
