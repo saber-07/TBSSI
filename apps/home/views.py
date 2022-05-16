@@ -81,28 +81,50 @@ class TbListView(ListView):
         context['FirstInd'] = Indicateur.objects.all().first()
         return context
 
+class TbDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(TbDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 class TbCreateView(CreateView):
     model = TB
     template_name = 'home/tbb_new.html'
     fields = ['Intitule', 'Objectif']
+    def get_context_data(self,*args, **kwargs):
+        context = super(TbCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 class TbUpdateView(UpdateView):
     model = TB
     template_name = 'home/tbb_edit.html'
     fields = ['Intitule', 'Objectif']
+    def get_context_data(self,*args, **kwargs):
+        context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 class TbDeleteView(DeleteView):
     model = TB
-    template_name = 'home/tbb_delete.html'
-    success_url = reverse_lazy('home/index.html')
+    template_name = 'home/indicateur_delete.html'
+    success_url = reverse_lazy('indicateur_list')
+    def get_context_data(self,*args, **kwargs):
+        context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 
-class IndicateurDetailView(DetailView):
-    model = Indicateur
-    template_name = 'home/indicateur_detail.html'
+def ListeIndicateurView(request):
+    return render(request,'home/listeIndicateur.html',
+    {'ListeInd' : Indicateur.objects.all(),
+    'ListeTb' : TB.objects.all()
+})
 
-class IndicateurCreateView(CreateView):
-    model = Indicateur
-    template_name = 'home/indicateur_new.html'
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+
+def ListeDonneesView(request):
+    return render(request,'home/listeDonnees.html',
+    {'ListeDonnees' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all()})
