@@ -81,9 +81,6 @@ class TbListView(ListView):
         context['FirstInd'] = Indicateur.objects.all().first()
         return context
 
-class TbDetailView(DetailView):
-    model = Indicateur
-    template_name = 'home/indicateur_detail.html'
 
 class TbCreateView(CreateView):
     model = TB
@@ -99,3 +96,13 @@ class TbDeleteView(DeleteView):
     model = TB
     template_name = 'home/tbb_delete.html'
     success_url = reverse_lazy('home/index.html')
+
+
+class IndicateurDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+
+class IndicateurCreateView(CreateView):
+    model = Indicateur
+    template_name = 'home/indicateur_new.html'
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
