@@ -23,8 +23,8 @@
              
             </a>
         
-          <a target="_blank" rel="sponsored noopener noreferrer" 
-             href="https://www.elit.dz/" class="simple-text logo-normal">
+          <a
+             href="{% url 'home' %}" class="simple-text logo-normal">
              <img src="/static/assets/img/elitLogo.png" alt="ELIT">
 
             </a>
@@ -87,7 +87,7 @@
           </a> </li>
 
           <li>
-            <a href="">
+            <a href="{% url 'liste_indicateurs'%}">
               <i class="tim-icons icon-bullet-list-67"></i>
               <p> Liste des Indicateurs </p>
             </a>
@@ -98,6 +98,21 @@
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Indicateur </p>
           </a> </li>
+
+          <li>
+            <a href="{% url 'liste_donnees'%}">
+              <i class="tim-icons icon-bullet-list-67"></i>
+              <p> Liste des Données </p>
+            </a>
+            
+          </li>
+
+
+          <li> <a href="">
+            <i class ="tim-icons icon-simple-add"></i>
+            <p> Ajouter Donnée </p>
+          </a> </li>
+
 
 
   

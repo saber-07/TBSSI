@@ -20,4 +20,6 @@ urlpatterns = [
     path('indicateur/new/', views.TbCreateView.as_view(), name='indicateur_new'),
     path('indicateur/<int:pk>/edit/', views.TbUpdateView.as_view(), name='indicateur_edit'),
     path('indicateur/<int:pk>/delete/', views.TbDeleteView.as_view(), name='indicateur_delete'),
-]
+    path('listeIndicateurs/', views.ListeIndicateurView, name='liste_indicateurs'),
+    path('listeDonnees/', views.ListeDonneesView, name ='liste_donnees'),
+    ]

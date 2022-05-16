@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Liste des Indicateurs {% endblock %} 
+{% block title %} Liste des Donnees {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -11,7 +11,7 @@
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header">
-        <h4 class="card-title"> Liste des Indicateurs </h4>
+        <h4 class="card-title"> Liste des Donnees </h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -19,34 +19,28 @@
             <thead class=" text-primary">
               <tr>
                 <th>
-                  Intitulé
+                  Indicateur
                 </th>
                 <th>
-                  Periodicité
+                  Date
                 </th>
                 <th>
-                  Graphe
-                </th>
-                <th class="text-center">
-                  Tableau de Bord
+                  Valeur
                 </th>
               </tr>
             </thead>
             <tbody>
-            {% for ind in ListeInd %}
+            {% for don in ListeDonnees %}
               <tr>
                 <td>
                 <a href="">
-                  {{ ind.Intitule_Indicateur }}
+                  {{ don.Id_Indicateur }}
                 </td> </a>
                 <td>
-                  {{ ind.Periodicite }}
+                  {{ don.Date }}
                 </td>
                 <td>
-                  {{ ind.Id_Graphe}}
-                </td>
-                <td class="text-center">
-                  {{ ind.Id_TB}}
+                  {{ don.Valeur}}
                 </td>
               </tr>
             {% endfor %}
@@ -191,4 +185,3 @@
 </div>
 
 {% endblock content %}
-
