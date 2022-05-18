@@ -13,7 +13,7 @@ class TB(models.Model):
         return self.Intitule
 
     def get_absolute_url(self):
-        return reverse("indicateur_list", kwargs={"pk": self.pk})
+        return reverse("tbb_detail", kwargs={"pk": self.pk})
     
 
     
@@ -50,3 +50,7 @@ class Donnee(models.Model):
 
     def __str__(self):
         return str(self.Valeur)
+
+    def get_absolute_url(self):
+        return reverse("data_detail", kwargs={"pk": self.pk})
+    

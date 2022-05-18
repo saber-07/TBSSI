@@ -5,4 +5,8 @@
     <p>{{indicateur.Id_TB}}</p>
     <p>{{indicateur.Id_Graphe}}</p>
     <p>{{indicateur.Periodicite}}</p>
+
+
+    <p><a href="{% url 'indicateur_edit' indicateur.pk%}">+ Modifier indicateur </a></p>
+    <p><a href="{% url 'indicateur_delete' indicateur.pk%}">+ Supprimer indicateur</a></p>
 {% endblock content %}

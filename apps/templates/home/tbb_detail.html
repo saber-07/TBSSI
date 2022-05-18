@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
-
+  <h2>tableau de bord {{ tb.Intitule }}</h2>
 {% for indicateur in object_list %}
 {{indicateur.Intitule_Indicateur}}
 
@@ -233,8 +233,8 @@
 <div class="row">
     <div class="col-lg-4">
 
-        <button class="btn btn-info" id="Modifier">Modifier</button>
-        <button class="btn btn-danger" id="Supprimer">Supprimer</button>
+      <a class="btn btn-info" href="{% url 'tbb_edit' tb.pk%}">Modifier</a>
+      <a class="btn btn-danger" href="{% url 'tbb_delete' tb.pk%}">Supprimer</a>
 
     </div>
 

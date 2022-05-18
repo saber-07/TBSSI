@@ -1,0 +1,12 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <h2><a href="">Data N°{{donnee.pk}}</a></h2>
+    <p>{{donnee.Valeur}}</p>
+    <p>{{donnee.Date}}</p>
+    <p>{{donnee.Id_Indicateur}}</p>
+
+
+    <p><a href="{% url 'data_update' donnee.pk%}">+ Modifier donnée</a></p>
+    <p><a href="{% url 'data_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+{% endblock content %}

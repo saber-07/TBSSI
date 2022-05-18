@@ -1,0 +1,8 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    {% for tb in liste_tb %}
+        <h2>{{tb.Intitule}}</h2>
+        <p>{{tb.Objectif}}</p>
+    {% endfor %}
+{% endblock content %}
