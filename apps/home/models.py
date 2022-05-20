@@ -33,12 +33,12 @@ class Indicateur(models.Model):
     )
 
     Intitule_Indicateur = models.CharField(max_length=100, blank=False, unique=True)
-    Objectif = models.CharField(max_length=100, blank=False)
-    Domaine = models.CharField(max_length=100, blank=False)
-    Type = models.CharField(choices=TYPE_INDICATEUR_CHOICES, blank=False)
-    Methode_calcul = models.CharField(max_length=200, blank=False)
-    Periodicite = models.CharField(choices=PERIODICITE_CHOICES)
-    Source = models.CharField(max_length=100, blank=False)
+    Objectif = models.CharField(max_length=100, default='objectif', blank=False)
+    Domaine = models.CharField(max_length=100, default='Sécurité des RH', blank=False)
+    Type = models.CharField(max_length=50, default='IPS', choices=TYPE_INDICATEUR_CHOICES, blank=False)
+    Methode_calcul = models.CharField(max_length=200, default='Nb utilisateur', blank=False)
+    Periodicite = models.CharField(max_length=100, choices=PERIODICITE_CHOICES)
+    Source = models.CharField(max_length=100, default='DSSI', blank=False)
 
 
     #cle etrangere -> Graphe + TB
@@ -64,7 +64,7 @@ class Graphe(models.Model):
     ('B','Beignet')
     ) 
 
-    Type = models.CharField(choices=GRAPHES_CHOICES)
+    Type = models.CharField(max_length=50, choices=GRAPHES_CHOICES)
 
     def __str__(self):
         return self.Type 
