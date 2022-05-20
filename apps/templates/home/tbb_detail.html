@@ -272,14 +272,6 @@
       doc.addImage(imgData, 'JPEG', 15, 40, 180, 160);
     */
       //pdf.setFont("helvetica");
-    
-      //for footer 
-      pdf.page = 1;
-
-      function footer() {
-        pdf.text(150,285, 'page ' + pdf.page);
-        pdf.page ++;
-      };
 
       pdf.setFontSize(50);
       pdf.setFontType("bold");
@@ -287,7 +279,6 @@
       //report title 
       pdf.text(80, 80, 'Rapport {{tb.Intitule}}');
       pdf.addPage();
-      pdf.footer();
       pdf.setFontSize(20);
       pdf.setFontType("normal");
       
@@ -307,7 +298,7 @@
       pdf.text(10, 10, '   Indicateur {{forloop.counter}} : {{indicateur.Intitule_Indicateur}}                                               ');
 
       pdf.addPage();
-      footer();
+      
     
      {% endfor %}
      //delete last blank page
