@@ -1,12 +1,19 @@
 {% extends "layouts/base.html" %}
 
+{% block title %} {{indicateur.Intitule_Indicateur}} {% endblock %} 
+
 {% block content %}
-    <h2><a href="">{{indicateur.Intitule_Indicateur}}</h2></a>
-    <p>{{indicateur.Id_TB}}</p>
-    <p>{{indicateur.Id_Graphe}}</p>
-    <p>{{indicateur.Periodicite}}</p>
+<div class = "card card-chart">
+    <div style= "height: 270px;" class = "card-body">
+    <h1><a href="">Carte Indicateur {{indicateur.Intitule_Indicateur}}</h1></a>
+    <h3>Tableau de bord : {{indicateur.Id_TB}}</h3>
+    <h3>Graphe : {{indicateur.Id_Graphe}}</h3>
+    <h3>Periodicité : {{indicateur.Periodicite}}</h3>
+
+</div>
+</div>
+    <p><a class = "btn btn-primary" href="{% url 'indicateur_edit' indicateur.pk%}">Modifier indicateur </a>
+    <a class = "btn btn-primary" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a></p>
 
 
-    <p><a href="{% url 'indicateur_edit' indicateur.pk%}">+ Modifier indicateur </a></p>
-    <p><a href="{% url 'indicateur_delete' indicateur.pk%}">+ Supprimer indicateur</a></p>
-{% endblock content %}
+    {% endblock content %}

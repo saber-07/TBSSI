@@ -1,8 +1,10 @@
 {% extends "layouts/base.html" %}
 
+{% block title %} Modifier Tableau de Bord {% endblock %} 
+
 
 {% block content %}
-<h1>Modifier indicateur</h1>
+<h1>Modifier Tableau de bord</h1>
 <form action="" method="post"> {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Modifier">

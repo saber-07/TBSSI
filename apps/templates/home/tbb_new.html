@@ -1,7 +1,30 @@
 {% extends "layouts/base.html" %}
 
+{% block title %} Ajouter Tableau de Bord {% endblock %} 
+
+
 {% block content %} 
-    <h1>New TBB</h1>
+<style>
+
+
+
+    input{
+    
+      width : 50%;
+      border-radius: 4px;
+      border: 2px solid #1c709b;
+      box-sizing: border-box;
+      padding : 12px 20px;
+      margin : 8px 0;
+    
+    }
+    
+    
+    
+    
+    
+       </style>
+    <h1>Ajouter Tableau de Bord</h1>
     <form action="" method="post"> {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="ajouter">

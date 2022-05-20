@@ -1,247 +1,337 @@
 {% extends "layouts/base.html" %}
 
-<!--
-    {% for indicateur in object_list %}
-        <h2><a href="">{{indicateur.Intitule_Indicateur}}</h2></a>
-        <p>{{indicateur.Id_TB}}</p>
-        <p>{{indicateur.Id_Graphe}}</p>
-        <p>{{indicateur.Periodicite}}</p>
-    {% endfor %}
+{% block title %} {{ tb.Intitule }}{% endblock %} 
 
--->
 {% block content%}
 <html>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script> 
+
 
 <body>
-  <h2>tableau de bord {{ tb.Intitule }}</h2>
-  {% for indicateur in object_list %}
-  {{indicateur.Intitule_Indicateur}}
+  <h2>{{ tb.Intitule }}</h2>
   
-  <div class="btn-group btn-group-toggle float-right">
-   
-      <button class="btn btn-success" id="line">Line Chart</button>
-      <button class="btn btn-info" id="bar">Bar Chart</button>
-      <button class="btn btn" id="pie">Pie Chart</button>
-    
-    </div>
-    
-  
-  
-  <!--<canvas id="myChart{{ forloop.counter0 }}"></canvas>
-  -->   
-  
-  
-  
-      <div class="row">
-  
-        <div class="col-12">
-          <div class="card card-chart">
-            <div class="card-header ">
-              <div class="row">
-                <div class="col-sm-6 text-left">
-                  <h5 class="card-category">Graphe 1 </h5>
-                  <h2 class="card-title">{{indicateur.Intitule_Indicateur}}</h2>
-                  
-                </div>
-                <div class="col-sm-6">
-                  <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                    <label class="btn btn-sm btn-primary btn-simple active" id="0">
-                      <input type="radio" name="options" checked>
-                      <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Accounts</span>
-                      <span class="d-block d-sm-none">
-                        <i class="tim-icons icon-single-02"></i>
-                      </span>
-                    </label>
-                    <label class="btn btn-sm btn-primary btn-simple" id="1">
-                      <input type="radio" class="d-none d-sm-none" name="options">
-                      <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Purchases</span>
-                      <span class="d-block d-sm-none">
-                        <i class="tim-icons icon-gift-2"></i>
-                      </span>
-                    </label>
-                    <label class="btn btn-sm btn-primary btn-simple" id="2">
-                      <input type="radio" class="d-none" name="options">
-                      <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Sessions</span>
-                      <span class="d-block d-sm-none">
-                        <i class="tim-icons icon-tap-02"></i>
-                      </span>
-                    </label>
-                  </div>
+{% for indicateur in object_list %}
+
+
+<!--<canvas id="myChart{{ forloop.counter0 }}"></canvas>
+-->   
+
+
+  <div class="row">
+
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header ">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category"></h5>
+                <h2 class="card-title">{{indicateur.Intitule_Indicateur}}</h2>
+                
+              </div>
+              <div class="col-sm-6">
+                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                 <button class="btn btn-sm btn-primary btn-simple" id="line{{forloop.counter0}}">Line</button>
+                 <button class="btn btn-sm btn-primary btn-simple" id="bar{{forloop.counter0}}">Bar</button>
+                 <button class="btn btn-sm btn-primary btn-simple" id="pie{{forloop.counter0}}">Pie</button>
+
                 </div>
               </div>
             </div>
             <div class="card-body">
-              <div class="chart-area">
+              <div style = "height: 530px;
+              width: 100%;" class="chart-area">
                 <canvas id="myChart{{ forloop.counter0 }}"></canvas>
               </div>
             </div>
           </div>
           
         </div>
-  
+        
       </div>
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="card card-chart">
-            <div class="card-header">
-              <h5 class="card-category">Graphe 2</h5>
-              <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> Indicateur 2</h3>
-            </div>
-            <div class="card-body">
-              <div class="chart-area">
-                <canvas id="myChart{{ forloop.counter0 }}"></canvas>
-              </div>
+
+    </div>
+  
+  
+  
+  <!--
+    <button class="btn btn-alert" onclick="downloadPDF()">Telecharger Rapport</button>
+  scripts for download Pdf report 
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js
+   "></script> -->
+
+<!---
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header">
+            <h5 class="card-category">Graphe 2</h5>
+            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> Indicateur 2</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="myChart{{ forloop.counter0 }}"></canvas>
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
-          <div class="card card-chart">
-            <div class="card-header">
-              <h5 class="card-category">Graphe 3</h5>
-              <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
-            </div>
-            <div class="card-body">
-              <div class="chart-area">
-                <canvas id="myChart{{ forloop.counter0 }}"></canvas>
-              </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header">
+            <h5 class="card-category">Graphe 3</h5>
+            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="myChart{{ forloop.counter0 }}"></canvas>
             </div>
           </div>
-          <br>
-      
-      
-  
-  
         </div>
-  
-  
-         
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-      <script>
-  
-          const line = document.getElementById('line');
-          const bar = document.getElementById('bar');
-          const pie = document.getElementById('pie');
+        <br>
+    
+    
+
+
+      </div>-->
+
+
+       
+
+    
+
+
+    <script>
+
+        const line{{forloop.counter0}} = document.getElementById('line{{forloop.counter0}}');
+        const bar{{forloop.counter0}} = document.getElementById('bar{{forloop.counter0}}');
+        const pie{{forloop.counter0}} = document.getElementById('pie{{forloop.counter0}}');
+      
+        line{{forloop.counter0}}.addEventListener('click', changeline);
+        bar{{forloop.counter0}}.addEventListener('click', changebar);
+        pie{{forloop.counter0}}.addEventListener('click', changepie);
+      
         
-          line.addEventListener('click', changeline);
-          bar.addEventListener('click', changebar);
-          pie.addEventListener('click', changepie);
-        
-          
-          const data = {
-            labels: [{% for don in ListeDonnees %}
-                     '{{ don.Date }}',
-                     {% endfor %}],
-            datasets: [{
-              label: 'what{{forloop.counter0}}',
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgb(255, 99, 132)',
-              data: [{% for don in ListeDonnees %}
-                     '{{ don.Valeur }}',
-                     {% endfor %}],
-            }]
-          };
-        
-        const config = {
+        const data{{forloop.counter0}} = {
+          labels: [{% for don in ListeDonnees %}
+                    {% if don.Id_Indicateur.id == indicateur.id %}
+                   '{{ don.Date }}',
+                    {% endif %}
+                   {% endfor %}],
+          datasets: [{
+            label: '{{indicateur.Intitule_Indicateur}}',
+            backgroundColor: color => {
+              console.log(color)
+              let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+               return colors;
+             },
+            borderColor: color => {
+              console.log(color)
+              let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+               return colors;
+             },
+            data: [{% for don in ListeDonnees %}
+                   {% if don.Id_Indicateur.id == indicateur.id %}
+                   '{{ don.Valeur }}',
+                   {% endif %}
+                   {% endfor %}],
+          }]
+        };
+      
+        //background color const
+  const bgColor{{forloop.counter0}} = {
+    id: 'bgColor{{forloop.counter0}}',
+    beforeDraw: (chart, options) => {
+      const { ctx, width, height } = chart;
+      ctx.fillStyle = '#26293d';
+      ctx.fillRect(0,0, width, height)
+      ctx.restore();
+    }
+  }
+    
+        const config{{forloop.counter0}} = {
           type: 'line',
-          data: data,
+          data: data{{forloop.counter0}},
           options: {
-            responsive: true,
-            plugins: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: ''
+            },
+          },
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          scales: {
+            x: {
+              display: true,
               title: {
                 display: true,
-                text: ''
-              },
+                text: 'Date'
+              }
             },
-            interaction: {
-              mode: 'index',
-              intersect: false
-            },
-            scales: {
-              x: {
+            y: {
+              display: true,
+              title: {
                 display: true,
-                title: {
-                  display: true,
-                  text: 'Date'
-                }
-              },
-              y: {
-                display: true,
-                title: {
-                  display: true,
-                  text: 'Valeur'
-                }
+                text: 'Valeur'
               }
             }
-          },
-        };
+          }
+        },
+        //add the background color plugin 
+        plugins: [bgColor{{forloop.counter0}}]
+      };
+
+      
+
+      function changeline(){
+
+        const updatetype = 'line';
+        myChart{{forloop.counter0}}.config.type = updatetype;
+        myChart{{forloop.counter0}}.update();
+      
+      };
+      
+      function changebar(){
+      
+        const updatetype = 'bar';
+        myChart{{forloop.counter0}}.config.type = updatetype;
+        myChart{{forloop.counter0}}.update();};
+      
+      
+      function changepie(){
+      
+        const updatetype = 'pie';
+        myChart{{forloop.counter0}}.config.type = updatetype;
+        myChart{{forloop.counter0}}.update();
+      };
+
+      
+      
+      
+    </script>
+
+    
+   
+
+<!--Graphs Scripts-->
+<script>
+  const myChart{{forloop.counter0}} = new Chart(
+    document.getElementById("myChart" + {{ forloop.counter0 }}),
+    config{{forloop.counter0}}
+  );
   
-        function changeline(){
+  /*
+  //for download pdf 
+  function downloadPDF(){
+    const canvas = document.getElementById('myChart{{forloop.counter0}}');
+    //create image 
+    const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
+    console.log(canvasImage)
+   
+    //image must go to PDF
+    let pdf = new jsPDF('landscape');
+    pdf.setFontSize(20);
+   
+    pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+    //add text 
+    pdf.text(10, 10, '   Tableau de bord : {{indicateur.Id_TB}}                                              Indicateur : {{indicateur.Intitule_Indicateur}} ');
+    pdf.save('{{indicateur.Intitule_Indicateur}}_{{indicateur.Id_TB}}.pdf');}
+
+*/
   
-          const updatetype = 'line';
-          myChart{{forloop.counter0}}.config.type = updatetype;
-          myChart{{forloop.counter0}}.update();
-        
-        };
-        
-        function changebar(){
-        
-          const updatetype = 'bar';
-          myChart{{forloop.counter0}}.config.type = updatetype;
-          myChart{{forloop.counter0}}.update();};
-        
-        
-        function changepie(){
-        
-          const updatetype = 'pie';
-          myChart{{forloop.counter0}}.config.type = updatetype;
-          myChart{{forloop.counter0}}.update();
-        };
-        
-        
-      </script>
   
+</script>
+
+{% endfor %}
+
+<br>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+  
+        <a class="btn btn-info" href="{% url 'tbb_edit' tb.pk%}">Modifier Tableau de Bord</a>
+        <a class="btn btn-danger" href="{% url 'tbb_delete' tb.pk%}">Supprimer Tableau de Bord</a>
+        <button class="btn btn-alert" onclick="downloadPDF()">Telecharger Rapport</button>
+        <!--scripts for download Pdf report -->
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js
+         "></script>
+  
+    </div>
+  
+
+   <script>
+
+    function downloadPDF(){
+
+      let pdf = new jsPDF('landscape');
+      /*var imgData = '';
+      console.log(imgData);
+      doc.addImage(imgData, 'JPEG', 15, 40, 180, 160);
+    */
+      //pdf.setFont("helvetica");
+    
+      //for footer 
+      pdf.page = 1;
+
+      function footer() {
+        pdf.text(150,285, 'page ' + pdf.page);
+        pdf.page ++;
+      };
+
+      pdf.setFontSize(50);
+      pdf.setFontType("bold");
+
+      //report title 
+      pdf.text(80, 80, 'Rapport {{tb.Intitule}}');
+      pdf.addPage();
+      pdf.footer();
+      pdf.setFontSize(20);
+      pdf.setFontType("normal");
+      
+      
+      {% for indicateur in object_list %}
+      const canvas{{forloop.counter0}} = document.getElementById('myChart{{forloop.counter0}}');
+      //create image 
+      const canvasImage{{forloop.counter0}} = canvas{{forloop.counter0}}.toDataURL('image/jpeg', 1.0);
+
+      console.log(canvasImage{{forloop.counter0}})
+     
+      //image must go to PDF
       
      
-  
-      <!--Graphs Scripts-->
-  <script>
-    const myChart{{forloop.counter0}} = new Chart(
-      document.getElementById("myChart" + {{ forloop.counter0 }}),
-      config
-    );
+     
+      pdf.addImage(canvasImage{{forloop.counter0}}, 'JPEG', 15, 15, 280, 150);
+      pdf.text(10, 10, '   Indicateur {{forloop.counter}} : {{indicateur.Intitule_Indicateur}}                                               ');
+
+      pdf.addPage();
+      footer();
     
-  </script>
-  
-  {% endfor %}
-  
-  <br>
-  
-  <div class="row">
-      <div class="col-lg-4">
-  
-        <a class="btn btn-info" href="{% url 'tbb_edit' tb.pk%}">Modifier</a>
-        <a class="btn btn-danger" href="{% url 'tbb_delete' tb.pk%}">Supprimer</a>
-  
-      </div>
-  
-  </div>
-  
-  </body>
-  </html>
-  
-  {% endblock %}
+     {% endfor %}
+     //delete last blank page
+     var pageCount = pdf.internal.getNumberOfPages();
+     pdf.deletePage(pageCount)
+
+      //add text 
+      window.open(pdf.output('bloburl'), 'Rapport {{tb.Intitule}}'); 
+      //pdf.save('Rapport {{tb.Intitule}}.pdf');
+    }
+
+       
+
+   </script>
+
+
+</div>
+
+</body>
+
+</html>
+
+{% endblock %}
+
+
+
   

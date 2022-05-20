@@ -81,6 +81,8 @@ class TbDetail(SingleObjectMixin ,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tb'] = self.object
+        context['ListeTb'] = TB.objects.all()
+        context['ListeDonnees'] = Donnee.objects.all()
         return context
 
     def get_queryset(self):
@@ -120,6 +122,10 @@ class IndicateurCreateView(CreateView):
     model = Indicateur
     template_name = 'home/indicateur_new.html'
     fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB'] 
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 
 class IndicateurListView(ListView):
@@ -144,6 +150,10 @@ class IndicateurUpdateView(UpdateView):
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
     fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 class IndicateurDeleteView(DeleteView):
     model = Indicateur
@@ -154,6 +164,10 @@ class DataCreateView(CreateView):
     model = Donnee
     template_name = 'home/data_new.html'
     fields = ['Date','Valeur','Id_Indicateur']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
 def listedonneesview(request):
     return render(request,'home/listeDonnees.html',
@@ -167,6 +181,7 @@ class DataDetailView(DetailView):
     def get_context_data(self,*args, **kwargs):
         context = super(DataDetailView, self).get_context_data(*args,**kwargs)
         context['all_data_list'] = Donnee.objects.all()
+        context['ListeTb'] = TB.objects.all()
         return context
 
 class DataDeleteView(DeleteView):
@@ -178,3 +193,7 @@ class DataUpdateView(UpdateView):
     model = Donnee
     template_name = 'home/data_update.html'
     fields = ['Date','Valeur','Id_Indicateur']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
