@@ -20,9 +20,9 @@ class TB(models.Model):
 #classe Indicateur 
 class Indicateur(models.Model):
 
-    PERIODICITE_CHOICES =( ('A', 'Annuelle'),
-                    ('T', 'Trimestrielle'),
-                    ('M', 'Mensuelle'),
+    PERIODICITE_CHOICES =( ('Annuelle', 'Annuelle'),
+                    ('Trimestrielle', 'Trimestrielle'),
+                    ('Mensuelle', 'Mensuelle'),
                     )
 
     TYPE_INDICATEUR_CHOICES = (  
@@ -57,11 +57,11 @@ class Indicateur(models.Model):
 class Graphe(models.Model):
     
     GRAPHES_CHOICES = (
-    ('BH','Barres horizontales'),
-    ('BV','Barres Verticales'),
-    ('L','Lineaire'),
-    ('C','Camembert'),
-    ('B','Beignet')
+    ('Barres horizontales','Barres horizontales'),
+    ('Barres Verticales','Barres Verticales'),
+    ('Lineaire','Lineaire'),
+    ('Camembert','Camembert'),
+    ('Beignet','Beignet')
     ) 
 
     Type = models.CharField(max_length=50, choices=GRAPHES_CHOICES)
