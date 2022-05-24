@@ -1,9 +1,12 @@
+from datetime import datetime
 from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from .models import TB,Indicateur,Graphe,Donnee
 
+
+import datetime
 
 from django import template
 from django.contrib.auth.decorators import login_required
@@ -25,6 +28,8 @@ def index(request):
     context['FirstInd'] = Indicateur.objects.all().first()
 
     context['ListeDonnees'] = Donnee.objects.all()
+
+    context['currentMonth'] = datetime.date.today().month
 
     return HttpResponse(html_template.render(context, request))
 
@@ -83,6 +88,8 @@ class TbDetail(SingleObjectMixin ,ListView):
         context['tb'] = self.object
         context['ListeTb'] = TB.objects.all()
         context['ListeDonnees'] = Donnee.objects.all()
+        context['currentMonth'] = datetime.date.today().month
+        context['currentYear'] = datetime.date.today().year
         return context
 
     def get_queryset(self):

@@ -17,7 +17,7 @@
 
    </style>
 
-    <div class="sidebar">
+    <div class="sidebar" data="blue">
       <div style ="background-color : #1d8cf8;" class="sidebar-wrapper">
         <div style="text-align: left;">
    
@@ -134,6 +134,7 @@
             </a>
           </li> 
         -->
+        
           
         <li class="{% if 'page-user' in segment %} active {% endif %}">
           <a href="/page-user.html">
@@ -141,6 +142,12 @@
             <p>Profil User</p>
           </a>
         </li>
+
+        <li> <a href="">
+          <i class ="tim-icons icon-simple-add"></i>
+          <p> Ajouter User </p>
+        </a> </li>
+
 
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">

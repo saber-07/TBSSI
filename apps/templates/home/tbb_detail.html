@@ -17,7 +17,7 @@
 <!--<canvas id="myChart{{ forloop.counter0 }}"></canvas>
 -->   
 
-
+<div class="content">
   <div class="row">
 
       <div class="col-12">
@@ -31,17 +31,19 @@
               </div>
               <div class="col-sm-6">
                 <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                 <button class="btn btn-sm btn-primary btn-simple" id="line{{forloop.counter0}}">Line</button>
-                 <button class="btn btn-sm btn-primary btn-simple" id="bar{{forloop.counter0}}">Bar</button>
-                 <button class="btn btn-sm btn-primary btn-simple" id="pie{{forloop.counter0}}">Pie</button>
-
+                 <button class="btn btn-sm btn-info btn-simple" id="line{{forloop.counter0}}">Linéaire</button>
+                 <button class="btn btn-sm btn-info btn-simple" id="bar{{forloop.counter0}}">Barres</button>
+              <!-- for pie and doughnut charts
+                 <button class="btn btn-sm btn-info btn-simple" id="pie{{forloop.counter0}}">Camembert</button>
+                 <button class="btn btn-sm btn-info btn-simple" id="doughnut{{forloop.counter0}}">Beignet</button>
+              -->
                 </div>
               </div>
             </div>
             <div class="card-body">
-              <div style = "height: 530px;
+              <div style = "height: auto;
               width: 100%;" class="chart-area">
-                <canvas id="myChart{{ forloop.counter0 }}"></canvas>
+                <canvas id="myChartBilan{{ forloop.counter0 }}"></canvas>
               </div>
             </div>
           </div>
@@ -51,7 +53,14 @@
       </div>
 
     </div>
-  
+
+    <!--
+    <div class="card-body">
+      <div style = "height: auto;
+      width: 100%;" class="chart-area">
+        <canvas id="myChartBilan{{ forloop.counter0 }}"></canvas>
+      </div>
+    </div>-->
   
   
   <!--
@@ -97,24 +106,126 @@
 
        
 
+       <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
     
+       <div class="row">
+        <div class="col-lg-5">
+          <div class="card card-chart">
+            <div class="card-header">
+              <h5 class="card-category"></h5>
+              <h3 class="card-title"><i class="tim-icons icon-atom text-primary"></i>
+               {% if indicateur.Periodicite == "Mensuelle" %}
+                Ce mois 
+               {% else %} 
+                Cette Année {{currentYear}}
+               {% endif %} </h3>
+            </div>
+            <div class="col-sm-11">
+                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                 <button class="btn btn-sm btn-info btn-simple" id="lineMini{{forloop.counter0}}">Linéaire</button>
+                 <button class="btn btn-sm btn-info btn-simple" id="barMini{{forloop.counter0}}">Barres</button>
+                 <button class="btn btn-sm btn-info btn-simple" id="pieMini{{forloop.counter0}}">Camembert</button>
+                 <button class="btn btn-sm btn-info btn-simple" id="doughnutMini{{forloop.counter0}}">Beignet</button>
+                </div>
+              </div>
+            <div class="card-body" style= "width: 100%; height: auto;">
+              <div class="chart-area">
+                {% if indicateur.Periodicite == "Mensuelle" %}
+                <canvas id="myChartCurrentMonth{{ forloop.counter0 }}"></canvas>
+                {% else %}
+                <canvas id="myChartCurrentYear{{ forloop.counter0 }}"></canvas>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="card card-chart">
+            <div class="card-header">
+              <h5 class="card-category"></h5>
+              <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-primary"></i>
+              Interpretation </h3>
+            </div>
+            <div class="card-body" style= "width: 100%; height: auto;">
+              <div class="chart-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <!-- Interpretation -->
+      <div class="row">
+        
+
+        <br>
+
+      </div>
+
+
 
 
     <script>
 
+     //for graphs per Periodicite
+      //function that parse django date format into js date format
+      function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
+
+      //setting the days 
+       const day{{forloop.counter0}} = [
+       {% for don in ListeDonnees %}
+       {% if don.Id_Indicateur.id == indicateur.id %}
+         {x: Date.parse(formatDate('{{don.Date}}')), y: {{don.Valeur}}},
+       {% endif%}
+       {% endfor%}
+       
+       ];
+      
+
+      //for graph change buttons
         const line{{forloop.counter0}} = document.getElementById('line{{forloop.counter0}}');
         const bar{{forloop.counter0}} = document.getElementById('bar{{forloop.counter0}}');
+       /*
         const pie{{forloop.counter0}} = document.getElementById('pie{{forloop.counter0}}');
-      
+        const doughnut{{forloop.counter0}} = document.getElementById('doughnut{{forloop.counter0}}');
+      */
         line{{forloop.counter0}}.addEventListener('click', changeline);
         bar{{forloop.counter0}}.addEventListener('click', changebar);
+
+        //mini buttons
+        lineMini{{forloop.counter0}}.addEventListener('click', changelineMini);
+        barMini{{forloop.counter0}}.addEventListener('click', changebarMini);
+        pieMini{{forloop.counter0}}.addEventListener('click', changepieMini);
+        doughnutMini{{forloop.counter0}}.addEventListener('click', changedoughnutMini);
+       /* 
         pie{{forloop.counter0}}.addEventListener('click', changepie);
-      
+        doughnut{{forloop.counter0}}.addEventListener('click', changedoughnut);
+      */
         
         const data{{forloop.counter0}} = {
           labels: [{% for don in ListeDonnees %}
                     {% if don.Id_Indicateur.id == indicateur.id %}
+                    {% if don.Date.month == currentMonth %}
                    '{{ don.Date }}',
+                    {% endif %}
                     {% endif %}
                    {% endfor %}],
           datasets: [{
@@ -134,7 +245,23 @@
                    '{{ don.Valeur }}',
                    {% endif %}
                    {% endfor %}],
-          }]
+          },
+          {label: 'Dataset 2',
+      data: [{% for don in ListeDonnees %}
+              {% if don.Id_Indicateur.id != indicateur.id %}
+              '{{ don.Valeur }}',
+              {% endif %}
+            {% endfor %}],
+      backgroundColor: color => {
+        console.log(color)
+        let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+         return colors;
+       },
+       borderColor: color => {
+        console.log(color)
+        let colors = color.index > 1 ? 'rgba(0,0,0,0)' : 'rgba(255,26,104,0.2)';
+         return colors;
+       }}]
         };
       
         //background color const
@@ -149,8 +276,27 @@
   }
     
         const config{{forloop.counter0}} = {
-          type: 'line',
+          {% if indicateur.Id_Graphe.id == 6 %}
+                type : 'pie',
+                {% elif indicateur.Id_Graphe.id == 5 %}
+                type : 'line',
+                {% elif indicateur.Id_Graphe.id == 7 %}
+                type : 'doughnut',
+                {% elif indicateur.Id_Graphe.id == 3 %}
+                type : 'bar',
+                {% elif indicateur.Id_Graphe.id == 4 %}
+                type : 'bar',
+                {% endif %}
           data: data{{forloop.counter0}},
+          {% if indicateur.Id_Graphe.id == 3 %}
+          options: {indexAxis: 'y',
+               elements: {
+                bar: {
+                   borderWidth: 2,
+                  }},
+                plugins: [bgColor{{forloop.counter0}}]
+          }};
+          {% else %}
           options: {
           responsive: true,
           plugins: {
@@ -163,6 +309,7 @@
             mode: 'index',
             intersect: false
           },
+          {% if indicateur.Id_Graphe.id != 7 %}
           scales: {
             x: {
               display: true,
@@ -179,36 +326,398 @@
               }
             }
           }
+          {% endif %}
         },
         //add the background color plugin 
         plugins: [bgColor{{forloop.counter0}}]
       };
+          {% endif %}
+
+
+      
+
+
+  //data for per month charts
+  const dataCurrentMonth{{forloop.counter0}} = {
+        labels: [{% for don in ListeDonnees %}
+        {% if don.Id_Indicateur.id == indicateur.id %}
+        {% if don.Date.month == currentMonth %}
+       '{{ don.Date }}',
+        {% endif %}
+        {% endif %}
+       {% endfor %}],
+        datasets: [{
+        label: '{{indicateur.Intitule_Indicateur}}',
+        backgroundColor: color => {
+        console.log(color)
+        let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+        return colors;
+      },
+borderColor: color => {
+  console.log(color)
+  let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+   return colors;
+ },
+ {% if indicateur.Id_Graphe.id == 7 or indicateur.Id_Graphe.id == 6 %}
+ borderWidth: 1,
+ {% if indicateur.Id_Graphe.id == 7 %}
+ cutout : '90%',
+ {% endif %}
+ {% endif %}
+ 
+{% if indicateur.Id_Graphe.id != 7 %}
+data: [{% for don in ListeDonnees %}
+       {% if don.Id_Indicateur.id == indicateur.id %}
+       '{{ don.Valeur }}',
+       {% endif %}
+       {% endfor %}],
+{% else %}
+//for pie / doughnut charts (special data structures)
+data: [
+      {% for don in ListeDonnees %}
+      {% if don.Id_Indicateur.id == indicateur.id %}
+      {% if don.Date.month == currentMonth %}
+       {day : '{{don.Date}}', sales: { drinks: {{don.Valeur}} }},
+      {% endif %}
+      {% endif %}
+      {% endfor %}],
+{% endif %}
+       
+
+      }]
+
+
+    
+    
+};
+
+
+
+      //config for per month charts 
+      const configCurrentMonth{{forloop.counter0}} = {
+        {% if indicateur.Id_Graphe.id == 6 %}
+              type : 'pie',
+              {% elif indicateur.Id_Graphe.id == 5 %}
+              type : 'line',
+              {% elif indicateur.Id_Graphe.id == 7 %}
+              type : 'doughnut',
+              {% elif indicateur.Id_Graphe.id == 3 %}
+              type : 'bar',
+              {% elif indicateur.Id_Graphe.id == 4 %}
+              type : 'bar',
+              {% endif %}
+        data: dataCurrentMonth{{forloop.counter0}},
+        {% if indicateur.Id_Graphe.id == 3 %}
+        options: {indexAxis: 'y',
+             elements: {
+              bar: {
+                 borderWidth: 2,
+                }},
+              plugins: [bgColor{{forloop.counter0}}]
+        }};
+        {% elif indicateur.Id_Graphe.id == 7 or indicateur.Id_Graphe.id == 6 %}
+        options: {
+          parsing: {
+            key: 'sales.drinks'
+          }
+
+        }};
+        {% else %}
+        options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: ''
+          },
+        },
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        {% if indicateur.Id_Graphe.id != 7 %}
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Valeur'
+            }
+          }
+        }
+        {% endif %}
+      },
+
+      //add the background color plugin 
+      plugins: [bgColor{{forloop.counter0}}]
+    }; 
+    {% endif %}
+  
+  
+  //data for currentYear chart
+  const dataCurrentYear{{forloop.counter0}}= {
+    labels: [{% for don in ListeDonnees %}
+    {% if don.Id_Indicateur.id == indicateur.id %}
+    {% if don.Date.year == currentYear %}
+   '{{ don.Date }}',
+    {% endif %}
+    {% endif %}
+   {% endfor %}],
+    datasets: [{
+    label: '{{indicateur.Intitule_Indicateur}}',
+    backgroundColor: color => {
+    console.log(color)
+    let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+    return colors;
+  },
+borderColor: color => {
+console.log(color)
+let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+return colors;
+},
+data: [{% for don in ListeDonnees %}
+   {% if don.Id_Indicateur.id == indicateur.id %}
+   '{{ don.Valeur }}',
+   {% endif %}
+   {% endfor %}],
+
+  }]};
+
+
+//config for Cuurent year charts
+const configCurrentYear{{forloop.counter0}}= {
+  {% if indicateur.Id_Graphe.id == 6 %}
+        type : 'pie',
+        {% elif indicateur.Id_Graphe.id == 5 %}
+        type : 'line',
+        {% elif indicateur.Id_Graphe.id == 7 %}
+        type : 'doughnut',
+        {% elif indicateur.Id_Graphe.id == 3 %}
+        type : 'bar',
+        {% elif indicateur.Id_Graphe.id == 4 %}
+        type : 'bar',
+        {% endif %}
+  data: dataCurrentYear{{forloop.counter0}},
+  {% if indicateur.Id_Graphe.id == 3 %}
+  options: {indexAxis: 'y',
+       elements: {
+        bar: {
+           borderWidth: 2,
+          }},
+        plugins: [bgColor{{forloop.counter0}}]
+  }};
+  {% else %}
+  options: {
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: ''
+    },
+  },
+  interaction: {
+    mode: 'index',
+    intersect: false
+  },
+  scales: {
+    x: {
+      display: true,
+      title: {
+        display: true,
+        text: '{{currentYear}}'
+      }
+    },
+    y: {
+      display: true,
+      title: {
+        display: true,
+        text: 'Valeur'
+      }
+    }
+  }
+},
+
+//add the background color plugin 
+plugins: [bgColor{{forloop.counter0}}]
+}; 
+{% endif %}
+
+
+
+  //data for bilan charts 
+  const dataBilan{{forloop.counter0}}= {
+    //labels: ,
+    datasets: [{
+    label: '{{indicateur.Intitule_Indicateur}}',
+    backgroundColor: color => {
+    console.log(color)
+    let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+    return colors;
+  },
+borderColor: color => {
+console.log(color)
+let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
+return colors;
+},
+data: day{{forloop.counter0}},
+
+  }]};
+
+
+
+
+  //config for per month charts 
+  const configBilan{{forloop.counter0}} = {
+    {% if indicateur.Id_Graphe.id == 6 %}
+          type : 'pie',
+          {% elif indicateur.Id_Graphe.id == 5 %}
+          type : 'line',
+          {% elif indicateur.Id_Graphe.id == 7 %}
+          type : 'doughnut',
+          {% elif indicateur.Id_Graphe.id == 3 %}
+          type : 'bar',
+          {% elif indicateur.Id_Graphe.id == 4 %}
+          type : 'bar',
+          {% endif %}
+    data: dataBilan{{forloop.counter0}},
+    options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: ''
+      },
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    {% if indicateur.Id_Graphe.id != 7 %}
+    scales: {
+      x: {
+        type: 'time',
+        {% if indicateur.Periodicite == "Mensuelle" %}
+        time: { 
+          unit: 'month'
+        }
+        {% else %}
+        time: {
+          unit: 'year'
+        }
+        {% endif %}
+        
+      },
+      y: {
+        beginAtZero: true
+      }
+      },
+      {% endif %}
+      //add the background color plugin 
+  plugins: [bgColor{{forloop.counter0}}]
+    }
+
+  };
+
+  
+  
+  
 
       
 
       function changeline(){
 
         const updatetype = 'line';
-        myChart{{forloop.counter0}}.config.type = updatetype;
-        myChart{{forloop.counter0}}.update();
+        myChartBilan{{forloop.counter0}}.config.type = updatetype;
+        myChartBilan{{forloop.counter0}}.update();
+
+        
       
       };
+
+      function changelineMini(){
+
+        const updatetypeMini = 'line';
+        {% if indicateur.Periodicite == "Mensuelle" %}
+        myChartCurrentMonth{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentMonth{{forloop.counter0}}.update();
+        {% else %}
+        myChartCurrentYear{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentYear{{forloop.counter0}}.update();
+
+        {% endif %}
+        
       
+      };      
       function changebar(){
       
         const updatetype = 'bar';
-        myChart{{forloop.counter0}}.config.type = updatetype;
-        myChart{{forloop.counter0}}.update();};
+        myChartBilan{{forloop.counter0}}.config.type = updatetype;
+        myChartBilan{{forloop.counter0}}.update();};
       
+      
+      function changebarMini(){
+      
+          const updatetypeMini = 'bar';
+          {% if indicateur.Periodicite == "Mensuelle" %}
+          myChartCurrentMonth{{forloop.counter0}}.config.type = updatetypeMini;
+          myChartCurrentMonth{{forloop.counter0}}.update();
+          {% else %}
+          myChartCurrentYear{{forloop.counter0}}.config.type = updatetypeMini;
+          myChartCurrentYear{{forloop.counter0}}.update();
+  
+          {% endif %}};
       
       function changepie(){
       
         const updatetype = 'pie';
-        myChart{{forloop.counter0}}.config.type = updatetype;
-        myChart{{forloop.counter0}}.update();
+        myChartBilan{{forloop.counter0}}.config.type = updatetype;
+        myChartBilan{{forloop.counter0}}.update();
       };
 
+      function changepieMini(){
       
+        const updatetypeMini = 'pie';
+        {% if indicateur.Periodicite == "Mensuelle" %}
+        myChartCurrentMonth{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentMonth{{forloop.counter0}}.update();
+        {% else %}
+        myChartCurrentYear{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentYear{{forloop.counter0}}.update();
+
+        {% endif %}
+      };
+
+
+
+
+      function changedoughnut(){
+
+        const updatetype = 'doughnut';
+        myChartBilan{{forloop.counter0}}.config.type = updatetype;
+        myChartBilan{{forloop.counter0}}.update();
+      
+      };
+      
+
+      function changedoughnutMini(){
+      
+        const updatetypeMini = 'doughnut';
+        {% if indicateur.Periodicite == "Mensuelle" %}
+        myChartCurrentMonth{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentMonth{{forloop.counter0}}.update();
+        {% else %}
+        myChartCurrentYear{{forloop.counter0}}.config.type = updatetypeMini;
+        myChartCurrentYear{{forloop.counter0}}.update();
+
+        {% endif %}
+      };
       
       
     </script>
@@ -218,11 +727,44 @@
 
 <!--Graphs Scripts-->
 <script>
+  /*
   const myChart{{forloop.counter0}} = new Chart(
     document.getElementById("myChart" + {{ forloop.counter0 }}),
     config{{forloop.counter0}}
+  );*/
+
+  var myChartCounter = 0;
+
+  {% if indicateur.Periodicite == "Mensuelle" %}
+  //charts per month 
+  const myChartCurrentMonth{{forloop.counter0}} = new Chart(
+    document.getElementById("myChartCurrentMonth" + {{forloop.counter0}}),
+    configCurrentMonth{{forloop.counter0}}
+  );
+
+  {% else %}
+
+  //charts per year 
+  const myChartCurrentYear{{forloop.counter0}} = new Chart(
+    document.getElementById("myChartCurrentYear" + {{forloop.counter0}}),
+    configCurrentYear{{forloop.counter0}}
+  );
+
+
+  {% endif %}
+
+
+
+  //bilan charts (depends on Periodicite)
+  const myChartBilan{{forloop.counter0}} = new Chart(
+    document.getElementById("myChartBilan" + {{forloop.counter0}}),
+    configBilan{{forloop.counter0}}
   );
   
+
+  //chart report (per periodité)
+
+
   /*
   //for download pdf 
   function downloadPDF(){
@@ -264,6 +806,7 @@
 
    <script>
 
+    console.log(myChartCounter);
     function downloadPDF(){
 
       let pdf = new jsPDF('landscape');
@@ -282,22 +825,53 @@
       pdf.setFontSize(20);
       pdf.setFontType("normal");
       
-      
+      console.log(myChartCounter);
+
+
       {% for indicateur in object_list %}
-      const canvas{{forloop.counter0}} = document.getElementById('myChart{{forloop.counter0}}');
+      const canvas{{forloop.counter0}} = document.getElementById('myChartBilan{{forloop.counter0}}');
       //create image 
-      const canvasImage{{forloop.counter0}} = canvas{{forloop.counter0}}.toDataURL('image/jpeg', 1.0);
+      const canvasImage{{forloop.counter0}} = canvas{{forloop.counter0}}.toDataURL('image/png', 1.0);
 
       console.log(canvasImage{{forloop.counter0}})
+
+      console.log(myChartCounter);
+
+
+     {% if indicateur.Periodicite == "Mensuelle" %}
+      //create other image 
+      const canvasCurrentMonth{{forloop.counter0}} = document.getElementById('myChartCurrentMonth{{forloop.counter0}}');
+      const canvasCurrentMonthImage{{forloop.counter0}} = canvasCurrentMonth{{forloop.counter0}}.toDataURL('image/png', 1.0);
      
+    {% else %}
+
+      const canvasCurrentYear{{forloop.counter0}} = document.getElementById('myChartCurrentYear{{forloop.counter0}}');
+      const canvasCurrentYearImage{{forloop.counter0}} = canvasCurrentYear{{forloop.counter0}}.toDataURL('image/png', 1.0);
+
+     {% endif %}
       //image must go to PDF
-      
      
-     
-      pdf.addImage(canvasImage{{forloop.counter0}}, 'JPEG', 15, 15, 280, 150);
+      pdf.addImage(canvasImage{{forloop.counter0}}, 'PNG', 15, 15, 280, 150);
       pdf.text(10, 10, '   Indicateur {{forloop.counter}} : {{indicateur.Intitule_Indicateur}}                                               ');
 
+      
       pdf.addPage();
+    {% if indicateur.Periodicite == "Mensuelle" %}
+
+      pdf.addImage(canvasCurrentMonthImage{{forloop.counter0}}, 'PNG', 15, 15, 280, 150);
+      pdf.text(10, 10, '   Ce mois                                            ');
+
+      
+      pdf.addPage();
+
+    {% else %}
+      pdf.addImage(canvasCurrentYearImage{{forloop.counter0}}, 'PNG', 15, 15, 280, 150);
+      pdf.text(10, 10, '   Cette Annee                                            ');
+
+      
+      pdf.addPage();    
+      {% endif %}
+
       
     
      {% endfor %}

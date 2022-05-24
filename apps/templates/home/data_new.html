@@ -1,29 +1,73 @@
 {% extends "layouts/base.html" %} 
 
 {% block content %} 
-   <style>
+<style>
+
+
+    form > label {
+        text-align: center;
+        font-size: 5em;
+        box-sizing: border-box;
+        width:200%;
+        
+    }
+
+
+    input{
+    
+
+      width : 50%;
+      border-radius: 4px;
+      border: 2px solid #1c709b;
+      box-sizing: border-box;
+      padding : 5px 20px;
+      margin : 8px 0;
+      
+
+    
+    }
+    
+    input[type=submit]{
+        
+        text-align: center;
+        padding : 5px 1px;
+
+    }
+    input[type=text]{
+        font-size: 1em;
+        width: 40%;
+    }
+    
+    select{
+        font-size:1em;
+        margin : 40px 40px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border: 2px solid #1c709b;
 
 
 
-input{
-
-  width : 50%;
-  border-radius: 4px;
-  border: 2px solid #1c709b;
-  box-sizing: border-box;
-  padding : 12px 20px;
-  margin : 8px 0;
-
-}
+    }
+    
 
 
+    
+    
+    </style>
+    <!--<h1>Nouvelle Donnée</h1>-->
+    <div class="col-lg-7">
+        <div class = "card card-chart">
+            <div class="card-header">
+              <h2 style= "color: #1d8cf8;" class="card-title"> Ajouter Donnée  </h2>
+            </div>
 
+            <div style= "height: auto;" class = "card-body">
 
-
-   </style>
-    <h1>Nouvelle Donnée</h1>
-    <form action="" method="post"> {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Ajouter">
-    </form>
+               <form action="" method="post"> {% csrf_token %}
+                {{form.as_p}}
+            </div>
+        </div>
+    </div>
+                <input style="text-align: center;" class = "btn btn-info" type="submit" value="Ajouter">
+              </form>
 {% endblock content %}
