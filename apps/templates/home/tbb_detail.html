@@ -276,19 +276,19 @@
   }
     
         const config{{forloop.counter0}} = {
-          {% if indicateur.Id_Graphe.id == 6 %}
+          {% if indicateur.Id_Graphe.Type == "Camembert" %}
                 type : 'pie',
-                {% elif indicateur.Id_Graphe.id == 5 %}
+                {% elif indicateur.Id_Graphe.Type == "Lineaire" %}
                 type : 'line',
-                {% elif indicateur.Id_Graphe.id == 7 %}
+                {% elif indicateur.Id_Graphe.Type == "Beignet" %}
                 type : 'doughnut',
-                {% elif indicateur.Id_Graphe.id == 3 %}
+                {% elif indicateur.Id_Graphe.Type == "Barres horizontales" %}
                 type : 'bar',
-                {% elif indicateur.Id_Graphe.id == 4 %}
+                {% elif indicateur.Id_Graphe.Type == "Barres Verticales" %}
                 type : 'bar',
                 {% endif %}
           data: data{{forloop.counter0}},
-          {% if indicateur.Id_Graphe.id == 3 %}
+          {% if indicateur.Id_Graphe.Type == "Barres horizontales" %}
           options: {indexAxis: 'y',
                elements: {
                 bar: {
@@ -309,7 +309,7 @@
             mode: 'index',
             intersect: false
           },
-          {% if indicateur.Id_Graphe.id != 7 %}
+          {% if indicateur.Id_Graphe.Type != "Beignet" %}
           scales: {
             x: {
               display: true,
@@ -358,14 +358,14 @@ borderColor: color => {
   let colors = color.index > 1 ? 'rgba(75,192,192,0.2)' : 'rgba(255,26,104,0.2)';
    return colors;
  },
- {% if indicateur.Id_Graphe.id == 7 or indicateur.Id_Graphe.id == 6 %}
+ {% if indicateur.Id_Graphe.Type == "Beignet" or indicateur.Id_Graphe.Type == "Camembert" %}
  borderWidth: 1,
- {% if indicateur.Id_Graphe.id == 7 %}
+ {% if indicateur.Id_Graphe.Type == "Beignet" %}
  cutout : '90%',
  {% endif %}
  {% endif %}
  
-{% if indicateur.Id_Graphe.id != 7 %}
+{% if indicateur.Id_Graphe.Type != "Beignet" %}
 data: [{% for don in ListeDonnees %}
        {% if don.Id_Indicateur.id == indicateur.id %}
        '{{ don.Valeur }}',
@@ -395,19 +395,19 @@ data: [
 
       //config for per month charts 
       const configCurrentMonth{{forloop.counter0}} = {
-        {% if indicateur.Id_Graphe.id == 6 %}
-              type : 'pie',
-              {% elif indicateur.Id_Graphe.id == 5 %}
-              type : 'line',
-              {% elif indicateur.Id_Graphe.id == 7 %}
-              type : 'doughnut',
-              {% elif indicateur.Id_Graphe.id == 3 %}
-              type : 'bar',
-              {% elif indicateur.Id_Graphe.id == 4 %}
-              type : 'bar',
-              {% endif %}
+        {% if indicateur.Id_Graphe.Type == "Camembert" %}
+                type : 'pie',
+                {% elif indicateur.Id_Graphe.Type == "Lineaire" %}
+                type : 'line',
+                {% elif indicateur.Id_Graphe.Type == "Beignet" %}
+                type : 'doughnut',
+                {% elif indicateur.Id_Graphe.Type == "Barres horizontales" %}
+                type : 'bar',
+                {% elif indicateur.Id_Graphe.Type == "Barres Verticales" %}
+                type : 'bar',
+                {% endif %}
         data: dataCurrentMonth{{forloop.counter0}},
-        {% if indicateur.Id_Graphe.id == 3 %}
+        {% if indicateur.Id_Graphe.Type == "Barres horizontales" %}
         options: {indexAxis: 'y',
              elements: {
               bar: {
@@ -415,7 +415,7 @@ data: [
                 }},
               plugins: [bgColor{{forloop.counter0}}]
         }};
-        {% elif indicateur.Id_Graphe.id == 7 or indicateur.Id_Graphe.id == 6 %}
+        {% elif indicateur.Id_Graphe.Type == "Beignet" or indicateur.Id_Graphe.Type == "Camembert" %}
         options: {
           parsing: {
             key: 'sales.drinks'
@@ -435,7 +435,7 @@ data: [
           mode: 'index',
           intersect: false
         },
-        {% if indicateur.Id_Graphe.id != 7 %}
+        {% if indicateur.Id_Graphe.Type != "Beignet" %}
         scales: {
           x: {
             display: true,
@@ -493,19 +493,19 @@ data: [{% for don in ListeDonnees %}
 
 //config for Cuurent year charts
 const configCurrentYear{{forloop.counter0}}= {
-  {% if indicateur.Id_Graphe.id == 6 %}
-        type : 'pie',
-        {% elif indicateur.Id_Graphe.id == 5 %}
-        type : 'line',
-        {% elif indicateur.Id_Graphe.id == 7 %}
-        type : 'doughnut',
-        {% elif indicateur.Id_Graphe.id == 3 %}
-        type : 'bar',
-        {% elif indicateur.Id_Graphe.id == 4 %}
-        type : 'bar',
-        {% endif %}
+  {% if indicateur.Id_Graphe.Type == "Camembert" %}
+                type : 'pie',
+                {% elif indicateur.Id_Graphe.Type == "Lineaire" %}
+                type : 'line',
+                {% elif indicateur.Id_Graphe.Type == "Beignet" %}
+                type : 'doughnut',
+                {% elif indicateur.Id_Graphe.Type == "Barres horizontales" %}
+                type : 'bar',
+                {% elif indicateur.Id_Graphe.Type == "Barres Verticales" %}
+                type : 'bar',
+                {% endif %}
   data: dataCurrentYear{{forloop.counter0}},
-  {% if indicateur.Id_Graphe.id == 3 %}
+  {% if indicateur.Id_Graphe.Type == "Barres horizontales" %}
   options: {indexAxis: 'y',
        elements: {
         bar: {
@@ -575,17 +575,17 @@ data: day{{forloop.counter0}},
 
   //config for per month charts 
   const configBilan{{forloop.counter0}} = {
-    {% if indicateur.Id_Graphe.id == 6 %}
-          type : 'pie',
-          {% elif indicateur.Id_Graphe.id == 5 %}
-          type : 'line',
-          {% elif indicateur.Id_Graphe.id == 7 %}
-          type : 'doughnut',
-          {% elif indicateur.Id_Graphe.id == 3 %}
-          type : 'bar',
-          {% elif indicateur.Id_Graphe.id == 4 %}
-          type : 'bar',
-          {% endif %}
+    {% if indicateur.Id_Graphe.Type == "Camembert" %}
+                type : 'pie',
+                {% elif indicateur.Id_Graphe.Type == "Lineaire" %}
+                type : 'line',
+                {% elif indicateur.Id_Graphe.Type == "Beignet" %}
+                type : 'doughnut',
+                {% elif indicateur.Id_Graphe.Type == "Barres horizontales" %}
+                type : 'bar',
+                {% elif indicateur.Id_Graphe.Type == "Barres Verticales" %}
+                type : 'bar',
+                {% endif %}
     data: dataBilan{{forloop.counter0}},
     options: {
     responsive: true,
@@ -599,7 +599,7 @@ data: day{{forloop.counter0}},
       mode: 'index',
       intersect: false
     },
-    {% if indicateur.Id_Graphe.id != 7 %}
+    {% if indicateur.Id_Graphe.Type != "Beignet" %}
     scales: {
       x: {
         type: 'time',
