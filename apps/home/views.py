@@ -1,7 +1,12 @@
+from datetime import datetime
+from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.detail import SingleObjectMixin
 from .models import TB,Indicateur,Graphe,Donnee
 
+
+import datetime
 
 from django import template
 from django.contrib.auth.decorators import login_required
@@ -23,6 +28,8 @@ def index(request):
     context['FirstInd'] = Indicateur.objects.all().first()
 
     context['ListeDonnees'] = Donnee.objects.all()
+
+    context['currentMonth'] = datetime.date.today().month
 
     return HttpResponse(html_template.render(context, request))
 
@@ -69,29 +76,29 @@ def pages(request):
 
 # Create your views here.
 
-class TbListView(ListView):
-    model = Indicateur
-    template_name = 'home/indicateur_list.html'
-    def get_context_data(self,*args, **kwargs):
-        context = super(TbListView, self).get_context_data(*args,**kwargs)
+class TbDetail(SingleObjectMixin ,ListView):
+    template_name = 'home/tbb_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=TB.objects.all())
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tb'] = self.object
         context['ListeTb'] = TB.objects.all()
-        context['FirstTb'] = TB.objects.all().first()
-        context['ListeInd'] = Indicateur.objects.all()
         context['ListeDonnees'] = Donnee.objects.all()
-        context['FirstInd'] = Indicateur.objects.all().first()
+        context['currentMonth'] = datetime.date.today().month
+        context['currentYear'] = datetime.date.today().year
         return context
 
-class TbDetailView(DetailView):
-    model = Indicateur
-    template_name = 'home/indicateur_detail.html'
-    def get_context_data(self,*args, **kwargs):
-        context = super(TbDetailView, self).get_context_data(*args,**kwargs)
-        context['ListeTb'] = TB.objects.all()
-        return context
+    def get_queryset(self):
+        return self.object.indicateur_set.all()
+    
 
 class TbCreateView(CreateView):
     model = TB
-    template_name = 'home/indicateur_new.html'
+    template_name = 'home/tbb_new.html'
     fields = ['Intitule', 'Objectif']
     def get_context_data(self,*args, **kwargs):
         context = super(TbCreateView, self).get_context_data(*args,**kwargs)
@@ -100,7 +107,7 @@ class TbCreateView(CreateView):
 
 class TbUpdateView(UpdateView):
     model = TB
-    template_name = 'home/indicateur_edit.html'
+    template_name = 'home/tbb_edit.html'
     fields = ['Intitule', 'Objectif']
     def get_context_data(self,*args, **kwargs):
         context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
@@ -109,22 +116,91 @@ class TbUpdateView(UpdateView):
 
 class TbDeleteView(DeleteView):
     model = TB
-    template_name = 'home/indicateur_delete.html'
-    success_url = reverse_lazy('indicateur_list')
+    template_name = 'home/tbb_delete.html'
+    success_url = reverse_lazy('home')
     def get_context_data(self,*args, **kwargs):
-        context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
+        context = super(TbDeleteView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
         return context
 
 
-def ListeIndicateurView(request):
+
+class IndicateurCreateView(CreateView):
+    model = Indicateur
+    template_name = 'home/indicateur_new.html'
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB'] 
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
+
+
+class IndicateurListView(ListView):
+    model = Indicateur
+    template_name = 'home/indicateur_list.html'
+
+class IndicateurDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
+
+def listeindicateurview(request):
     return render(request,'home/listeIndicateur.html',
     {'ListeInd' : Indicateur.objects.all(),
     'ListeTb' : TB.objects.all()
 })
 
+class IndicateurUpdateView(UpdateView):
+    model = Indicateur
+    template_name = 'home/indicateur_edit.html'
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
 
-def ListeDonneesView(request):
+class IndicateurDeleteView(DeleteView):
+    model = Indicateur
+    template_name = 'home/indicateur_delete.html'
+    success_url = reverse_lazy('liste_indicateurs')
+
+class DataCreateView(CreateView):
+    model = Donnee
+    template_name = 'home/data_new.html'
+    fields = ['Date','Valeur','Id_Indicateur']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context
+
+def listedonneesview(request):
     return render(request,'home/listeDonnees.html',
-    {'ListeDonnees' : Donnee.objects.all(),
-    'ListeTb' : TB.objects.all()})
+    {'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all()
+})
+
+class DataDetailView(DetailView):
+    model = Donnee
+    template_name = 'home/data_detail.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataDetailView, self).get_context_data(*args,**kwargs)
+        context['all_data_list'] = Donnee.objects.all()
+        context['ListeTb'] = TB.objects.all()
+        return context
+
+class DataDeleteView(DeleteView):
+    model = Donnee
+    template_name = 'home/data_delete.html'
+    success_url = reverse_lazy('liste_donnees')
+
+class DataUpdateView(UpdateView):
+    model = Donnee
+    template_name = 'home/data_update.html'
+    fields = ['Date','Valeur','Id_Indicateur']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        return context

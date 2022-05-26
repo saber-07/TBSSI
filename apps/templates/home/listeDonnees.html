@@ -19,6 +19,9 @@
             <thead class=" text-primary">
               <tr>
                 <th>
+                  N° Donnee
+                </th>
+                <th>
                   Indicateur
                 </th>
                 <th>
@@ -30,17 +33,21 @@
               </tr>
             </thead>
             <tbody>
-            {% for don in ListeDonnees %}
+            {% for donnee in all_data_list %}
               <tr>
                 <td>
-                <a href="">
-                  {{ don.Id_Indicateur }}
+                <a href="{% url 'data_detail' donnee.pk%}">
+                  Data N°{{ donnee.id }}
                 </td> </a>
+
                 <td>
-                  {{ don.Date }}
+                  {{ donnee.Id_Indicateur }}
                 </td>
                 <td>
-                  {{ don.Valeur}}
+                  {{ donnee.Date }}
+                </td>
+                <td>
+                  {{ donnee.Valeur}}
                 </td>
               </tr>
             {% endfor %}

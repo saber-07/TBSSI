@@ -17,14 +17,10 @@
 
    </style>
 
-    <div class="sidebar">
-      <div class="sidebar-wrapper">
+    <div class="sidebar" data="blue">
+      <div style ="background-color : #1d8cf8;" class="sidebar-wrapper">
         <div style="text-align: left;">
-          <a target="_blank" rel="sponsored noopener noreferrer" 
-             href="https://appseed.us/admin-dashboards/django-dashboard-black" class="simple-text logo-mini">
-             
-            </a>
-        
+   
           <a
              href="{% url 'home' %}" class="simple-text logo-normal">
              <img src="/static/assets/img/elitLogo.png" alt="ELIT">
@@ -74,7 +70,7 @@
           <div class="dropdown-container">
            <ul>
             {% for tb in ListeTb %}
-            <li> <a href="{% url 'indicateur_list' tb.pk%}">
+            <li> <a href="{% url 'tbb_detail' tb.pk%}">
             <i class="tim-icons icon-single-copy-04"></i>
               <p> {{ tb.Intitule }} </p>
             </a> </li>
@@ -83,26 +79,26 @@
           </div>
           </li>
 
-          <li> <a href="">
+          <li> <a href="{% url 'tbb_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Tableau de bord </p>
           </a> </li>
 
           <li>
-            <a href="{% url 'liste_indicateurs'%}">
+            <a href="{% url 'liste_indicateurs' %}">
               <i class="tim-icons icon-bullet-list-67"></i>
               <p> Liste des Indicateurs </p>
             </a>
             
           </li>
 
-          <li> <a href="">
+          <li> <a href="{% url 'indicateur_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Indicateur </p>
           </a> </li>
 
           <li>
-            <a href="{% url 'liste_donnees'%}">
+            <a href="{% url 'liste_donnees' %}">
               <i class="tim-icons icon-bullet-list-67"></i>
               <p> Liste des Données </p>
             </a>
@@ -110,7 +106,7 @@
           </li>
 
 
-          <li> <a href="">
+          <li> <a href="{% url 'data_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Donnée </p>
           </a> </li>
@@ -138,6 +134,7 @@
             </a>
           </li> 
         -->
+        
           
         <li class="{% if 'page-user' in segment %} active {% endif %}">
           <a href="/page-user.html">
@@ -145,6 +142,12 @@
             <p>Profil User</p>
           </a>
         </li>
+
+        <li> <a href="">
+          <i class ="tim-icons icon-simple-add"></i>
+          <p> Ajouter User </p>
+        </a> </li>
+
 
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">

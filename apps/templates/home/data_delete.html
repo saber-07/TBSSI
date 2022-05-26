@@ -1,0 +1,10 @@
+{% extends "layouts/base.html" %}
+
+
+{% block content %}
+    <h1>Supprimer la donnée</h1>
+    <form action="" method="post"> {% csrf_token %}
+        <p>Êtes vous sûr de vouloir supprimer la donnée N°"{{donnee.pk}}"?</p>
+        <input type="submit" value="Confirmer">
+    </form>
+{% endblock content %}

@@ -1,17 +1,25 @@
 {% extends "layouts/base.html" %}
 
+<<<<<<< HEAD
 {% block title %}Home{% endblock %}
+=======
+{% block title %} Acceuil {% endblock %}
+>>>>>>> master
 {% block content %}
-<html>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Document</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
-  <h1> Tableau de bord 
-    {{ FirstTb.Intitule }}
+  <h1> Acceuil
     <br>
         
   </h1>
 
+<<<<<<< HEAD
 
 
   <!--<canvas id="myChart"></canvas>-->
@@ -401,239 +409,13 @@
         </div>
       </div>
     </div>-->
+=======
+  <button class="btn btn-info" > Administration </button>
+>>>>>>> master
 
 
+  {{currentMonth}}
 </body>
-
-
-
-<script>
-
-  //for buttons graph changes 
-  const line = document.getElementById('line');
-  const bar = document.getElementById('bar');
-  const pie = document.getElementById('pie');
-
-  line.addEventListener('click', changeline);
-  bar.addEventListener('click', changebar);
-  pie.addEventListener('click', changepie);
-
-  
-  const data = {
-    labels: [{% for don in ListeDonnees %}
-             '{{ don.Date }}',
-             {% endfor %}],
-    datasets: [{
-      label: '{{ FirstInd.Intitule_Indicateur }}',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [{% for don in ListeDonnees %}
-             '{{ don.Valeur }}',
-             {% endfor %}],
-    }]
-  };
-
-const config = {
-  type: 'line',
-  data: data,
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: ''
-      },
-    },
-    interaction: {
-      mode: 'index',
-      intersect: false
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Valeur'
-        }
-      }
-    }
-  },
-};
-
-
-function changeline(){
-
-  const updatetype = 'line';
-  myChart.config.type = updatetype;
-  myChart.update();
-
-};
-
-function changebar(){
-
-  const updatetype = 'bar';
-  myChart.config.type = updatetype;
-  myChart.update();};
-
-
-function changepie(){
-
-  const updatetype = 'pie';
-  myChart.config.type = updatetype;
-  myChart.update();
-};
-</script>
-
-
-<!-- Second Graph -->
-
-
-<script>
-
-  const dataBis = {
-    labels: [{% for don in ListeDonnees %}
-             '{{ don.Date }}',
-             {% endfor %}],
-    datasets: [{
-      label: '{{ FirstInd.Intitule_Indicateur }}',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [{% for don in ListeDonnees %}
-             '{{ don.Valeur }}',
-             {% endfor %}],
-    }]
-  };
-
-const configBis = {
-  type: 'bar',
-  data: data,
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: ''
-      },
-    },
-    interaction: {
-      mode: 'index',
-      intersect: false
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Valeur'
-        }
-      }
-    }
-  },
-};
-</script>
-
-<!-- Third Graph--> 
-<script>
-  
-  const dataThird = {
-    labels: [{% for don in ListeDonnees %}
-             '{{ don.Date }}',
-             {% endfor %}],
-    datasets: [{
-      label: '{{ FirstInd.Intitule_Indicateur }}',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [{% for don in ListeDonnees %}
-             '{{ don.Valeur }}',
-             {% endfor %}],
-    }]
-  };
-
-const configThird = {
-  type: 'pie',
-  data: data,
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: ''
-      },
-    },
-    interaction: {
-      mode: 'index',
-      intersect: false
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Valeur'
-        }
-      }
-    }
-  },
-};
-
-</script>
-
-
-
-
-
-
-
-
-
-
-
-<!--Graphs Scripts-->
-<script>
-  const myChart = new Chart(
-    document.getElementById('myChart'),
-    config
-  );
-
-  const myChartBis = new Chart(
-    document.getElementById('myChartBis'),
-    configBis
-  );
-
-
-  const myChartThird = new Chart(
-    document.getElementById('myChartThird'),
-    configThird
-  );
-
-  
-</script>
-
-
-
- 
-
 </html>
 
 {% endblock %}

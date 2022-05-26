@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Donnée {{donnee.pk}} {% endblock%}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a href="">Data N°{{donnee.pk}}</a></h1>
+    <h3>Indicateur : {{donnee.Id_Indicateur}}</h3>
+    <h3>Date : {{donnee.Date}}</h3>
+    <h3>Valeur : {{donnee.Valeur}}</h3>
+
+    </div>
+
+</div>
+
+    <p><a class = "btn btn-primary" href="{% url 'data_update' donnee.pk%}">+ Modifier donnée</a>
+    <a class = "btn btn-primary" href="{% url 'data_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+{% endblock content %}
