@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from apps.administration.models import CustomUser
 
 
 #les modeles utilisés
@@ -19,6 +20,8 @@ class TB(models.Model):
     
 #classe Indicateur 
 class Indicateur(models.Model):
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
     PERIODICITE_CHOICES =( ('Annuelle', 'Annuelle'),
                     ('Trimestrielle', 'Trimestrielle'),
@@ -71,6 +74,7 @@ class Graphe(models.Model):
 
 #classe donnée
 class Donnee(models.Model):
+
     Date = models.DateField(blank=False)
     Valeur = models.IntegerField(blank=False)
     #cle etrangere indicateur

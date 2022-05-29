@@ -3,14 +3,14 @@ from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
-from .models import TB,Indicateur,Graphe,Donnee
-
-
+from .models import TB,Indicateur,Donnee
+from guardian.mixins import PermissionListMixin, PermissionRequiredMixin
+from guardian.shortcuts import get_objects_for_user
 import datetime
 
 from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render 
@@ -133,11 +133,7 @@ class IndicateurCreateView(CreateView):
         context = super(IndicateurCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
         return context
-
-
-class IndicateurListView(ListView):
-    model = Indicateur
-    template_name = 'home/indicateur_list.html'
+    
 
 class IndicateurDetailView(DetailView):
     model = Indicateur
@@ -148,12 +144,12 @@ class IndicateurDetailView(DetailView):
         return context
 
 def listeindicateurview(request):
-    return render(request,'home/listeIndicateur.html',
-    {'ListeInd' : Indicateur.objects.all(),
-    'ListeTb' : TB.objects.all()
-})
+    return render(request, 'home/listeIndicateur.html', {'ListeInd' : Indicateur.objects.all})
 
-class IndicateurUpdateView(UpdateView):
+
+class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
+    permission_required = "change_indicateur"
+
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
     fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']

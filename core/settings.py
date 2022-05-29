@@ -30,9 +30,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.home',# Enable the inner home (home)
-    'chartjs',  
+    'apps.home',
+    'apps.administration',
+    'chartjs',
+    'guardian', 
 ]
+# new custom user model 
+AUTH_USER_MODEL = 'administration.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,3 +129,11 @@ STATICFILES_DIRS = (
 
 #############################################################
 #############################################################
+
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # default
+    'guardian.backends.ObjectPermissionBackend',
+)
