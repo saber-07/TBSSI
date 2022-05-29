@@ -24,6 +24,15 @@
                   <span class="d-lg-none d-md-block">Search</span>
                 </button>
               </li>
+
+              <li>
+                {% if user.is_authenticated %}
+                <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
+                 {% else %}
+                <p>Welcome, new user. Please log in.</p>
+                {% endif %}
+              </li>
+
               <li class="dropdown nav-item">
                 <a href="javascript:void(0)" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div class="notification d-none d-lg-block d-xl-block"></div>

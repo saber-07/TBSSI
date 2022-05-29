@@ -147,11 +147,30 @@
               <h5 class="card-category"></h5>
               <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-primary"></i>
               Interpretation </h3>
+          
+              
             </div>
+
+            <div class="col-sm-11">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+              <button class="btn btn-sm btn-primary btn-simple" onclick="">Ajouter Interpretation</button>
+              </div>
+            </div>
+
+            
             <div class="card-body" style= "width: 100%; height: auto;">
               <div class="chart-area">
+                {% for interpretation in ListeInter %}
+                   {% if interpretation.Id_Indicateur.id == indicateur.id %}
+                      
+                      {{interpretation.Contenu}}
+                   {% endif %}
+                {% endfor %}
                 
               </div>
+
+              
+              
             </div>
           </div>
         </div>

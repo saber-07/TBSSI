@@ -3,7 +3,7 @@ from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
-from .models import TB,Indicateur,Graphe,Donnee
+from .models import TB,Indicateur,Graphe,Donnee, Interpretation
 
 
 import datetime
@@ -14,6 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render 
+
+from guardian.shortcuts import get_objects_for_user 
+
 
 
 
@@ -87,6 +90,7 @@ class TbDetail(SingleObjectMixin ,ListView):
         context = super().get_context_data(**kwargs)
         context['tb'] = self.object
         context['ListeTb'] = TB.objects.all()
+        context['ListeInter'] = Interpretation.objects.all()
         context['ListeDonnees'] = Donnee.objects.all()
         context['currentMonth'] = datetime.date.today().month
         context['currentYear'] = datetime.date.today().year
@@ -153,6 +157,12 @@ def listeindicateurview(request):
     'ListeTb' : TB.objects.all()
 })
 
+'''
+def listeindicateurview(request):
+    indicateur_data = get_objects_for_user(request.user,'indicateur.view_indicateur', klass=Indicateur)
+    return render(request,'home/listeIndicateur.html', {'ListeInd' : indicateur_data})
+'''
+
 class IndicateurUpdateView(UpdateView):
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
@@ -204,3 +214,4 @@ class DataUpdateView(UpdateView):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
         return context
+
