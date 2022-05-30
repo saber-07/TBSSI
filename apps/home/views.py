@@ -215,3 +215,11 @@ class DataUpdateView(UpdateView):
         context['ListeTb'] = TB.objects.all()
         return context
 
+
+
+#for administration
+def administrationView(request):
+    return render(request,'home/administration.html',
+    {'ListeInd' : Indicateur.objects.all(),
+    'ListeTb' : TB.objects.all()
+})
