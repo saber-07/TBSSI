@@ -89,3 +89,6 @@ class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
+
+
+

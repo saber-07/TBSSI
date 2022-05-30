@@ -24,9 +24,7 @@
 
 
 
-  {% if "mygroup" in user.groups.all.0.name %}
   <a href="{% url 'administration' %}" class="btn btn-info" > Administration</a>
-  {% endif %}
 
 
   <!--better version for later
@@ -38,6 +36,7 @@
         Text showed to users in group 'Sellers'
     {% endif %}
 {% endfor %}-->
+
 </body>
 </html>
 
