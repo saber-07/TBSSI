@@ -29,4 +29,7 @@ urlpatterns = [
     path('data/detail/<int:pk>/', views.DataDetailView.as_view(), name='data_detail'),
     path('data/<int:pk>/delete/', views.DataDeleteView.as_view(), name='data_delete'),
     path('data/<int:pk>/update/', views.DataUpdateView.as_view(), name='data_update'),
+
+    #for administration
+    path('administration/', views.administrationView, name='administration'),
     ]

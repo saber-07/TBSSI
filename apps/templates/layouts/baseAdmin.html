@@ -9,7 +9,7 @@
   <link rel="canonical" href="https://appseed.us/admin-dashboards/django-dashboard-black">
   
   <title>
-    TBSSI ELIT | {% block title %}{% endblock %}
+    Administration TBSSI ELIT | {% block title %}{% endblock %}
   </title>
 
   <!--     Fonts and icons     -->
@@ -27,14 +27,14 @@
 
 </head>
 
-<body class="white-content">
+<body class="">
   <div class="wrapper">
 
-    {% include 'includes/sidebar.html' %}
+    {% include 'includes/sidebarAdmin.html' %}
 
     <div class="main-panel" data="blue">
 
-      {% include 'includes/navigation.html' %}
+      {% include 'includes/navigationAdmin.html' %}
 
       <div class="content">
 
@@ -42,14 +42,15 @@
 
       </div>
 
+      <!--
       {% include 'includes/footer.html' %}
-
+      -->
     </div>
     
   </div>
-
+<!---
   {% include 'includes/fixed-plugin.html' %}
-
+-->
   {% include 'includes/scripts.html' %}
 
   {% include 'includes/scripts-sidebar.html' %}
