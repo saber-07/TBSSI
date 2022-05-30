@@ -46,7 +46,7 @@
             </a>
           </li>-->
 
-
+    
           <li class="{% if 'notifications' in segment %} active {% endif %}">
             <a href="/ui-notifications.html">
               <i class="tim-icons icon-bell-55"></i>
@@ -79,6 +79,7 @@
           </div>
           </li>
 
+      {% if "Chef département" not in user.groups.all.0.name and "Directeur" not in user.groups.all.0.name %}
           <li> <a href="{% url 'tbb_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Tableau de bord </p>
@@ -110,6 +111,8 @@
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Donnée </p>
           </a> </li>
+
+       
 
 
 
@@ -149,6 +152,23 @@
         </a> </li>
 
 
+        {% endif %}
+
+       <!-- Validation Buttons -->
+       {% if "Chef département" in user.groups.all.0.name %}
+        
+       <li> <a href="">
+        <i class ="tim-icons icon-check-2"></i>
+        <p> Validation Indicateurs </p>
+      </a> </li>
+       {% elif "Directeur" in user.groups.all.0.name %}
+
+       <li> <a href="">
+        <i class ="tim-icons icon-check-2"></i>
+        <p> Validation Indicateurs </p>
+      </a> </li>
+       {% endif %}
+
           <li class="{% if 'rtl-support' in segment %} active {% endif %}">
             <a href="/page-rtl-support.html">
               <i class="tim-icons icon-world"></i>
@@ -162,6 +182,7 @@
               <p>Icons</p>
             </a>
           </li>-->
+
           <li>
             <a href="{% url 'logout' %}" >
               <i class="tim-icons icon-button-power"></i>

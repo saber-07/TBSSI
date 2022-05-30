@@ -16,8 +16,9 @@
   </h1>
 
 
+  {% if "Admin" in user.groups.all.0.name %}
   <a class="btn btn-info" href="{% url 'administration' %}"> Administration </a>
-
+  {% endif %}
   
 </body>
 </html>
