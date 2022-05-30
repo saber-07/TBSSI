@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
 #les modeles utilisés
 
@@ -39,3 +41,11 @@ class CustomUser(AbstractUser):
     departements = models.ForeignKey(Departement, on_delete=models.CASCADE, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
+
+
+@receiver(post_save, sender=CustomUser)
+def user_post_save(sender, instance, created, *args, **kargs):
+      group = Group.objects.get(name=instance.poste)
+      instance.groups.add(group)
+
+post_save.connect(user_post_save, sender=CustomUser)

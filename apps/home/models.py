@@ -42,6 +42,8 @@ class Indicateur(models.Model):
     Methode_calcul = models.CharField(max_length=200, default='Nb utilisateur', blank=False)
     Periodicite = models.CharField(max_length=100, choices=PERIODICITE_CHOICES)
     Source = models.CharField(max_length=100, default='DSSI', blank=False)
+    validation_chef_dep = models.BooleanField(default=False)
+    validation_directeur = models.BooleanField(default=False)
 
 
     #cle etrangere -> Graphe + TB

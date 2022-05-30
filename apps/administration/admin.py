@@ -8,8 +8,9 @@ from .forms import CustomUserCreationForm
 class CustomUserAdmin(UserAdmin): 
     add_form = CustomUserCreationForm 
     model = CustomUser
-    list_display = ['email', 'username', 'departements', 'poste', 'is_staff', ]
+    list_display = ['email', 'username', 'departements', 'directions', 'filiales', 'poste', 'is_staff', ]
     add_fieldsets = UserAdmin.add_fieldsets+(
+        (None, {'fields' : ('email',)}),
         (None, {'fields' : ('poste',)}),
         (None, {'fields' : ('departements',)}),
         (None, {'fields' : ('directions',)}),
