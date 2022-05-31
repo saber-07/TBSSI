@@ -24,8 +24,10 @@
 
             <ul class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
-
-              <li class="search-bar input-group">
+             <li>
+             {{ user.get_username }}
+             </li>
+             <li class="search-bar input-group">
                 <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
                   <span class="d-lg-none d-md-block">Search</span>
                 </button>
@@ -74,7 +76,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Rechercher" name="searched">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <i class="tim-icons icon-simple-remove"></i>
               </button>

@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Register {% endblock %} 
+{% block title %} Creer un compte {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -17,7 +17,7 @@
                   <h5 class="title">Register</h5>
 
                   <h6 class="card-category">
-                      Add your credentials
+                      Ajouter vos informations
                   </h6>
                 </div>
 
@@ -26,7 +26,7 @@
                     <div class="row">
                       <div class="col-md-3 px-md-1">
                         <div class="form-group">
-                          <label>Username</label>
+                          <label>Nom d'utilisateur</label>
                           <input class="form-control" id="username_create" name="username" required="" type="text" value="">
                         </div>
                       </div>
@@ -44,7 +44,7 @@
                     <div class="row">
                       <div class="col-md-3 px-md-1">
                         <div class="form-group">
-                          <label>Password</label>
+                          <label>Mot de passe</label>
                           <input class="form-control" id="pwd_create" name="password" required="" type="password" value="">
                         </div>
                       </div>
@@ -52,9 +52,9 @@
                     
                 </div>
                 <div class="card-footer">
-                  <button type="submit" name="register" class="btn btn-fill btn-primary">Register</button>
+                  <button type="submit" name="register" class="btn btn-fill btn-primary">Creer</button>
                   &nbsp; &nbsp;
-                  Have an account? <a href="/login.html" class="text-primary">Login</a>
+                  Vous avez deja un compte? <a href="/login.html" class="text-primary">Se Connecter</a>
                 </div>
 
               </form>

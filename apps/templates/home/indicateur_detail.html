@@ -52,7 +52,19 @@
     </table>
 
     <p><a style= "color: white;" class = "btn btn-info" href="{% url 'indicateur_edit' indicateur.pk%}">Modifier indicateur </a>
-    <a style= "color: white;" class = "btn btn-info" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a></p>
 
+
+
+    {% if DirecteurGroup in user.groups.all %}
+   <a class="btn btn-success" href="">Valider indicateur</a>
+
+    {% elif ChefDeptGroup in user.groups.all %}
+
+    <a class="btn btn-success" href="">Valider indicateur</a>
+
+  
+    {% endif %}
+
+    <a style= "color: white;" class = "btn btn-danger" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a> </p>
 
     {% endblock content %}
