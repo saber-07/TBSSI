@@ -3,8 +3,8 @@ from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
-from .models import TB,Indicateur,Donnee
-from guardian.mixins import PermissionListMixin, PermissionRequiredMixin
+from .models import TB,Indicateur,Donnee, Interpretation
+from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import get_objects_for_user
 import datetime
 
@@ -18,7 +18,7 @@ from django.shortcuts import render
 
 
 @login_required(login_url="/login/")
-def index(request):
+def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
     context = {'segment': 'index'}
 
     html_template = loader.get_template('home/index.html')
@@ -208,3 +208,12 @@ def administrationView(request):
     {'ListeInd' : Indicateur.objects.all(),
     'ListeTb' : TB.objects.all()
 })
+
+class ValidationIndicateurDirecteurListView(ListView):
+    model = Indicateur
+    template_name = 'home/validation_indicateur_directeur.html'
+    
+class ValidationIndicateurDirecteurDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+    success_url = reverse_lazy('validation_indicateur_directeur')

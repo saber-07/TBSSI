@@ -163,7 +163,7 @@
       </a> </li>
        {% elif "Directeur" in user.groups.all.0.name %}
 
-       <li> <a href="">
+       <li> <a href="{% url 'validation_indicateur_directeur' %}">
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
       </a> </li>

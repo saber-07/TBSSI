@@ -1,0 +1,8 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+{% for indicateur in object_list%}
+{% if not indicateur.validation_directeur and indicateur.user.directions ==  user.directions %}
+<h2><a href="{% url 'indicateur_detail' indicateur.pk %}">{{indicateur.Intitule_Indicateur}}</h2></a>
+{% endif %}
+{% endfor %}
+{% endblock content %}

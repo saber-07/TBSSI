@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 #les modeles utilisés
@@ -35,6 +35,7 @@ class CustomUser(AbstractUser):
         ('Directeur', 'Directeur'),
         ('Chef département', 'Chef département'),
         ('Ingénieur', 'Ingénieur'),
+        ('Admin' , 'Admin')
     )
 
     poste = models.CharField(max_length=50, choices=POSTE_CHOICES, null=True, blank=True)
@@ -45,7 +46,8 @@ class CustomUser(AbstractUser):
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
-      group = Group.objects.get(name=instance.poste)
-      instance.groups.add(group)
+    group = Group.objects.get(name='Admin') if instance.is_superuser else Group.objects.get(name=instance.poste)
+
+    instance.groups.add(group)
 
 post_save.connect(user_post_save, sender=CustomUser)

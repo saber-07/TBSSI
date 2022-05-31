@@ -1,7 +1,9 @@
+import django
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser
-
+# from django.db.models.signals import pre_save
+# from django.dispatch import receiver
 
 #les modeles utilisés
 
@@ -24,7 +26,6 @@ class Indicateur(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
     PERIODICITE_CHOICES =( ('Annuelle', 'Annuelle'),
-                    ('Trimestrielle', 'Trimestrielle'),
                     ('Mensuelle', 'Mensuelle'),
                     )
 
@@ -95,3 +96,9 @@ class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
+    Date = models.DateField(blank=False, default=django.utils.timezone.now)
+
+
+# @receiver(pre_save, sender=Interpretation)
+# def user_post_save(sender, instance, created, *args, **kargs):
+#     instance.Id_Indicateur = 

@@ -16,10 +16,12 @@
   </h1>
 
 
-  {% if "Admin" in user.groups.all.0.name %}
+  {% for g in user.groups.all %}
+  {% if "Admin" in g.name %}
   <a class="btn btn-info" href="{% url 'administration' %}"> Administration </a>
   {% endif %}
-  
+
+{% endfor %}
 </body>
 </html>
 
