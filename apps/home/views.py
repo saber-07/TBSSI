@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic.detail import SingleObjectMixin
 from .models import TB,Indicateur,Graphe,Donnee, Interpretation
 
+from django.contrib.auth.models import Group
 
 import datetime
 
@@ -33,6 +34,13 @@ def index(request):
     context['ListeDonnees'] = Donnee.objects.all()
 
     context['currentMonth'] = datetime.date.today().month
+  
+    #Ajouter les groupes
+    context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+    context['AdminGroup'] = Group.objects.get(name='Admin')
+    context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+    context['PDGGroup'] = Group.objects.get(name='PDG')
+    context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
 
     return HttpResponse(html_template.render(context, request))
 

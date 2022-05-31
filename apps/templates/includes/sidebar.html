@@ -31,6 +31,7 @@
         <ul class="nav">
         {% if request.user.is_authenticated %}
 
+
           <li class="{% if 'index' in segment %} active {% endif %}">
             <a href="/">
               <i class="tim-icons icon-chart-pie-36"></i>
@@ -79,7 +80,7 @@
           </div>
           </li>
 
-      {% if "Chef Departement" not in user.groups.all.0.name and "Directeur" not in user.groups.all.0.name %}
+      {% if ChefDeptGroup not in user.groups.all and DirecteurGroup not in user.groups.all %}
           <li> <a href="{% url 'tbb_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Tableau de bord </p>
@@ -155,13 +156,13 @@
         {% endif %}
 
        <!-- Validation Buttons -->
-       {% if "Chef Departement" in user.groups.all.0.name %}
+       {% if ChefDeptGroup in user.groups.all %}
         
        <li> <a href="">
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
       </a> </li>
-       {% elif "Directeur" in user.groups.all.0.name %}
+       {% elif DirecteurGroup in user.groups.all %}
 
        <li> <a href="">
         <i class ="tim-icons icon-check-2"></i>
