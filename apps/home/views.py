@@ -15,6 +15,9 @@ from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render 
 
+from django.contrib.auth.models import Group
+
+
 
 
 @login_required(login_url="/login/")
@@ -30,6 +33,13 @@ def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
     context['ListeDonnees'] = Donnee.objects.all()
 
     context['currentMonth'] = datetime.date.today().month
+
+    #Ajouter les groupes
+    context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+    context['AdminGroup'] = Group.objects.get(name='Admin')
+    context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+    context['PDGGroup'] = Group.objects.get(name='PDG')
+    context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
 
     return HttpResponse(html_template.render(context, request))
 
@@ -90,6 +100,14 @@ class TbDetail(SingleObjectMixin ,ListView):
         context['ListeDonnees'] = Donnee.objects.all()
         context['currentMonth'] = datetime.date.today().month
         context['currentYear'] = datetime.date.today().year
+
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        
         return context
 
     def get_queryset(self):
@@ -103,6 +121,12 @@ class TbCreateView(CreateView):
     def get_context_data(self,*args, **kwargs):
         context = super(TbCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 class TbUpdateView(UpdateView):
@@ -112,6 +136,13 @@ class TbUpdateView(UpdateView):
     def get_context_data(self,*args, **kwargs):
         context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+        
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 class TbDeleteView(DeleteView):
@@ -121,6 +152,14 @@ class TbDeleteView(DeleteView):
     def get_context_data(self,*args, **kwargs):
         context = super(TbDeleteView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+
+         #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        
         return context
 
 
@@ -132,6 +171,12 @@ class IndicateurCreateView(CreateView):
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
     
 
@@ -141,10 +186,23 @@ class IndicateurDetailView(DetailView):
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurDetailView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+
+         #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 def listeindicateurview(request):
-    return render(request, 'home/listeIndicateur.html', {'ListeInd' : Indicateur.objects.all})
+    return render(request, 'home/listeIndicateur.html', 
+    {'ListeInd' : Indicateur.objects.all,
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')})
 
 
 class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
@@ -156,12 +214,28 @@ class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+         #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 class IndicateurDeleteView(DeleteView):
     model = Indicateur
     template_name = 'home/indicateur_delete.html'
     success_url = reverse_lazy('liste_indicateurs')
+    def get_context_data(self,*args, **kwargs):
+        context = super(IndicateurDeleteView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
 
 class DataCreateView(CreateView):
     model = Donnee
@@ -170,12 +244,23 @@ class DataCreateView(CreateView):
     def get_context_data(self,*args, **kwargs):
         context = super(DataCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 def listedonneesview(request):
     return render(request,'home/listeDonnees.html',
     {'all_data_list' : Donnee.objects.all(),
-    'ListeTb' : TB.objects.all()
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')
 })
 
 class DataDetailView(DetailView):
@@ -185,12 +270,29 @@ class DataDetailView(DetailView):
         context = super(DataDetailView, self).get_context_data(*args,**kwargs)
         context['all_data_list'] = Donnee.objects.all()
         context['ListeTb'] = TB.objects.all()
+        
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 class DataDeleteView(DeleteView):
     model = Donnee
     template_name = 'home/data_delete.html'
     success_url = reverse_lazy('liste_donnees')
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataDeleteView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
 
 class DataUpdateView(UpdateView):
     model = Donnee
@@ -199,6 +301,12 @@ class DataUpdateView(UpdateView):
     def get_context_data(self,*args, **kwargs):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
 
@@ -206,14 +314,36 @@ class DataUpdateView(UpdateView):
 def administrationView(request):
     return render(request,'home/administration.html',
     {'ListeInd' : Indicateur.objects.all(),
-    'ListeTb' : TB.objects.all()
+    'ListeTb' : TB.objects.all(),
 })
 
 class ValidationIndicateurDirecteurListView(ListView):
     model = Indicateur
     template_name = 'home/validation_indicateur_directeur.html'
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationIndicateurDirecteurListView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
     
 class ValidationIndicateurDirecteurDetailView(DetailView):
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
     success_url = reverse_lazy('validation_indicateur_directeur')
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationIndicateurDirecteurDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
