@@ -1,0 +1,7 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    {% for customuser in object_list %}
+        <h2><a href="{% url 'user_detail' customuser.pk%}">{{customuser.username}}</h2>
+    {% endfor %}
+{% endblock content %}

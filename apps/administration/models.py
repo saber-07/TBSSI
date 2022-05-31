@@ -6,27 +6,29 @@ from django.dispatch import receiver
 
 #les modeles utilisés
 
-
-class Departement(models.Model):
-
-    nom_dep = models.CharField(max_length=60, null=True, blank=True)
-
-    def __str__(self):
-        return self.nom_dep
-
-class Direction(models.Model):
-
-    nom_dir = models.CharField(max_length=60, null=True, blank=True)
-
-    def __str__(self):
-        return self.nom_dir
-
 class Filiale(models.Model):
 
     nom_fil = models.CharField(max_length=60, null=True, blank=True)
 
     def __Str__(self):
         return self.nom_fil
+
+class Direction(models.Model):
+
+    nom_dir = models.CharField(max_length=60, null=True, blank=True)
+    filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    def __str__(self):
+        return self.nom_dir
+
+class Departement(models.Model):
+
+    nom_dep = models.CharField(max_length=60, null=True, blank=True)
+    directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.nom_dep
 
 class CustomUser(AbstractUser):
 
