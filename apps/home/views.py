@@ -16,7 +16,8 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import Group
 
-
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 
 @login_required(login_url="/login/")
@@ -247,6 +248,11 @@ class DataCreateView(CreateView):
     model = Donnee
     template_name = 'home/data_new.html'
     fields = ['Date','Valeur','Id_Indicateur']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self,*args, **kwargs):
         context = super(DataCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()

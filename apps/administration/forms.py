@@ -19,6 +19,7 @@ class CustomUserCreationForm(UserCreationForm):
             'departements',
             'directions',
             'filiales',
+            'is_admin',
             'password1', 
             'password2', 
             ]
@@ -36,4 +37,5 @@ class EditUserForm(forms.ModelForm):
             'departements',
             'directions',
             'filiales',
+            'is_admin',
             ]

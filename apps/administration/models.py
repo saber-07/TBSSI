@@ -36,20 +36,25 @@ class CustomUser(AbstractUser):
         ('PDG', 'PDG'),
         ('Directeur', 'Directeur'),
         ('Chef département', 'Chef département'),
-        ('Ingénieur', 'Ingénieur'),
-        ('Admin' , 'Admin')
+        ('Ingénieur', 'Ingénieur')
     )
 
     poste = models.CharField(max_length=50, choices=POSTE_CHOICES, null=True, blank=True)
     departements = models.ForeignKey(Departement, on_delete=models.CASCADE, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
+    is_admin = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
-    group = Group.objects.get(name='Admin') if instance.is_superuser else Group.objects.get(name=instance.poste)
 
-    instance.groups.add(group)
+    if (instance.is_admin):
+        group = Group.objects.get(name='Admin')  
+        instance.groups.add(group)
+
+    if(not instance.is_superuser):
+        group = Group.objects.get(name=instance.poste) 
+        instance.groups.add(group)
 
 post_save.connect(user_post_save, sender=CustomUser)

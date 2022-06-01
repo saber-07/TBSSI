@@ -80,6 +80,8 @@ class Graphe(models.Model):
 #classe donnée
 class Donnee(models.Model):
 
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+
     Date = models.DateField(blank=False)
     Valeur = models.IntegerField(blank=False)
     #cle etrangere indicateur
@@ -104,17 +106,34 @@ class Interpretation(models.Model):
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
-        ["change_indicateur", "delete_indicateur"],  # The permission we want to assign.
+        "change_indicateur",  # The permission we want to assign.
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
     )
 
+@receiver(post_save, sender=Indicateur)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_indicateur",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+    )
 
 @receiver(post_save, sender=Donnee)
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
-        ["change_data", "delete_data"],  # The permission we want to assign.
+        "change_donnee",  # The permission we want to assign.
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
-    )
+   )
+
+@receiver(post_save, sender=Donnee)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donnee",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
