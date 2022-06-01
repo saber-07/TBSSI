@@ -31,6 +31,9 @@ urlpatterns = [
     path('data/<int:pk>/update/', views.DataUpdateView.as_view(), name='data_update'),
     path('validation/indicateur/directeurlist/', views.ValidationIndicateurDirecteurListView.as_view(), name='validation_indicateur_directeur'),
     path('validation/indicateur/directeur/<int:pk>/', views.ValidationIndicateurDirecteurDetailView.as_view(), name='indicateur_detail'),
+    path('validation/indicateur/chefdeplist/', views.ValidationIndicateurChefDepListView.as_view(), name='validation_indicateur_chefdep'),
+    path('validation/indicateur/chefdep/<int:pk>/', views.ValidationIndicateurDirecteurDetailView.as_view(), name='indicateur_detail'),
+
     #for administration
     path('administration/', views.administrationView, name='administration'),
     ]

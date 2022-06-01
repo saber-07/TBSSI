@@ -157,7 +157,7 @@
        <!-- Validation Buttons -->
        {% if ChefDeptGroup in user.groups.all %}
         
-       <li> <a href="">
+       <li> <a href="{% url 'validation_indicateur_chefdep' %}">
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
       </a> </li>

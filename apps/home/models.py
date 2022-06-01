@@ -1,9 +1,11 @@
+from urllib import request
 import django
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser
-# from django.db.models.signals import pre_save
-# from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from guardian.shortcuts import assign_perm
 
 #les modeles utilisés
 
@@ -91,7 +93,6 @@ class Donnee(models.Model):
     
 
 #classe interpretation
-
 class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
@@ -99,6 +100,21 @@ class Interpretation(models.Model):
     Date = models.DateField(blank=False, default=django.utils.timezone.now)
 
 
-# @receiver(pre_save, sender=Interpretation)
-# def user_post_save(sender, instance, created, *args, **kargs):
-#     instance.Id_Indicateur = 
+@receiver(post_save, sender=Indicateur)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        ["change_indicateur", "delete_indicateur"],  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+    )
+
+
+@receiver(post_save, sender=Donnee)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        ["change_data", "delete_data"],  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+    )

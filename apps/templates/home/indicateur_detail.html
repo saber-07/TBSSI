@@ -56,11 +56,11 @@
 
 
     {% if DirecteurGroup in user.groups.all %}
-   <a class="btn btn-success" href="">Valider indicateur</a>
+   <a class="btn btn-success" href="{% url 'liste_indicateurs' %}">Valider indicateur</a>
 
     {% elif ChefDeptGroup in user.groups.all %}
 
-    <a class="btn btn-success" href="">Valider indicateur</a>
+    <a class="btn btn-success" href="{% url 'liste_indicateurs' %}">Valider indicateur</a>
 
   
     {% endif %}

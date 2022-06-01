@@ -10,7 +10,7 @@ class Filiale(models.Model):
 
     nom_fil = models.CharField(max_length=60, null=True, blank=True)
 
-    def __Str__(self):
+    def __str__(self):
         return self.nom_fil
 
 class Direction(models.Model):

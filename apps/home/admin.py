@@ -1,4 +1,3 @@
-from math import perm
 from django.contrib import admin
 from .models import TB, Indicateur, Interpretation, Graphe, Donnee
 from guardian.admin import GuardedModelAdmin
