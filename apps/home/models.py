@@ -1,9 +1,11 @@
+from urllib import request
 import django
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser
-# from django.db.models.signals import pre_save
-# from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from guardian.shortcuts import assign_perm
 
 #les modeles utilisés
 
@@ -46,7 +48,6 @@ class Indicateur(models.Model):
     validation_chef_dep = models.BooleanField(default=False)
     validation_directeur = models.BooleanField(default=False)
 
-
     #cle etrangere -> Graphe + TB
     Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
     Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)
@@ -78,6 +79,8 @@ class Graphe(models.Model):
 #classe donnée
 class Donnee(models.Model):
 
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+
     Date = models.DateField(blank=False)
     Valeur = models.IntegerField(blank=False)
     #cle etrangere indicateur
@@ -91,7 +94,6 @@ class Donnee(models.Model):
     
 
 #classe interpretation
-
 class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
@@ -99,6 +101,59 @@ class Interpretation(models.Model):
     Date = models.DateField(blank=False, default=django.utils.timezone.now)
 
 
-# @receiver(pre_save, sender=Interpretation)
-# def user_post_save(sender, instance, created, *args, **kargs):
-#     instance.Id_Indicateur = 
+@receiver(post_save, sender=Indicateur)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_indicateur",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+    )
+
+@receiver(post_save, sender=Indicateur)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_indicateur",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+    )
+
+@receiver(post_save, sender=Donnee)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_donnee",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=Donnee)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donnee",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+
+@receiver(post_save, sender=Indicateur)
+def notification(sender, instance, created, *args, **kargs):
+
+    template = render_to_string('home/email_template.html', {'indicateur':instance.Intitule_Indicateur, 'inge':instance.user})
+
+    email = EmailMessage(
+    'nouvel indicateur',
+    template,
+    settings.EMAIL_HOST_USER,
+    [instance.user.directions.directeur.email, instance.user.Departement.chef_dep.email],
+    )
+
+    email.fail_silently=False
+    email.send()
+
+post_save.connect(notification, sender=Indicateur)

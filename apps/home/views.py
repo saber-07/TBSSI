@@ -13,10 +13,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import render 
+from django.shortcuts import get_object_or_404, render 
 
 from django.contrib.auth.models import Group
-
 
 
 
@@ -129,9 +128,10 @@ class TbCreateView(CreateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class TbUpdateView(UpdateView):
+class TbUpdateView(PermissionRequiredMixin, UpdateView):
     model = TB
     template_name = 'home/tbb_edit.html'
+    permission_required = "home.change_tb"
     fields = ['Intitule', 'Objectif']
     def get_context_data(self,*args, **kwargs):
         context = super(TbUpdateView, self).get_context_data(*args,**kwargs)
@@ -145,9 +145,10 @@ class TbUpdateView(UpdateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class TbDeleteView(DeleteView):
+class TbDeleteView(PermissionRequiredMixin, DeleteView):
     model = TB
     template_name = 'home/tbb_delete.html'
+    permission_required = "home.delete_tb"
     success_url = reverse_lazy('home')
     def get_context_data(self,*args, **kwargs):
         context = super(TbDeleteView, self).get_context_data(*args,**kwargs)
@@ -166,8 +167,13 @@ class TbDeleteView(DeleteView):
 
 class IndicateurCreateView(CreateView):
     model = Indicateur
+    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
     template_name = 'home/indicateur_new.html'
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB'] 
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -180,7 +186,7 @@ class IndicateurCreateView(CreateView):
         return context
     
 
-class IndicateurDetailView(DetailView):
+class IndicateurDetailView(PermissionRequiredMixin, DetailView):
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
     def get_context_data(self,*args, **kwargs):
@@ -206,10 +212,9 @@ def listeindicateurview(request):
 
 
 class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
-    permission_required = "change_indicateur"
-
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
+    permission_required = "home.change_indicateur"
     fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
@@ -222,9 +227,10 @@ class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class IndicateurDeleteView(DeleteView):
+class IndicateurDeleteView(PermissionRequiredMixin ,DeleteView):
     model = Indicateur
     template_name = 'home/indicateur_delete.html'
+    permission_required = "home.delete_indicateur"
     success_url = reverse_lazy('liste_indicateurs')
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurDeleteView, self).get_context_data(*args,**kwargs)
@@ -241,6 +247,11 @@ class DataCreateView(CreateView):
     model = Donnee
     template_name = 'home/data_new.html'
     fields = ['Date','Valeur','Id_Indicateur']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self,*args, **kwargs):
         context = super(DataCreateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -279,9 +290,10 @@ class DataDetailView(DetailView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataDeleteView(DeleteView):
+class DataDeleteView(PermissionRequiredMixin, DeleteView):
     model = Donnee
     template_name = 'home/data_delete.html'
+    permission_required = "home.delete_donnee"
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataDeleteView, self).get_context_data(*args,**kwargs)
@@ -294,9 +306,10 @@ class DataDeleteView(DeleteView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataUpdateView(UpdateView):
+class DataUpdateView(PermissionRequiredMixin, UpdateView):
     model = Donnee
     template_name = 'home/data_update.html'
+    permission_required = "home.change_donnee"
     fields = ['Date','Valeur','Id_Indicateur']
     def get_context_data(self,*args, **kwargs):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
@@ -347,3 +360,83 @@ class ValidationIndicateurDirecteurDetailView(DetailView):
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
+
+class ValidationIndicateurChefDepListView(ListView):
+    model = Indicateur
+    template_name = 'home/validation_indicateur_chef_dep.html'
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationIndicateurChefDepListView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+    
+class ValidationIndicateurChefDepDetailView(DetailView):
+    model = Indicateur
+    template_name = 'home/indicateur_detail.html'
+    success_url = reverse_lazy('validation_indicateur_chef_dep')
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationIndicateurChefDepDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+def valider_ind(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    indicateur = get_object_or_404(Indicateur, pk=pk)
+    indicateur.validation_directeur = True
+    indicateur.save()
+
+    context = {'indicateur': indicateur,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/indicateur_detail.html",
+        context=context
+    )
+
+
+
+
+def valider_ind_Bis(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    indicateur = get_object_or_404(Indicateur, pk=pk)
+    indicateur.validation_chef_dep = True
+    indicateur.save()
+
+    context = {'indicateur': indicateur,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/indicateur_detail.html",
+        context=context
+    )
+
+

@@ -1,0 +1,24 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{customuser.username}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">User {{customuser.username}}</a></h1>
+    <h3>Poste  : {{customuser.poste}}</h3>
+    <h3>Departement : {{customuser.departements}}</h3>
+    <h3>Direction : {{customuser.directions}}</h3>
+    <h3>Filiale: {{customuser.filiales}}</h3>
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'user_edit' customuser.pk%}">Modifier Utilisateur</a>
+    <a class = "btn btn-danger" href="{% url 'user_delete' customuser.pk%}">Supprimer Utilisateur</a></p>
+
+
+{% endblock %}

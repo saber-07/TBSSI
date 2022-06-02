@@ -1,0 +1,23 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{direction.nom_dir}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Direction {{direction.nom_dir}}</a></h1>
+    <h3>Nom direction : {{direction.nom_dir}}</h3>
+    <h3>Filiales : {{direction.filiales}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'direction_edit' direction.pk%}">Modifier Direction</a>
+    <a class = "btn btn-danger" href="{% url 'direction_delete' direction.pk%}">Supprimer Direction</a></p>
+
+
+{% endblock %}

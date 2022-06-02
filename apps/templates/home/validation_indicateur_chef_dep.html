@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Valider Indicateurs {% endblock%}
+
+{% block content %}
+
+<h1> Liste des indicateurs non validés </h1>
+{% for indicateur in object_list%}
+{% if not indicateur.validation_chef_dep and indicateur.user.departements ==  user.departements %}
+<h2><a href="{% url 'indicateur_detail' indicateur.pk %}">{{indicateur.Intitule_Indicateur}}</h2></a>
+{% endif %}
+{% endfor %}
+
+
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Filiales{% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Filiales </h2>
+    {% for filiale in object_list %}
+        <h2><a href="{% url 'filiale_detail' filiale.pk%}">{{filiale.nom_fil}}</h2>
+    {% endfor %}
+{% endblock content %}

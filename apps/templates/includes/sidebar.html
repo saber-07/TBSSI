@@ -138,18 +138,15 @@
           </li> 
         -->
         
-          
+      <!--  
         <li class="{% if 'page-user' in segment %} active {% endif %}">
           <a href="/page-user.html">
             <i class="tim-icons icon-single-02"></i>
             <p>Profil User</p>
           </a>
-        </li>
+        </li>-->
 
-        <li> <a href="">
-          <i class ="tim-icons icon-simple-add"></i>
-          <p> Ajouter User </p>
-        </a> </li>
+    
 
 
         {% endif %}
@@ -157,7 +154,7 @@
        <!-- Validation Buttons -->
        {% if ChefDeptGroup in user.groups.all %}
         
-       <li> <a href="">
+       <li> <a href="{% url 'validation_indicateur_chefdep' %}">
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
       </a> </li>
@@ -169,12 +166,6 @@
       </a> </li>
        {% endif %}
 
-          <li class="{% if 'rtl-support' in segment %} active {% endif %}">
-            <a href="/page-rtl-support.html">
-              <i class="tim-icons icon-world"></i>
-              <p>العربية</p>
-            </a>
-          </li>
         <!--
           <li class="{% if 'icons' in segment %} active {% endif %}">
             <a href="/ui-icons.html">

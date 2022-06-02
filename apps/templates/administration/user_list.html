@@ -1,7 +1,87 @@
-{% extends 'layouts/base.html' %}
+{% extends 'administration/layouts/baseAdmin.html' %}
 
+{% block title %} Liste des Utilisateurs{% endblock title%}
 {% block content %}
-    {% for customuser in object_list %}
-        <h2><a href="{% url 'user_detail' customuser.pk%}">{{customuser.username}}</h2>
+    
+    <h2> Liste des Utilisateurs </h2>
+    
+
+
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card ">
+         
+  <div class="card-body">
+      <div class="table-responsive">
+        <table class="table tablesorter " id="">
+          <thead class=" text-primary">
+            <tr>
+              <th>
+               
+                Nom d'Utilisateur
+
+              </th>
+
+              <th>
+               
+                Poste
+
+              </th>
+
+              <th>
+               
+                Email
+
+              </th>
+
+              <th>
+               
+                Departement
+
+              </th>
+
+              <th>
+               
+                Direction
+
+              </th>
+
+              <th>
+               
+                Filiale
+
+              </th>
+
+  
+          
+              
+            </tr>
+          </thead>
+  
+          <tbody>
+
+            {% for customuser in object_list %}
+      {% if customuser.username != 'AnonymousUser' %}
+       <tr>
+        <td> <a style= "color: #1d8cf8;" href="{% url 'user_detail' customuser.pk%}">{{customuser.username}}</td></a>
+        <td> {{customuser.poste}} </td>
+        <td> {{customuser.email}} </td>
+        <td> {{customuser.departements}} </td>
+        <td> {{customuser.directions}} </td>
+        <td> {{customuser.filiales}} </td>
+
+       </tr>
+       {% endif %}
     {% endfor %}
+
+              
+              </tbody>
+            </table>
+          </div>
+        </div>
+  
+      </div>
+  </div>
+  
+  </div>
 {% endblock content %}

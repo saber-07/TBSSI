@@ -10,14 +10,14 @@ class Filiale(models.Model):
 
     nom_fil = models.CharField(max_length=60, null=True, blank=True)
 
-    def __Str__(self):
+    def __str__(self):
         return self.nom_fil
 
 class Direction(models.Model):
 
     nom_dir = models.CharField(max_length=60, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
-
+    directeur = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_dir
@@ -26,6 +26,7 @@ class Departement(models.Model):
 
     nom_dep = models.CharField(max_length=60, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
+    chef_dep = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_dep
@@ -36,20 +37,44 @@ class CustomUser(AbstractUser):
         ('PDG', 'PDG'),
         ('Directeur', 'Directeur'),
         ('Chef département', 'Chef département'),
-        ('Ingénieur', 'Ingénieur'),
-        ('Admin' , 'Admin')
+        ('Ingénieur', 'Ingénieur')
     )
 
     poste = models.CharField(max_length=50, choices=POSTE_CHOICES, null=True, blank=True)
     departements = models.ForeignKey(Departement, on_delete=models.CASCADE, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
+    is_admin = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
-    group = Group.objects.get(name='Admin') if instance.is_superuser else Group.objects.get(name=instance.poste)
 
-    instance.groups.add(group)
+    if (instance.is_admin):
+        group = Group.objects.get(name='Admin')  
+        instance.groups.add(group)
+
+    if(not instance.is_superuser):
+        group = Group.objects.get(name=instance.poste) 
+        instance.groups.add(group)
+    
+    if (instance.poste == 'Directeur'):
+        instance.directions.directeur = instance
 
 post_save.connect(user_post_save, sender=CustomUser)
+
+@receiver(post_save, sender=CustomUser)
+def directeur_affect(sender, instance, created, *args, **kargs):
+
+    if (instance.poste == 'Directeur'):
+        instance.directions.directeur = instance
+
+    instance.directions.save()
+
+@receiver(post_save, sender=CustomUser)
+def directeur_affect(sender, instance, created, *args, **kargs):
+
+    if (instance.poste == 'Chef département'):
+        instance.Departement.chef_dep = instance
+
+    instance.Departement.save()

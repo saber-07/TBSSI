@@ -1,0 +1,16 @@
+{% extends "administration/layouts/baseAdmin.html"%}
+
+{% block title %} Accueil {% endblock title %}
+
+{% block content %}
+<body>
+    <h1> Bienvenue a l'Administration du TBSSI ELIT {{user.get_username}}!
+      <br>
+          
+    </h1>
+
+    <a class="btn btn-alert" href="{% url 'home' %}"> Revenir vers Tableau de bord </a>
+
+</body>
+
+{% endblock %}
