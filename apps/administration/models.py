@@ -17,7 +17,7 @@ class Direction(models.Model):
 
     nom_dir = models.CharField(max_length=60, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
-
+    directeur = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_dir
@@ -26,6 +26,7 @@ class Departement(models.Model):
 
     nom_dep = models.CharField(max_length=60, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
+    chef_dep = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_dep
@@ -56,5 +57,24 @@ def user_post_save(sender, instance, created, *args, **kargs):
     if(not instance.is_superuser):
         group = Group.objects.get(name=instance.poste) 
         instance.groups.add(group)
+    
+    if (instance.poste == 'Directeur'):
+        instance.directions.directeur = instance
 
 post_save.connect(user_post_save, sender=CustomUser)
+
+@receiver(post_save, sender=CustomUser)
+def directeur_affect(sender, instance, created, *args, **kargs):
+
+    if (instance.poste == 'Directeur'):
+        instance.directions.directeur = instance
+
+    instance.directions.save()
+
+@receiver(post_save, sender=CustomUser)
+def directeur_affect(sender, instance, created, *args, **kargs):
+
+    if (instance.poste == 'Chef département'):
+        instance.Departement.chef_dep = instance
+
+    instance.Departement.save()

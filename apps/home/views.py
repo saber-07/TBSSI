@@ -16,9 +16,6 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import Group
 
-from django.core.mail import EmailMessage
-from django.conf import settings
-
 
 @login_required(login_url="/login/")
 def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
@@ -294,7 +291,7 @@ class DataDetailView(DetailView):
 class DataDeleteView(PermissionRequiredMixin, DeleteView):
     model = Donnee
     template_name = 'home/data_delete.html'
-    permission_required = "home.delete_data"
+    permission_required = "home.delete_donnee"
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataDeleteView, self).get_context_data(*args,**kwargs)
@@ -310,7 +307,7 @@ class DataDeleteView(PermissionRequiredMixin, DeleteView):
 class DataUpdateView(PermissionRequiredMixin, UpdateView):
     model = Donnee
     template_name = 'home/data_update.html'
-    permission_required = "home.change_data"
+    permission_required = "home.change_donnee"
     fields = ['Date','Valeur','Id_Indicateur']
     def get_context_data(self,*args, **kwargs):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)

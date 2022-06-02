@@ -48,7 +48,6 @@ class Indicateur(models.Model):
     validation_chef_dep = models.BooleanField(default=False)
     validation_directeur = models.BooleanField(default=False)
 
-
     #cle etrangere -> Graphe + TB
     Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
     Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)
@@ -137,3 +136,24 @@ def set_permission(sender, instance, **kwargs):
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
+
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+
+@receiver(post_save, sender=Indicateur)
+def notification(sender, instance, created, *args, **kargs):
+
+    template = render_to_string('home/email_template.html', {'indicateur':instance.Intitule_Indicateur, 'inge':instance.user})
+
+    email = EmailMessage(
+    'nouvel indicateur',
+    template,
+    settings.EMAIL_HOST_USER,
+    [instance.user.directions.directeur.email, instance.user.Departement.chef_dep.email],
+    )
+
+    email.fail_silently=False
+    email.send()
+
+post_save.connect(notification, sender=Indicateur)
