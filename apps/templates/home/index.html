@@ -10,18 +10,99 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
-  <h1> Acceuil
+  <h1> Bienvenue {{user.get_username}}!             
+    
+  
     <br>
         
   </h1>
 
 
-  {% for g in user.groups.all %}
-  {% if "Admin" in g.name %}
-  <a class="btn btn-info" href="{% url 'administration' %}"> Administration </a>
-  {% endif %}
 
-{% endfor %}
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+      
+        <div class="card-body">
+
+          <table class="table tablesorter " id="">
+
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <td>{{user.get_username}}</td>
+              </tr>
+              <tr>
+                <th>Poste</th>
+                <td>{{request.user.poste}}</td>
+              </tr>
+              <tr>
+                <th>Departement</th>
+                <td>{{request.user.departements}}</td>
+              </tr>
+              <tr>
+                <th>Direction</th>
+                <td>{{request.user.directions}}</td>
+              </tr>
+              <tr>
+                <th>Filiale</th>
+                <td>{{request.user.filiales}}</td>
+              </tr>
+          
+            </table>
+          
+         
+        </div>
+        <div class="card-footer">
+          {% if AdminGroup in user.groups.all %}
+    <a class="btn btn-info" href="{% url 'administration' %}"> Administration </a>
+    {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-user">
+        <div class="card-body">
+          <p class="card-text">
+            <div class="author">
+              <div class="block block-one"></div>
+              <div class="block block-two"></div>
+              <div class="block block-three"></div>
+              <div class="block block-four"></div>
+              <a href="javascript:void(0)">
+                <img class="avatar" src="/static/assets/img/anime3.png" alt="Bill Gates photo - when buys a Linux.">
+                <h5 class="title">
+                  {{ request.user.username }}
+                </h5>
+              </a>
+              <p class="description">
+                {{ request.user.email }}
+              </p>
+            </div>
+          </p>
+          <div class="card-description">
+           
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="button-container">
+            <button href="javascript:void(0)" class="btn btn-icon btn-round btn-facebook">
+              <i class="fab fa-facebook"></i>
+            </button>
+            <button href="javascript:void(0)" class="btn btn-icon btn-round btn-twitter">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button href="javascript:void(0)" class="btn btn-icon btn-round btn-google">
+              <i class="fab fa-google-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+
 </body>
 </html>
 

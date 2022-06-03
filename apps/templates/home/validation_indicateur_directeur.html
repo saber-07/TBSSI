@@ -5,9 +5,50 @@
 {% block content %}
 
 <h1> Liste des indicateurs non validés </h1>
-{% for indicateur in object_list%}
-{% if not indicateur.validation_directeur and indicateur.user.directions ==  user.directions %}
-<h2><a href="{% url 'indicateur_detail' indicateur.pk %}">{{indicateur.Intitule_Indicateur}}</h2></a>
-{% endif %}
-{% endfor %}
+
+
+<div class="row">
+    <div class="col-md-7">
+      <div class="card ">
+       
+<div class="card-body">
+    <div class="table-responsive">
+      <table class="table tablesorter " id="">
+        <thead class=" text-primary">
+          <tr>
+            <th>
+              Libellé
+            </th>
+
+            <th class="text-center"> 
+              Createur
+            </th>
+            
+          </tr>
+        </thead>
+
+        <tbody>
+            {% for indicateur in object_list%}
+            {% if not indicateur.validation_directeur and indicateur.user.directions ==  user.directions %}              <tr>
+                <td>
+                <a style= "color: #1d8cf8;" href="{% url 'indicateur_detail' indicateur.pk %}">
+                  {{ indicateur.Intitule_Indicateur }}
+                </td> </a>
+                <td class="text-center">
+                    {{ indicateur.user }}
+                </td>
+             
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+</div>
+        
 {% endblock content %}

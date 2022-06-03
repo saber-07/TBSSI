@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Directions{% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Directions </h2>
+    {% for direction in object_list %}
+        <h2><a href="{% url 'direction_detail' direction.pk%}">{{direction.nom_dir}}</h2>
+    {% endfor %}
+{% endblock content %}

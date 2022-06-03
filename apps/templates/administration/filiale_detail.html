@@ -1,0 +1,22 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{filiale.nom_fil}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Filiale {{filiale.nom_fil}}</a></h1>
+    <h3>Nom Filiale : {{filiale.nom_fil}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'filiale_edit' filiale.pk%}">Modifier Filiale</a>
+    <a class = "btn btn-danger" href="{% url 'filiale_delete' filiale.pk%}">Supprimer Filiale</a></p>
+
+
+{% endblock %}

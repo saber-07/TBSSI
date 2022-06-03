@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
-
+from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -13,6 +13,10 @@ class Filiale(models.Model):
     def __str__(self):
         return self.nom_fil
 
+    def get_absolute_url(self):
+        return reverse("filiale_detail", kwargs={"pk": self.pk})
+    
+
 class Direction(models.Model):
 
     nom_dir = models.CharField(max_length=60, null=True, blank=True)
@@ -21,6 +25,10 @@ class Direction(models.Model):
 
     def __str__(self):
         return self.nom_dir
+    
+    def get_absolute_url(self):
+        return reverse("direction_detail", kwargs={"pk": self.pk})
+    
 
 class Departement(models.Model):
 
@@ -30,6 +38,10 @@ class Departement(models.Model):
 
     def __str__(self):
         return self.nom_dep
+    
+    def get_absolute_url(self):
+        return reverse("departement_detail", kwargs={"pk": self.pk})
+    
 
 class CustomUser(AbstractUser):
 
@@ -46,6 +58,10 @@ class CustomUser(AbstractUser):
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
 
+    def get_absolute_url(self):
+        return reverse("customuser_detail", kwargs={"pk": self.pk})
+    
+
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
@@ -57,9 +73,6 @@ def user_post_save(sender, instance, created, *args, **kargs):
     if(not instance.is_superuser):
         group = Group.objects.get(name=instance.poste) 
         instance.groups.add(group)
-    
-    if (instance.poste == 'Directeur'):
-        instance.directions.directeur = instance
 
 post_save.connect(user_post_save, sender=CustomUser)
 
@@ -68,13 +81,11 @@ def directeur_affect(sender, instance, created, *args, **kargs):
 
     if (instance.poste == 'Directeur'):
         instance.directions.directeur = instance
-
-    instance.directions.save()
+        instance.directions.save()
 
 @receiver(post_save, sender=CustomUser)
-def directeur_affect(sender, instance, created, *args, **kargs):
+def departement_affect(sender, instance, created, *args, **kargs):
 
     if (instance.poste == 'Chef département'):
-        instance.Departement.chef_dep = instance
-
-    instance.Departement.save()
+        instance.departements.chef_dep = instance
+        instance.departements.save()

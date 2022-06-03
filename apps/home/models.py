@@ -150,7 +150,7 @@ def notification(sender, instance, created, *args, **kargs):
     'nouvel indicateur',
     template,
     settings.EMAIL_HOST_USER,
-    [instance.user.directions.directeur.email, instance.user.Departement.chef_dep.email],
+    [instance.user.directions.directeur.email, instance.user.departements.chef_dep.email],
     )
 
     email.fail_silently=False

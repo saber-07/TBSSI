@@ -1,8 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 import os
 from decouple import config
 from unipath import Path
@@ -148,4 +143,3 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'sonalgaz.elit.2022@gmail.com'
 EMAIL_HOST_PASSWORD = 'izqefpjnteuvxvtn'
-

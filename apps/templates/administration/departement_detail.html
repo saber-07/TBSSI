@@ -1,0 +1,23 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{departement.nom_dep}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Departement {{departement.nom_dep}}</a></h1>
+    <h3>Nom departement : {{departement.nom_dep}}</h3>
+    <h3>Directions : {{departement.directions}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'departement_edit' departement.pk%}">Modifier Departement</a>
+    <a class = "btn btn-danger" href="{% url 'departement_delete' departement.pk%}">Supprimer Departement</a></p>
+
+
+{% endblock %}

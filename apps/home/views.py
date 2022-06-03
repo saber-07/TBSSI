@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import render 
+from django.shortcuts import get_object_or_404, render 
 
 from django.contrib.auth.models import Group
 
@@ -323,7 +323,7 @@ class DataUpdateView(PermissionRequiredMixin, UpdateView):
 
 #for administration
 def administrationView(request):
-    return render(request,'home/administration.html',
+    return render(request,'administration/administration.html',
     {'ListeInd' : Indicateur.objects.all(),
     'ListeTb' : TB.objects.all(),
 })
@@ -389,3 +389,52 @@ class ValidationIndicateurChefDepDetailView(DetailView):
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
+
+def valider_ind(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    indicateur = get_object_or_404(Indicateur, pk=pk)
+    indicateur.validation_directeur = True
+    indicateur.save()
+
+    context = {'indicateur': indicateur,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/indicateur_detail.html",
+        context=context
+    )
+
+
+
+
+def valider_ind_Bis(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    indicateur = get_object_or_404(Indicateur, pk=pk)
+    indicateur.validation_chef_dep = True
+    indicateur.save()
+
+    context = {'indicateur': indicateur,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/indicateur_detail.html",
+        context=context
+    )
+
+

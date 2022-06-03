@@ -1,8 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from django.urls import path
 from apps.home import views
 
@@ -32,8 +27,14 @@ urlpatterns = [
     path('validation/indicateur/directeurlist/', views.ValidationIndicateurDirecteurListView.as_view(), name='validation_indicateur_directeur'),
     path('validation/indicateur/directeur/<int:pk>/', views.ValidationIndicateurDirecteurDetailView.as_view(), name='indicateur_detail'),
     path('validation/indicateur/chefdeplist/', views.ValidationIndicateurChefDepListView.as_view(), name='validation_indicateur_chefdep'),
-    path('validation/indicateur/chefdep/<int:pk>/', views.ValidationIndicateurDirecteurDetailView.as_view(), name='indicateur_detail'),
+    path('validation/indicateur/chefdep/<int:pk>/', views.ValidationIndicateurChefDepDetailView.as_view(), name='indicateur_detail'),
 
     #for administration
     path('administration/', views.administrationView, name='administration'),
+
+    #for validation
+    path('valider_indicateur/<int:pk>', views.valider_ind, name='valider-indicateur'), 
+    path('valider_indicateur_bis/<int:pk>', views.valider_ind_Bis, name='valider-indicateur-bis'), 
+    
+
     ]

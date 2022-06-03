@@ -3,6 +3,7 @@
 {% block title %} {{indicateur.Intitule_Indicateur}} {% endblock %} 
 
 {% block content %}
+
 <div class = "card card-chart">
     <div style= "height: 120px;" class = "card-body">
     <h1><a style= "color: #1d8cf8;" href="">Fiche indicateur {{indicateur.Intitule_Indicateur}}</h1></a>
@@ -34,7 +35,7 @@
       </tr>
       <tr>
         <th>Méthode de calcul</th>
-        <td>{{indicateur.Methode_calul}}</td>
+        <td>{{indicateur.Methode_calcul}}</td>
       </tr>
       <tr>
         <th>Periodicité de calcul</th>
@@ -48,10 +49,61 @@
         <th>Presentation Graphique</th>
         <td>{{indicateur.Id_Graphe}}</td>
       </tr>
+      <tr>
+        <th>Validation</th>
+        {% if not indicateur.validation_directeur %}
+        <td> Non validé </td>
+        {% else %}
+        <td> Validé par le directeur {% if indicateur.validation_chef_dep %}
+          et le chef de departement {% endif %} </td>
+        {% endif %}
+      </tr>
     
     </table>
+    
+  {% if indicateur.validation_directeur and indicateur.validation_chef_dep  %}
+
+      <div style= "text-align:right;width: 80%; height: auto;" class = "card-body">
+        <h3><a style= "color: green;" href="">Validé</h3></a>
+
+        <h1> <i style="color:#23DC3D;" class="tim-icons icon-check-2"></i> <h2>
+       
+          
+
+  
+  </div>
+
+  {% endif %}
+
+ 
+
+
+    
+    {% if DirecteurGroup in user.groups.all %}
+    {% if not indicateur.validation_directeur %}
+    <p><a class="btn btn-success" href="{% url 'valider-indicateur' indicateur.pk %}">Valider indicateur</a></p>
+    {% else %}
+    <div class = "card card-chart">
+      <div style= "height: auto;" class = "card-body">
+      <h1><a style= "color: green;" href="">Validé par le directeur</h1></a>
+     
+  
+  </div>
+  </div>
+    {% endif %}
+    {% elif ChefDeptGroup in user.groups.all %}
+    {% if not indicateur.validation_chef_dep %}
+    <p><a class="btn btn-success" href="{% url 'valider-indicateur-bis' indicateur.pk %}">Valider indicateur</a></p>
+    {% endif %}
+  
+  </div>
+
+
+    
+    {% else %}
 
     <p><a style= "color: white;" class = "btn btn-info" href="{% url 'indicateur_edit' indicateur.pk%}">Modifier indicateur </a>
+<<<<<<< HEAD
 
 
 
@@ -61,10 +113,13 @@
     {% elif ChefDeptGroup in user.groups.all %}
 
     <a class="btn btn-success" href="{% url 'liste_indicateurs' %}">Valider indicateur</a>
+=======
+    <a style= "color: white;" class = "btn btn-danger" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a> </p>
+>>>>>>> master
 
   
     {% endif %}
 
-    <a style= "color: white;" class = "btn btn-danger" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a> </p>
+
 
     {% endblock content %}

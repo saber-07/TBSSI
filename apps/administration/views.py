@@ -93,13 +93,13 @@ class DepartementCreateView(CreateView):
 
     model = Departement
     template_name = 'administration/departement_new.html'
-    fields = ['nom_dir', 'filiales']
+    fields = ['nom_dep', 'directions']
 
 class DepartementUpdateView(UpdateView):
 
     model = Departement
     template_name = 'administration/departement_edit.html'
-    fields = ['nom_dir', 'filiales']
+    fields = ['nom_dep', 'directions']
 
 class DepartementDeleteView(DeleteView):
     
