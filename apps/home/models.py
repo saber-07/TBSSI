@@ -91,7 +91,6 @@ class Donnee(models.Model):
 
     def get_absolute_url(self):
         return reverse("data_detail", kwargs={"pk": self.pk})
-    
 
 #classe interpretation
 class Interpretation(models.Model):
@@ -99,6 +98,9 @@ class Interpretation(models.Model):
     Contenu = models.TextField(blank=False)
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
     Date = models.DateField(blank=False, default=django.utils.timezone.now)
+
+    def get_absolute_url(self):
+        return reverse("interpretation_detail", kwargs={"pk": self.pk})
 
 
 @receiver(post_save, sender=Indicateur)
@@ -150,7 +152,7 @@ def notification(sender, instance, created, *args, **kargs):
     'nouvel indicateur',
     template,
     settings.EMAIL_HOST_USER,
-    [instance.user.directions.directeur.email, instance.user.Departement.chef_dep.email],
+    [instance.user.directions.directeur.email, instance.user.departements.chef_dep.email],
     )
 
     email.fail_silently=False

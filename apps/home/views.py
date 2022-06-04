@@ -18,6 +18,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import Group
 
 
+from django.urls import resolve
 
 @login_required(login_url="/login/")
 def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
@@ -105,8 +106,10 @@ class TbDetail(SingleObjectMixin ,ListView):
         context['AdminGroup'] = Group.objects.get(name='Admin')
         context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
         context['PDGGroup'] = Group.objects.get(name='PDG')
-        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département'),
         
+        #liste d interpretation
+        context['ListeInter'] = Interpretation.objects.all()
         return context
 
     def get_queryset(self):
@@ -204,6 +207,7 @@ class IndicateurDetailView(PermissionRequiredMixin, DetailView):
 def listeindicateurview(request):
     return render(request, 'home/listeIndicateur.html', 
     {'ListeInd' : Indicateur.objects.all,
+     'ListeTb' : TB.objects.all(),
     'DirecteurGroup' : Group.objects.get(name='Directeur'),
     'AdminGroup' : Group.objects.get(name='Admin'),
     'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
@@ -325,10 +329,63 @@ class DataUpdateView(PermissionRequiredMixin, UpdateView):
 
 #for administration
 def administrationView(request):
-    return render(request,'home/administration.html',
+    return render(request,'administration/administration.html',
     {'ListeInd' : Indicateur.objects.all(),
     'ListeTb' : TB.objects.all(),
 })
+
+#for interpretation
+class InterpretationCreateView(CreateView):
+    model = Interpretation
+    template_name = 'home/interpretation_new.html'
+    fields = ['Contenu']
+
+    # pk_url_kwarg = 'interpretation_pk'
+    # slug_url_kwarg='Id_indicateur'
+
+    def form_valid(self, form):
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(InterpretationCreateView, self).form_valid(form)
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context  
+
+    
+class InterpretationDetailView(DetailView):
+    model = Interpretation
+    template_name = 'home/interpretation_detail.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationDetailView, self).get_context_data(*args,**kwargs)
+        context['all_data_list'] = Donnee.objects.all()
+        context['ListeTb'] = TB.objects.all()
+        
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+
+
+
+
+
+
+
 
 class ValidationIndicateurDirecteurListView(ListView):
     model = Indicateur
@@ -344,7 +401,7 @@ class ValidationIndicateurDirecteurListView(ListView):
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
-    
+
 class ValidationIndicateurDirecteurDetailView(DetailView):
     model = Indicateur
     template_name = 'home/indicateur_detail.html'

@@ -29,6 +29,12 @@ urlpatterns = [
     path('validation/indicateur/chefdeplist/', views.ValidationIndicateurChefDepListView.as_view(), name='validation_indicateur_chefdep'),
     path('validation/indicateur/chefdep/<int:pk>/', views.ValidationIndicateurChefDepDetailView.as_view(), name='indicateur_detail'),
 
+    #for interpretation
+    path('interpretation/new/<int:pk>', views.InterpretationCreateView.as_view(), name='interpretation_new'),
+    
+    path('interpretation/detail/<int:pk>/', views.InterpretationDetailView.as_view(), name='interpretation_detail'),
+
+
     #for administration
     path('administration/', views.administrationView, name='administration'),
 
