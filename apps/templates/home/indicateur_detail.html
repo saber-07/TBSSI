@@ -104,6 +104,8 @@
 
     <p><a style= "color: white;" class = "btn btn-info" href="{% url 'indicateur_edit' indicateur.pk%}">Modifier indicateur </a>
     <a style= "color: white;" class = "btn btn-danger" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a> </p>
+    <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
+
 
   
     {% endif %}

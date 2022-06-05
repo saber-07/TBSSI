@@ -9,6 +9,7 @@ from django.dispatch import receiver
 class Filiale(models.Model):
 
     nom_fil = models.CharField(max_length=60, null=True, blank=True)
+    pdg = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_fil
@@ -52,11 +53,17 @@ class CustomUser(AbstractUser):
         ('Ingénieur', 'Ingénieur')
     )
 
+    SEXE_CHOICES=(
+        ('Masculin', 'Masculin'),
+        ('Feminin', 'Feminin')
+    )
+
     poste = models.CharField(max_length=50, choices=POSTE_CHOICES, null=True, blank=True)
     departements = models.ForeignKey(Departement, on_delete=models.CASCADE, null=True, blank=True)
     directions = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
     filiales = models.ForeignKey(Filiale, on_delete=models.CASCADE, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
+    sexe= models.CharField(max_length=10,choices=SEXE_CHOICES,default="Masculin")
 
     def get_absolute_url(self):
         return reverse("customuser_detail", kwargs={"pk": self.pk})
@@ -73,6 +80,7 @@ def user_post_save(sender, instance, created, *args, **kargs):
     if(not instance.is_superuser):
         group = Group.objects.get(name=instance.poste) 
         instance.groups.add(group)
+    
 
 post_save.connect(user_post_save, sender=CustomUser)
 
@@ -88,4 +96,11 @@ def departement_affect(sender, instance, created, *args, **kargs):
 
     if (instance.poste == 'Chef département'):
         instance.departements.chef_dep = instance
+        instance.departements.save()
+
+@receiver(post_save, sender=CustomUser)
+def pdg_affect(sender, instance, created, *args, **kargs):
+
+    if (instance.poste == 'PDG'):
+        instance.filiales.pdg = instance
         instance.departements.save()

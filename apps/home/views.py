@@ -106,8 +106,7 @@ class TbDetail(SingleObjectMixin ,ListView):
         context['AdminGroup'] = Group.objects.get(name='Admin')
         context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
         context['PDGGroup'] = Group.objects.get(name='PDG')
-        context['ChefDeptGroup'] = Group.objects.get(name='Chef département'),
-        
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         #liste d interpretation
         context['ListeInter'] = Interpretation.objects.all()
         return context
@@ -250,11 +249,15 @@ class IndicateurDeleteView(PermissionRequiredMixin ,DeleteView):
 class DataCreateView(CreateView):
     model = Donnee
     template_name = 'home/data_new.html'
-    fields = ['Date','Valeur','Id_Indicateur']
-
+    fields = ['Date','Valeur']
+     
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(DataCreateView, self).form_valid(form)
 
     def get_context_data(self,*args, **kwargs):
         context = super(DataCreateView, self).get_context_data(*args,**kwargs)
@@ -380,6 +383,20 @@ class InterpretationDetailView(DetailView):
         return context
 
 
+class InterpretationUpdateView(UpdateView):
+    model = Interpretation
+    template_name = 'home/interpretation_edit.html'
+    fields = ['Contenu']
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+         #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
 
 
 
@@ -493,6 +510,31 @@ def valider_ind_Bis(request, *args, **kwargs):
     return render(
         request,
         "home/indicateur_detail.html",
+        context=context
+    )
+
+
+
+#valider rapport 
+def valider_rapport(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    tb = get_object_or_404(TB, pk=pk)
+    tb.validation_rapport = True
+    tb.save()
+
+    context = {'tb': tb,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/tbb_detail.html",
         context=context
     )
 

@@ -20,7 +20,7 @@ urlpatterns = [
     path('indicateur/<int:pk>/edit', views.IndicateurUpdateView.as_view(), name='indicateur_edit'),
     path('indicateur/<int:pk>/delete', views.IndicateurDeleteView.as_view(), name='indicateur_delete'),
     path('listeDonnees/', views.listedonneesview, name ='liste_donnees'),
-    path('data/new/', views.DataCreateView.as_view(), name='data_new'),
+    path('data/new/<int:pk>', views.DataCreateView.as_view(), name='data_new'),
     path('data/detail/<int:pk>/', views.DataDetailView.as_view(), name='data_detail'),
     path('data/<int:pk>/delete/', views.DataDeleteView.as_view(), name='data_delete'),
     path('data/<int:pk>/update/', views.DataUpdateView.as_view(), name='data_update'),
@@ -34,13 +34,16 @@ urlpatterns = [
     
     path('interpretation/detail/<int:pk>/', views.InterpretationDetailView.as_view(), name='interpretation_detail'),
 
+    path('interpretation/<int:pk>/edit', views.InterpretationUpdateView.as_view(), name='interpretation_edit'),
+
 
     #for administration
     path('administration/', views.administrationView, name='administration'),
 
     #for validation
     path('valider_indicateur/<int:pk>', views.valider_ind, name='valider-indicateur'), 
-    path('valider_indicateur_bis/<int:pk>', views.valider_ind_Bis, name='valider-indicateur-bis'), 
+    path('valider_indicateur_bis/<int:pk>', views.valider_ind_Bis, name='valider-indicateur-bis'),
+    path('valider_rapport/<int:pk>', views.valider_rapport, name='valider-rapport'), 
     
 
     ]

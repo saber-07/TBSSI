@@ -57,6 +57,9 @@
           {% if AdminGroup in user.groups.all %}
     <a class="btn btn-info" href="{% url 'administration' %}"> Administration </a>
     {% endif %}
+
+
+       
         </div>
       </div>
     </div>
@@ -70,7 +73,12 @@
               <div class="block block-three"></div>
               <div class="block block-four"></div>
               <a href="javascript:void(0)">
+                {% if request.user.sexe == "Masculin" %}
                 <img class="avatar" src="/static/assets/img/anime3.png" alt="Bill Gates photo - when buys a Linux.">
+                {% else %}
+                <img class="avatar" src="/static/assets/img/anime4.png" alt="">
+                {% endif %}
+
                 <h5 class="title">
                   {{ request.user.username }}
                 </h5>
@@ -78,6 +86,8 @@
               <p class="description">
                 {{ request.user.email }}
               </p>
+              <a class="btn btn-sm btn-danger btn-simple" href="{% url 'change_password' %}"> Modifer Mot de passe </a>
+
             </div>
           </p>
           <div class="card-description">

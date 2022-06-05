@@ -1,5 +1,3 @@
-from urllib import request
-import django
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser
@@ -7,13 +5,17 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 #les modeles utilisés
 
 #classe Tableau de bord (principale)
 class TB(models.Model):
     Intitule = models.CharField(max_length=200, blank=False, unique=True)
     Objectif = models.CharField(max_length=200, blank=False)
-    
+    validation_rapport = models.BooleanField(default=False)
+
     def __str__(self):
         return self.Intitule
 
@@ -97,7 +99,7 @@ class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
-    Date = models.DateField(blank=False, default=django.utils.timezone.now)
+    Date = models.DateField(auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse("interpretation_detail", kwargs={"pk": self.pk})
@@ -152,7 +154,8 @@ def notification(sender, instance, created, *args, **kargs):
     'nouvel indicateur',
     template,
     settings.EMAIL_HOST_USER,
-    [instance.user.directions.directeur.email, instance.user.departements.chef_dep.email],
+    [instance.user.directions.directeur.email, instance.user.departements.chef_dep.email,
+    ],
     )
 
     email.fail_silently=False

@@ -26,4 +26,12 @@
 
 </div>
 
+
+<p><a class = "btn btn-light" href="{% url 'interpretation_edit' interpretation.pk%}">Modifier Interpretation</a>
+
+  <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' interpretation.Id_Indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
+
+
+</p>
+
 {% endblock content %}
