@@ -80,11 +80,14 @@
           </div>
           </li>
 
-      {% if ChefDeptGroup not in user.groups.all and DirecteurGroup not in user.groups.all %}
+        {% if AdminGroup in user.groups.all %}
           <li> <a href="{% url 'tbb_new' %}">
             <i class ="tim-icons icon-simple-add"></i>
             <p> Ajouter Tableau de bord </p>
           </a> </li>
+        {% endif %}
+
+        {% if PDGGroup not in user.groups.all and ChefDeptGroup not in user.groups.all and DirecteurGroup not in user.groups.all %}
 
           <li>
             <a href="{% url 'liste_indicateurs' %}">
@@ -108,11 +111,7 @@
           </li>
 
 
-          <li> <a href="{% url 'data_new' %}">
-            <i class ="tim-icons icon-simple-add"></i>
-            <p> Ajouter Donnée </p>
-          </a> </li>
-
+        
        
 
 

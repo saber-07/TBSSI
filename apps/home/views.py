@@ -17,6 +17,8 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import Group
 
 
+from django.urls import resolve
+
 @login_required(login_url="/login/")
 def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
     context = {'segment': 'index'}
@@ -104,7 +106,8 @@ class TbDetail(SingleObjectMixin ,ListView):
         context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
-        
+        #liste d interpretation
+        context['ListeInter'] = Interpretation.objects.all()
         return context
 
     def get_queryset(self):
@@ -165,7 +168,7 @@ class TbDeleteView(PermissionRequiredMixin, DeleteView):
 
 class IndicateurCreateView(CreateView):
     model = Indicateur
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite']
     template_name = 'home/indicateur_new.html'
 
     def form_valid(self, form):
@@ -202,6 +205,7 @@ class IndicateurDetailView(PermissionRequiredMixin, DetailView):
 def listeindicateurview(request):
     return render(request, 'home/listeIndicateur.html', 
     {'ListeInd' : Indicateur.objects.all,
+     'ListeTb' : TB.objects.all(),
     'DirecteurGroup' : Group.objects.get(name='Directeur'),
     'AdminGroup' : Group.objects.get(name='Admin'),
     'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
@@ -244,11 +248,15 @@ class IndicateurDeleteView(PermissionRequiredMixin ,DeleteView):
 class DataCreateView(CreateView):
     model = Donnee
     template_name = 'home/data_new.html'
-    fields = ['Date','Valeur','Id_Indicateur']
-
+    fields = ['Date','Valeur']
+     
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(DataCreateView, self).form_valid(form)
 
     def get_context_data(self,*args, **kwargs):
         context = super(DataCreateView, self).get_context_data(*args,**kwargs)
@@ -328,6 +336,73 @@ def administrationView(request):
     'ListeTb' : TB.objects.all(),
 })
 
+#for interpretation
+class InterpretationCreateView(CreateView):
+    model = Interpretation
+    template_name = 'home/interpretation_new.html'
+    fields = ['Contenu']
+
+    # pk_url_kwarg = 'interpretation_pk'
+    # slug_url_kwarg='Id_indicateur'
+
+    def form_valid(self, form):
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(InterpretationCreateView, self).form_valid(form)
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context  
+
+    
+class InterpretationDetailView(DetailView):
+    model = Interpretation
+    template_name = 'home/interpretation_detail.html'
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationDetailView, self).get_context_data(*args,**kwargs)
+        context['all_data_list'] = Donnee.objects.all()
+        context['ListeTb'] = TB.objects.all()
+        
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+
+class InterpretationUpdateView(UpdateView):
+    model = Interpretation
+    template_name = 'home/interpretation_edit.html'
+    fields = ['Contenu']
+    def get_context_data(self,*args, **kwargs):
+        context = super(InterpretationUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+         #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+
+
+
+
+
+
 class ValidationIndicateurDirecteurListView(ListView):
     model = Indicateur
     template_name = 'home/validation_indicateur_directeur.html'
@@ -342,7 +417,7 @@ class ValidationIndicateurDirecteurListView(ListView):
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
-    
+
 class ValidationIndicateurDirecteurDetailView(DetailView):
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
@@ -434,6 +509,31 @@ def valider_ind_Bis(request, *args, **kwargs):
     return render(
         request,
         "home/indicateur_detail.html",
+        context=context
+    )
+
+
+
+#valider rapport 
+def valider_rapport(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    tb = get_object_or_404(TB, pk=pk)
+    tb.validation_rapport = True
+    tb.save()
+
+    context = {'tb': tb,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/tbb_detail.html",
         context=context
     )
 

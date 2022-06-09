@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}  Interpretation {{interpretation.Id_Indicateur}} du {{interpretation.Date}} {% endblock%}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: auto;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Interpretation N°{{interpretation.id}}</a></h1>
+    <h3>Indicateur : {{interpretation.Id_Indicateur}}</h3>
+    <h3>Date : {{interpretation.Date}} </h3>
+    <h3>Contenu :</h3>
+    <div class="typography-line">
+        <blockquote>
+          <p class="blockquote blockquote-blue">
+             {{interpretation.Contenu}}
+            <br>
+            <br>
+         
+          </p>
+        </blockquote>
+      </div>
+    
+
+    </div>
+
+</div>
+
+
+<p><a class = "btn btn-light" href="{% url 'interpretation_edit' interpretation.pk%}">Modifier Interpretation</a>
+
+  <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' interpretation.Id_Indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
+
+
+</p>
+
+{% endblock content %}
