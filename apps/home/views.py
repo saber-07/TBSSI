@@ -169,7 +169,7 @@ class TbDeleteView(PermissionRequiredMixin, DeleteView):
 
 class IndicateurCreateView(CreateView):
     model = Indicateur
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite']
     template_name = 'home/indicateur_new.html'
 
     def form_valid(self, form):
