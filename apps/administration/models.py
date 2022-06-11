@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 from django.urls import reverse
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 #les modeles utilisés
@@ -108,3 +108,7 @@ def pdg_affect(sender, instance, created, *args, **kargs):
     if (instance.poste == 'PDG'):
         instance.filiales.pdg = instance
         instance.departements.save()
+
+@receiver(pre_save, sender=CustomUser)
+def username_affect(sender, instance, *args, **kargs):
+    instance.username = f"{instance.last_name}.{instance.first_name}"

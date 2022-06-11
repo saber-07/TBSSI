@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import TB,Indicateur,Donnee
+from .models import TB,Indicateur,Donnee, Interpretation
 from guardian.mixins import PermissionRequiredMixin
 import datetime
 
@@ -538,3 +538,5 @@ def valider_rapport(request, *args, **kwargs):
     )
 
 
+def page_not_found_view(request, exception):
+    return render(request, '404.html', status=404)
