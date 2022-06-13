@@ -72,6 +72,42 @@ class CustomUser(AbstractUser):
     def get_absolute_url(self):
         return reverse("customuser_detail", kwargs={"pk": self.pk})
     
+class Application(models.Model):
+
+    nom_app = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nom_app
+ 
+class Referentiel(models.Model):
+
+    nom_referentiel = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nom_referentiel
+
+class Domaine(models.Model):
+
+    nom_domaine = models.CharField(max_length=20)
+    referentiel = models.ForeignKey(Referentiel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_domaine
+
+class Categorie(models.Model):
+
+    nom_categorie = models.CharField(max_length=20)
+    domaine = models.ForeignKey(Domaine, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_categorie
+class Mesure(models.Model):
+
+    nom_mesure = models.CharField(max_length=20)
+    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_mesure
 
 
 @receiver(post_save, sender=CustomUser)

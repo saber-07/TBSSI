@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from apps.administration.models import CustomUser
+from apps.administration.models import CustomUser, Application, Filiale, Mesure
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
@@ -93,6 +93,15 @@ class Donnee(models.Model):
 
     def get_absolute_url(self):
         return reverse("data_detail", kwargs={"pk": self.pk})
+
+class DonneeApplication(Donnee):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+
+class DonneeFilliale(Donnee):
+    filiale = models.ForeignKey(Filiale, on_delete=models.CASCADE)
+
+class DonneeMesure(Donnee):
+    mesure = models.ForeignKey(Mesure, on_delete=models.CASCADE)
 
 #classe interpretation
 class Interpretation(models.Model):
