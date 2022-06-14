@@ -27,9 +27,10 @@
           </tr>
         </thead>
 
+        <!-- Indicateur s'affiche si déja validé par le chef departement-->
         <tbody>
             {% for indicateur in object_list%}
-            {% if not indicateur.validation_directeur and indicateur.user.directions ==  user.directions %}              <tr>
+            {% if not indicateur.validation_directeur and indicateur.validation_chef_dep and indicateur.user.directions ==  user.directions %}              <tr>
                 <td>
                 <a style= "color: #1d8cf8;" href="{% url 'indicateur_detail' indicateur.pk %}">
                   {{ indicateur.Intitule_Indicateur }}

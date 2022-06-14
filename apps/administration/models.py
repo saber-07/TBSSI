@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 from django.urls import reverse
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 #les modeles utilisés
@@ -69,6 +69,46 @@ class CustomUser(AbstractUser):
         return reverse("customuser_detail", kwargs={"pk": self.pk})
     
 
+    def get_absolute_url(self):
+        return reverse("customuser_detail", kwargs={"pk": self.pk})
+    
+class Application(models.Model):
+
+    nom_app = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nom_app
+ 
+class Referentiel(models.Model):
+
+    nom_referentiel = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nom_referentiel
+
+class Domaine(models.Model):
+
+    nom_domaine = models.CharField(max_length=20)
+    referentiel = models.ForeignKey(Referentiel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_domaine
+
+class Categorie(models.Model):
+
+    nom_categorie = models.CharField(max_length=20)
+    domaine = models.ForeignKey(Domaine, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_categorie
+class Mesure(models.Model):
+
+    nom_mesure = models.CharField(max_length=20)
+    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom_mesure
+
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
@@ -104,3 +144,7 @@ def pdg_affect(sender, instance, created, *args, **kargs):
     if (instance.poste == 'PDG'):
         instance.filiales.pdg = instance
         instance.departements.save()
+
+@receiver(pre_save, sender=CustomUser)
+def username_affect(sender, instance, *args, **kargs):
+    instance.username = f"{instance.last_name}.{instance.first_name}"

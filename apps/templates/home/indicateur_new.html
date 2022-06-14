@@ -9,11 +9,24 @@
 <style>
 
 
-    form > label {
-        text-align: center;
-        font-size: 5em;
+
+    form {
+        text-align: left;
+        font-size: 1.5em;
         box-sizing: border-box;
-        width:200%;
+        width:40%;
+        margin : 10px 50px;
+
+    }
+
+    label {
+        font-weight: bold;
+        text-align: center;
+        font-size: 3em;
+        box-sizing: border-box;
+        width:auto;
+
+
         
     }
 
@@ -21,12 +34,12 @@
     input{
     
 
-      width : 50%;
+      width : 30%;
       border-radius: 4px;
       border: 2px solid #1c709b;
       box-sizing: border-box;
       padding : 5px 20px;
-      margin : 8px 0;
+      margin : 8px 40px;
       
 
     
@@ -36,19 +49,23 @@
         
         text-align: center;
         padding : 5px 1px;
+        margin : 8px 20px;
+
 
     }
     input[type=text]{
-        font-size: 1em;
-        width: 40%;
+        font-size: 0.75em;
+        width: auto;
+        margin : 8px 100px;
     }
     
     select{
-        font-size:1em;
+        font-size:0.75em;
         margin : 40px 40px;
         border-radius: 4px;
         box-sizing: border-box;
         border: 2px solid #1c709b;
+        margin : 8px 100px;
 
 
 
@@ -58,28 +75,49 @@
 
     
     
-       </style>
+   </style>
    
    <!--  <h1>Ajouter indicateur</h1>-->
     
    <div class="col-lg-7">
     <div class = "card card-chart">
         <div class="card-header">
-            <h2 style= "color: #1d8cf8;" class="card-title"> Ajouter Indicateur </h2>
+            <h1 style= "color: #1d8cf8;" class="card-title"> Ajouter Indicateur </h1>
           </div>
         <div style= "height: auto;" class = "card-body">
             
                 <form action="" method="post"> {% csrf_token %}
                 {{form.as_p}}
                 <br>
+               
 
             </div>
+            
+            <div style="text-align:right;">
+                <input class= "btn btn-info" type="submit" value="Ajouter">
+            </div>
 
-        </div>
+        </form>
+
+      
+
+       </div>
+
+        
+
     </div>
 
-                <input class= "btn btn-info" type="submit" value="Ajouter">
-            </form>
+
+
+
+<!--
+            <h1 style= "color: #1d8cf8;">Ajouter indicateur</h1>
+<form action="" method="post"> {% csrf_token %}
+    {{form.as_p}}
+    <br>
+    <input type="submit" value="Ajouter">
+</form>-->
+
 
         
 {% endblock content %}

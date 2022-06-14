@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from apps.administration.models import CustomUser
+from apps.administration.models import CustomUser, Application, Filiale, Mesure
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
@@ -94,12 +94,25 @@ class Donnee(models.Model):
     def get_absolute_url(self):
         return reverse("data_detail", kwargs={"pk": self.pk})
 
+class DonneeApplication(Donnee):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+
+class DonneeFilliale(Donnee):
+    filiale = models.ForeignKey(Filiale, on_delete=models.CASCADE)
+
+class DonneeMesure(Donnee):
+    mesure = models.ForeignKey(Mesure, on_delete=models.CASCADE)
+
 #classe interpretation
 class Interpretation(models.Model):
 
     Contenu = models.TextField(blank=False)
     Id_Indicateur = models.ForeignKey(Indicateur, on_delete=models.CASCADE)
     Date = models.DateField(auto_now_add=True)
+
+    validation_chef_dep = models.BooleanField(default=False)
+    validation_directeur = models.BooleanField(default=False)
+
 
     def get_absolute_url(self):
         return reverse("interpretation_detail", kwargs={"pk": self.pk})
@@ -149,16 +162,63 @@ from django.template.loader import render_to_string
 def notification(sender, instance, created, *args, **kargs):
 
     template = render_to_string('home/email_template.html', {'indicateur':instance.Intitule_Indicateur, 'inge':instance.user})
+    #Send email 
+    #indicateur doit d abord etre validé par le chef dep
+    if not instance.validation_chef_dep:
+        email = EmailMessage(
+        'Nouvel indicateur a valider',
+        template,
+        settings.EMAIL_HOST_USER,
+        [instance.user.departements.chef_dep.email, 
+        ],
+        )
+        email.fail_silently=False
+        email.send()
+    #des qu'il est validé, une notification est envoyé au directeur
+    elif not instance.validation_directeur:
+        email = EmailMessage(
+        'Nouvel Indicateur a valider',
+        template,
+        settings.EMAIL_HOST_USER,
+        [instance.user.directions.directeur.email, 
+        ],
+        ) 
+        email.fail_silently=False
+        email.send()
 
-    email = EmailMessage(
-    'nouvel indicateur',
-    template,
-    settings.EMAIL_HOST_USER,
-    [instance.user.directions.directeur.email, instance.user.departements.chef_dep.email,
-    ],
-    )
-
-    email.fail_silently=False
-    email.send()
 
 post_save.connect(notification, sender=Indicateur)
+
+
+#fonction envoi notif validation interpretation
+@receiver(post_save, sender=Interpretation)
+def notificationInter(sender, instance, created, *args, **kargs):
+
+    template = render_to_string('home/email_templateInter.html', {'indicateur':instance.Id_Indicateur, 'inge':instance.Id_Indicateur.user})
+    #Send email 
+    #indicateur doit d abord etre validé par le chef dep
+    if not instance.validation_chef_dep:
+        email = EmailMessage(
+        'Nouvelle interpretation a valider',
+        template,
+        settings.EMAIL_HOST_USER,
+        [instance.Id_Indicateur.user.departements.chef_dep.email, 
+        ],
+        )
+        email.fail_silently=False
+        email.send()
+    #des qu'il est validé, une notification est envoyé au directeur
+    elif not instance.validation_directeur:
+        email = EmailMessage(
+        'Nouvelle interpretation a valider',
+        template,
+        settings.EMAIL_HOST_USER,
+        [instance.Id_Indicateur.user.directions.directeur.email, 
+        ],
+        ) 
+        email.fail_silently=False
+        email.send()
+
+
+
+post_save.connect(notificationInter, sender=Interpretation)

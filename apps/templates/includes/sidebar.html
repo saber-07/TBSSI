@@ -157,11 +157,19 @@
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
       </a> </li>
+      <li> <a href="{% url 'validation_interpretation_chefdep' %}">
+        <i class ="tim-icons icon-check-2"></i>
+        <p> Validation Interpretations </p>
+      </a> </li>
        {% elif DirecteurGroup in user.groups.all %}
 
        <li> <a href="{% url 'validation_indicateur_directeur' %}">
         <i class ="tim-icons icon-check-2"></i>
         <p> Validation Indicateurs </p>
+      </a> </li>
+      <li> <a href="{% url 'validation_interpretation_directeur' %}">
+        <i class ="tim-icons icon-check-2"></i>
+        <p> Validation Interpretations </p>
       </a> </li>
        {% endif %}
 
