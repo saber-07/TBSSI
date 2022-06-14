@@ -45,5 +45,5 @@ urlpatterns = [
     path('valider_indicateur_bis/<int:pk>', views.valider_ind_Bis, name='valider-indicateur-bis'),
     path('valider_rapport/<int:pk>', views.valider_rapport, name='valider-rapport'), 
     
-
+    path('refus-indicateur/<int:pk>', views.refus_indicateur, name='refus-indicateur'),
     ]
