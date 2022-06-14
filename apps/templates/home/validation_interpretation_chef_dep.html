@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Valider Interpretations {% endblock%}
+
+{% block content %}
+
+<h1> Liste des interpretations non validées </h1>
+
+
+<div class="row">
+    <div class="col-md-7">
+      <div class="card ">
+       
+<div class="card-body">
+    <div class="table-responsive">
+      <table class="table tablesorter " id="">
+        <thead class=" text-primary">
+          <tr>
+            <th>
+              Num
+            </th>
+
+            <th class="text-center"> 
+              Créateur
+            </th>
+            
+          </tr>
+        </thead>
+
+        <tbody>
+            {% for interpretation in object_list%}
+            {% if not interpretation.validation_chef_dep and interpretation.Id_Indicateur.user.departements ==  user.departements %}              <tr>
+                <td>
+                <a style= "color: #1d8cf8;" href="{% url 'interpretation_detail' interpretation.pk %}">
+                    Interpretation N°{{ interpretation.id }}{{ interpretation. }}
+                </td> </a>
+                <td class="text-center">
+                    {{ interpretation.Id_Indicateur.user }}
+                </td>
+             
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+</div>
+        
+{% endblock content %}

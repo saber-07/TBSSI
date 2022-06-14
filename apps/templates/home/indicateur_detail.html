@@ -51,11 +51,11 @@
       </tr>
       <tr>
         <th>Validation</th>
-        {% if not indicateur.validation_directeur %}
+        {% if not indicateur.validation_chef_dep %}
         <td> Non validé </td>
         {% else %}
-        <td> Validé par le directeur {% if indicateur.validation_chef_dep %}
-          et le chef de departement {% endif %} </td>
+        <td> Validé par le chef departement {% if indicateur.validation_directeur %}
+          et le directeur {% endif %} </td>
         {% endif %}
       </tr>
     
@@ -81,34 +81,37 @@
     
     {% if DirecteurGroup in user.groups.all %}
     {% if not indicateur.validation_directeur %}
-    <p><a class="btn btn-success" href="{% url 'valider-indicateur' indicateur.pk %}">Valider indicateur</a></p>
+    <p><a class="btn btn-success" href="{% url 'valider-indicateur' indicateur.pk %}">Valider indicateur</a>
+      <a class="btn btn-danger" href="{% url 'refus-indicateur' indicateur.pk %}">Refuser indicateur</a></p>
+    {% endif %}
+    {% elif ChefDeptGroup in user.groups.all %}
+    {% if not indicateur.validation_chef_dep %}
+    <p><a class="btn btn-success" href="{% url 'valider-indicateur-bis' indicateur.pk %}">Valider indicateur</a>
+      <a class="btn btn-danger" href="{% url 'refus-indicateur' indicateur.pk %}">Refuser indicateur</a></p>
+    </p>
     {% else %}
     <div class = "card card-chart">
       <div style= "height: auto;" class = "card-body">
-      <h1><a style= "color: green;" href="">Validé par le directeur</h1></a>
+      <h1><a style= "color: green;" href="">Validé par le chef de département</h1></a>
      
   
   </div>
   </div>
-    {% endif %}
-    {% elif ChefDeptGroup in user.groups.all %}
-    {% if not indicateur.validation_chef_dep %}
-    <p><a class="btn btn-success" href="{% url 'valider-indicateur-bis' indicateur.pk %}">Valider indicateur</a></p>
     {% endif %}
   
   </div>
 
 
     
-    {% else %}
+    {% elif indicateur.user == request.user %}
 
     <p><a style= "color: white;" class = "btn btn-info" href="{% url 'indicateur_edit' indicateur.pk%}">Modifier indicateur </a>
     <a style= "color: white;" class = "btn btn-danger" href="{% url 'indicateur_delete' indicateur.pk%}">Supprimer indicateur</a> </p>
+    {% endif %}
     <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
 
 
   
-    {% endif %}
 
 
 

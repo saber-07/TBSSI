@@ -66,8 +66,14 @@
                <form action="" method="post"> {% csrf_token %}
                 {{form.as_p}}
             </div>
+
+           </form>
+
+           <div style="text-align:right;">
+            <input class= "btn btn-info" type="submit" value="Ajouter">
+           </div>
+  
+
         </div>
     </div>
-                <input style="text-align: center;" class = "btn btn-info" type="submit" value="Ajouter">
-              </form>
 {% endblock content %}

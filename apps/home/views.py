@@ -13,9 +13,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render,redirect 
+
+from django.contrib.auth.models import Group
+
 from django.core.mail import send_mail, BadHeaderError
 from .forms import RefusForm
+
+from django.urls import resolve
 
 @login_required(login_url="/login/")
 def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
@@ -41,9 +46,49 @@ def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
     return HttpResponse(html_template.render(context, request))
 
 
+# @login_required(login_url="/login/")
+# def pages(request):
+#     context = {}
+#     # All resource paths end in .html.
+#     # Pick out the html file name from the url. And load that template.
+#     try:
+
+#         load_template = request.path.split('/')[-1]
+
+#         if load_template == 'admin':
+#             context['ListeTb'] = TB.objects.all()
+#             context['FirstTb'] = TB.objects.all().first()
+#             context['ListeInd'] = Indicateur.objects.all()
+#             context['ListeDonnees'] = Donnee.objects.all()
+#             context['FirstInd'] = Indicateur.objects.all().first()
+
+#             return HttpResponseRedirect(reverse('admin:index'))
+#         context['segment'] = load_template
+
+#         html_template = loader.get_template('home/' + load_template)
+        
+#         context['ListeTb'] = TB.objects.all()
+#         context['FirstTb'] = TB.objects.all().first()
+#         context['ListeInd'] = Indicateur.objects.all()
+#         context['ListeDonnees'] = Donnee.objects.all()
+#         context['FirstInd'] = Indicateur.objects.all().first()
+
+#         return HttpResponse(html_template.render(context, request))
+
+#     except template.TemplateDoesNotExist:
+
+#         html_template = loader.get_template('home/page-404.html')
+#         return HttpResponse(html_template.render(context, request))
+
+#     except:
+#         html_template = loader.get_template('home/page-500.html')
+#         return HttpResponse(html_template.render(context, request))
+
+
+
 # Create your views here.
 
-class TbDetail(LoginRequiredMixin, PermissionRequired, SingleObjectMixin ,ListView):
+class TbDetail(LoginRequiredMixin,SingleObjectMixin ,ListView):
     login_url = '/login/'
     template_name = 'home/tbb_detail.html'
     permission_required = "home.view_indicateur"
@@ -74,7 +119,7 @@ class TbDetail(LoginRequiredMixin, PermissionRequired, SingleObjectMixin ,ListVi
         return self.object.indicateur_set.all()
     
 
-class TbCreateView(LoginRequiredMixin, PermissionRequired, CreateView):
+class TbCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = TB
     template_name = 'home/tbb_new.html'
@@ -91,8 +136,7 @@ class TbCreateView(LoginRequiredMixin, PermissionRequired, CreateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class TbUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-
+class TbUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     login_url = '/login/'
     model = TB
     template_name = 'home/tbb_edit.html'
@@ -110,7 +154,7 @@ class TbUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class TbDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class TbDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
     login_url = '/login/'
     model = TB
     template_name = 'home/tbb_delete.html'
@@ -130,11 +174,11 @@ class TbDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return context
 
 
-class IndicateurCreateView(LoginRequiredMixin, PermissionRequired ,CreateView):
+
+class IndicateurCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
-    permission_required = "home.create_indicateur"
     model = Indicateur
-    fields = ['Intitule_Indicateur', 'Id_TB', 'Objectif', 'Domaine' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite', 'Id_Graphe']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
     template_name = 'home/indicateur_new.html'
 
     def form_valid(self, form):
@@ -153,7 +197,7 @@ class IndicateurCreateView(LoginRequiredMixin, PermissionRequired ,CreateView):
         return context
     
 
-class IndicateurDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class IndicateurDetailView(LoginRequiredMixin,PermissionRequiredMixin, DetailView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
@@ -181,7 +225,7 @@ def listeindicateurview(request):
     'ChefDeptGroup' : Group.objects.get(name='Chef département')})
 
 
-class IndicateurUpdateView(LoginRequiredMixin, PermissionRequiredMixin , UpdateView):
+class IndicateurUpdateView(LoginRequiredMixin,PermissionRequiredMixin ,UpdateView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
@@ -198,7 +242,7 @@ class IndicateurUpdateView(LoginRequiredMixin, PermissionRequiredMixin , UpdateV
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class IndicateurDeleteView(LoginRequiredMixin, PermissionRequiredMixin ,DeleteView):
+class IndicateurDeleteView(LoginRequiredMixin,PermissionRequiredMixin ,DeleteView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/indicateur_delete.html'
@@ -215,9 +259,7 @@ class IndicateurDeleteView(LoginRequiredMixin, PermissionRequiredMixin ,DeleteVi
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataCreateView(LoginRequiredMixin, CreateView, PermissionRequired):
-    permission_required = 'home.add_data'
-    permission_required = "home.create_data"
+class DataCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = Donnee
     template_name = 'home/data_new.html'
@@ -254,7 +296,7 @@ def listedonneesview(request):
     'ChefDeptGroup' : Group.objects.get(name='Chef département')
 })
 
-class DataDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class DataDetailView(LoginRequiredMixin,DetailView):
     login_url = '/login/'
     model = Donnee
     template_name = 'home/data_detail.html'
@@ -272,7 +314,7 @@ class DataDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class DataDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
     login_url = '/login/'
     model = Donnee
     template_name = 'home/data_delete.html'
@@ -289,7 +331,7 @@ class DataDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class DataUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     login_url = '/login/'
     model = Donnee
     template_name = 'home/data_update.html'
@@ -316,7 +358,7 @@ def administrationView(request):
 })
 
 #for interpretation
-class InterpretationCreateView(LoginRequiredMixin, PermissionRequired, CreateView):
+class InterpretationCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = Interpretation
     permission_required = "home.create_interpretation"
@@ -346,7 +388,7 @@ class InterpretationCreateView(LoginRequiredMixin, PermissionRequired, CreateVie
         return context  
 
     
-class InterpretationDetailView(LoginRequiredMixin, PermissionRequired, DetailView):
+class InterpretationDetailView(LoginRequiredMixin,DetailView):
     login_url = '/login/'
     model = Interpretation
     permission_required = "home.view_interpretation"
@@ -365,7 +407,7 @@ class InterpretationDetailView(LoginRequiredMixin, PermissionRequired, DetailVie
         return context
 
 
-class InterpretationUpdateView(LoginRequiredMixin, PermissionRequired, UpdateView):
+class InterpretationUpdateView(LoginRequiredMixin,UpdateView):
     login_url = '/login/'
     model = Interpretation
     permission_required = "home.change_interpretation"
@@ -388,7 +430,7 @@ class InterpretationUpdateView(LoginRequiredMixin, PermissionRequired, UpdateVie
 
 
 
-class ValidationIndicateurDirecteurListView(LoginRequiredMixin, ListView):
+class ValidationIndicateurDirecteurListView(LoginRequiredMixin,ListView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/validation_indicateur_directeur.html'
@@ -404,7 +446,7 @@ class ValidationIndicateurDirecteurListView(LoginRequiredMixin, ListView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class ValidationIndicateurDirecteurDetailView(LoginRequiredMixin, DetailView):
+class ValidationIndicateurDirecteurDetailView(LoginRequiredMixin,DetailView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
@@ -421,7 +463,7 @@ class ValidationIndicateurDirecteurDetailView(LoginRequiredMixin, DetailView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class ValidationIndicateurChefDepListView(LoginRequiredMixin, ListView):
+class ValidationIndicateurChefDepListView(LoginRequiredMixin,ListView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/validation_indicateur_chef_dep.html'
@@ -437,7 +479,7 @@ class ValidationIndicateurChefDepListView(LoginRequiredMixin, ListView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
     
-class ValidationIndicateurChefDepDetailView(LoginRequiredMixin, DetailView):
+class ValidationIndicateurChefDepDetailView(LoginRequiredMixin,DetailView):
     login_url = '/login/'
     model = Indicateur
     template_name = 'home/indicateur_detail.html'
@@ -454,6 +496,7 @@ class ValidationIndicateurChefDepDetailView(LoginRequiredMixin, DetailView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
+@login_required(login_url="/login/")
 def valider_ind(request, *args, **kwargs):
     pk = kwargs.get('pk')
     indicateur = get_object_or_404(Indicateur, pk=pk)
@@ -503,6 +546,129 @@ def valider_ind_Bis(request, *args, **kwargs):
 
 
 
+
+#Valider Interpretation
+class ValidationInterpretationDirecteurListView(LoginRequiredMixin,ListView):
+    login_url = '/login/'
+    model = Interpretation
+    template_name = 'home/validation_interpretation_directeur.html'
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationInterpretationDirecteurListView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class ValidationInterpretationDirecteurDetailView(LoginRequiredMixin,DetailView):
+    login_url = '/login/'
+    model = Interpretation
+    template_name = 'home/interpretation_detail.html'
+    success_url = reverse_lazy('validation_interpretation_directeur')
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationInterpretationDirecteurDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class ValidationInterpretationChefDepListView(LoginRequiredMixin,ListView):
+    login_url = '/login/'
+    model = Interpretation
+    template_name = 'home/validation_interpretation_chef_dep.html'
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationInterpretationChefDepListView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+    
+class ValidationInterpretationChefDepDetailView(LoginRequiredMixin,DetailView):
+    login_url = '/login/'
+    model = Interpretation
+    template_name = 'home/interpretation_detail.html'
+    success_url = reverse_lazy('validation_interpretation_chef_dep')
+    
+    def get_context_data(self,*args, **kwargs):
+        context = super(ValidationInterpretationChefDepDetailView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+
+
+@login_required(login_url="/login/")
+def valider_inter(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    interpretation = get_object_or_404(Interpretation, pk=pk)
+    interpretation.validation_directeur = True
+    interpretation.save()
+
+    context = {'interpretation': interpretation,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/interpretation_detail.html",
+        context=context
+    )
+
+
+
+@login_required(login_url="/login/")
+def valider_inter_Bis(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    interpretation = get_object_or_404(Interpretation, pk=pk)
+    interpretation.validation_chef_dep = True
+    interpretation.save()
+
+    context = {'interpretation': interpretation,
+    'all_data_list' : Donnee.objects.all(),
+    'ListeTb' : TB.objects.all(),
+    'DirecteurGroup' : Group.objects.get(name='Directeur'),
+    'AdminGroup' : Group.objects.get(name='Admin'),
+    'IngenieurGroup' : Group.objects.get(name='Ingénieur'),
+    'PDGGroup' : Group.objects.get(name='PDG'),
+    'ChefDeptGroup' : Group.objects.get(name='Chef département')}
+
+
+    return render(
+        request,
+        "home/interpretation_detail.html",
+        context=context
+    )
+
+
+
+
+
+
 #valider rapport 
 @login_required(login_url="/login/")
 def valider_rapport(request, *args, **kwargs):
@@ -528,6 +694,7 @@ def valider_rapport(request, *args, **kwargs):
     )
 
 
+   
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
@@ -550,8 +717,29 @@ def refus_indicateur(request, **kwargs):
         if form.is_valid():
             message = form.cleaned_data['motif']
             try:
-                send_mail('motif de refus', message, ind.user.directions.directeur.email, [ind.user.email])
+                send_mail('Indicateur Refusé', message, ind.user.directions.directeur.email, [ind.user.email])
             except BadHeaderError:
                 return HttpResponse('Invalid header found')
             return redirect('liste_indicateurs')
+
+    return render(request, "home/email-refus.html", {'form': form})
+
+
+@login_required(login_url="/login/")
+def refus_inter(request, **kwargs):
+    pk = kwargs.get('pk')
+    inter = get_object_or_404(Interpretation, pk=pk)
+
+    if request.method == 'GET':
+        form = RefusForm()
+    else : 
+        form = RefusForm(request.POST)
+        if form.is_valid():
+            message = form.cleaned_data['motif']
+            try:
+                send_mail('Interpretation Refusée', message, inter.Id_Indicateur.user.directions.directeur.email, [inter.Id_Indicateur.user.email])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found')
+            return redirect('liste_indicateurs')
+
     return render(request, "home/email-refus.html", {'form': form})

@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
-  <h1> Bienvenue {{user.get_username}}!             
+  <h1> Bienvenue {{request.user.last_name}} {{request.user.first_name}}!             
     
   
     <br>
@@ -80,7 +80,7 @@
                 {% endif %}
 
                 <h5 class="title">
-                  {{ request.user.username }}
+                  {{ request.user.first_name }} {{request.user.last_name}}
                 </h5>
               </a>
               <p class="description">

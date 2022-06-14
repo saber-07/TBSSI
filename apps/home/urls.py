@@ -29,6 +29,7 @@ urlpatterns = [
     path('validation/indicateur/chefdeplist/', views.ValidationIndicateurChefDepListView.as_view(), name='validation_indicateur_chefdep'),
     path('validation/indicateur/chefdep/<int:pk>/', views.ValidationIndicateurChefDepDetailView.as_view(), name='indicateur_detail'),
 
+   
     #for interpretation
     path('interpretation/new/<int:pk>', views.InterpretationCreateView.as_view(), name='interpretation_new'),
     
@@ -36,6 +37,10 @@ urlpatterns = [
 
     path('interpretation/<int:pk>/edit', views.InterpretationUpdateView.as_view(), name='interpretation_edit'),
 
+    path('validation/interpretation/directeurlist/', views.ValidationInterpretationDirecteurListView.as_view(), name='validation_interpretation_directeur'),
+    path('validation/interpretation/directeur/<int:pk>/', views.ValidationInterpretationDirecteurDetailView.as_view(), name='interpretation_detail'),
+    path('validation/interpretation/chefdeplist/', views.ValidationInterpretationChefDepListView.as_view(), name='validation_interpretation_chefdep'),
+    path('validation/interpretation/chefdep/<int:pk>/', views.ValidationInterpretationChefDepDetailView.as_view(), name='interpretation_detail'),
 
     #for administration
     path('administration/', views.administrationView, name='administration'),
@@ -43,7 +48,18 @@ urlpatterns = [
     #for validation
     path('valider_indicateur/<int:pk>', views.valider_ind, name='valider-indicateur'), 
     path('valider_indicateur_bis/<int:pk>', views.valider_ind_Bis, name='valider-indicateur-bis'),
+    
+
+    path('valider_interpretation/<int:pk>', views.valider_inter, name='valider-inter'), 
+    path('valider_interpretation_bis/<int:pk>', views.valider_inter_Bis, name='valider-inter-bis'),
+    
+    
     path('valider_rapport/<int:pk>', views.valider_rapport, name='valider-rapport'), 
+
+    path('refus-indicateur/<int:pk>', views.refus_indicateur, name='refus-indicateur'),
+
+    path('refus-inter/<int:pk>', views.refus_inter, name='refus-inter'),
+
     
     path('refus-indicateur/<int:pk>', views.refus_indicateur, name='refus-indicateur'),
     ]
