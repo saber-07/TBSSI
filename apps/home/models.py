@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from apps.administration.models import CustomUser, Application, Filiale, Mesure
+from apps.administration.models import CustomUser, Application, Filiale, Mesure, Departement
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
@@ -29,7 +29,8 @@ class Indicateur(models.Model):
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
-    PERIODICITE_CHOICES =( ('Annuelle', 'Annuelle'),
+    PERIODICITE_CHOICES =( 
+                    ('Annuelle', 'Annuelle'),
                     ('Mensuelle', 'Mensuelle'),
                     )
 
@@ -40,16 +41,24 @@ class Indicateur(models.Model):
         ('IPS', 'Indicateurs de performance stratégiques'),
     )
 
+    TYPE_DONNEES_CHOICES = (  
+        ('Mesure', 'Mesure'),
+        ('Application', 'Application'),
+        ('Filiale', 'Filiale'),
+        ('Standard', 'Standard'),
+    )
+
     Intitule_Indicateur = models.CharField(max_length=100, blank=False, unique=True)
-    Objectif = models.CharField(max_length=100, default='objectif', blank=False)
-    Domaine = models.CharField(max_length=100, default='Sécurité des RH', blank=False)
-    Type = models.CharField(max_length=50, default='IPS', choices=TYPE_INDICATEUR_CHOICES, blank=False)
-    Methode_calcul = models.CharField(max_length=200, default='Nb utilisateur', blank=False)
+    Objectif = models.CharField(max_length=100, blank=False)
+    Domaine = models.CharField(max_length=100, blank=False)
+    Type = models.CharField(max_length=50, choices=TYPE_INDICATEUR_CHOICES, blank=False)
+    Methode_calcul = models.CharField(max_length=200, blank=False)
     Periodicite = models.CharField(max_length=100, choices=PERIODICITE_CHOICES)
-    Source = models.CharField(max_length=100, default='DSSI', blank=False)
+    Source = models.CharField(max_length=100, blank=False)
     validation_chef_dep = models.BooleanField(default=False)
     validation_directeur = models.BooleanField(default=False)
 
+    type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False)
     #cle etrangere -> Graphe + TB
     Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
     Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)
@@ -97,7 +106,7 @@ class Donnee(models.Model):
 class DonneeApplication(Donnee):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
 
-class DonneeFilliale(Donnee):
+class DonneeFiliale(Donnee):
     filiale = models.ForeignKey(Filiale, on_delete=models.CASCADE)
 
 class DonneeMesure(Donnee):
@@ -150,6 +159,59 @@ def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
         "delete_donnee",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+@receiver(post_save, sender=DonneeApplication)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_donneeapplication",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=DonneeApplication)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donneeapplication",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=DonneeFiliale)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_donneefiliale",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=DonneeFiliale)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donneefiliale",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=DonneeMesure)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_donneemesure",  # The permission we want to assign.
+        instance.user,  # The user object.
+        instance  # The object we want to assign the permission to.
+   )
+
+@receiver(post_save, sender=DonneeMesure)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donneemesure",  # The permission we want to assign.
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )

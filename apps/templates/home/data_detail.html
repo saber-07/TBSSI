@@ -5,16 +5,45 @@
 {% block content %}
 
 <div class = "card card-chart">
-    <div style = "height: 270px;" class = "card-body">
+    <div style = "height: auto;" class = "card-body">
     <h1><a style= "color: #1d8cf8;" href="">Data N°{{donnee.pk}}</a></h1>
     <h3>Indicateur : {{donnee.Id_Indicateur}}</h3>
     <h3>Date : {{donnee.Date}}</h3>
     <h3>Valeur : {{donnee.Valeur}}</h3>
 
+    {% if donnee.Id_Indicateur.type_donnees == "Filiale" %}
+    {% for donfil in ListeDonFiliales %}
+    {% if donfil.pk == donnee.pk %}
+    <h3> Filiale : {{donfil.filiale}}</h3>
+    {% endif %}
+    {% endfor %}
+    {% elif donnee.Id_Indicateur.type_donnees == "Application" %}
+    <h3> Application : </h3>
+    {% elif donnee.Id_Indicateur.type_donnees == "Mesure" %}
+    <h3> Mesure : </h3>
+    {% endif %}
+
+
+
+
     </div>
 
 </div>
 
-    <p><a class = "btn btn-light" href="{% url 'data_update' donnee.pk%}">+ Modifier donnée</a>
-    <a class = "btn btn-danger" href="{% url 'data_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+  {% if donnee.Id_Indicateur.type_donnees == "Filiale" %}
+    <p><a class = "btn btn-light" href="{% url 'data_filiale_update' donnee.pk%}">+ Modifier donnée</a>
+    <a class = "btn btn-danger" href="{% url 'data_filiale_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+
+  {% elif donnee.Id_Indicateur.type_donnees == "Application" %}
+  <p><a class = "btn btn-light" href="{% url 'data_app_update' donnee.pk%}">+ Modifier donnée</a>
+    <a class = "btn btn-danger" href="{% url 'data_app_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+
+    {% elif donnee.Id_Indicateur.type_donnees == "Mesure" %}
+    <p><a class = "btn btn-light" href="{% url 'data_mesure_update' donnee.pk%}">+ Modifier donnée</a>
+      <a class = "btn btn-danger" href="{% url 'data_mesure_delete' donnee.pk%}">+ Supprimer donnée</a></p>
+
+
+
+
+    {% endif %}
 {% endblock content %}

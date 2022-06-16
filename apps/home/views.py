@@ -1,29 +1,23 @@
 from datetime import datetime
-from multiprocessing import context
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import TB, DonneeApplication, DonneeFiliale, DonneeMesure,Indicateur,Donnee, Interpretation, Graphe
 from django.views.generic.detail import SingleObjectMixin
-from .models import TB,Indicateur,Donnee, Interpretation
-from django.views.generic.detail import SingleObjectMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin as PermissionRequired
 from guardian.mixins import PermissionRequiredMixin
-from guardian.shortcuts import get_objects_for_user
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 import datetime
-
-from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.template import loader
-from django.urls import reverse
 from django.shortcuts import get_object_or_404, render,redirect 
 
 from django.contrib.auth.models import Group
 
+from apps.administration.models import Filiale, Application, Mesure
+
 from django.core.mail import send_mail, BadHeaderError
 from .forms import RefusForm
-
-from django.urls import resolve
 
 @login_required(login_url="/login/")
 def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
@@ -94,6 +88,7 @@ def index(request):  # sourcery skip: merge-dict-assign, move-assign-in-block
 class TbDetail(LoginRequiredMixin,SingleObjectMixin ,ListView):
     login_url = '/login/'
     template_name = 'home/tbb_detail.html'
+    permission_required = "home.view_indicateur"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=TB.objects.all())
@@ -106,6 +101,12 @@ class TbDetail(LoginRequiredMixin,SingleObjectMixin ,ListView):
         context['ListeDonnees'] = Donnee.objects.all()
         context['currentMonth'] = datetime.date.today().month
         context['currentYear'] = datetime.date.today().year
+        context['diff'] = (datetime.date.today().month) - 5 
+        context['previousMonth'] = datetime.date.today().month - 1
+        context['previousYear'] = datetime.date.today().year - 1
+        
+        context['diffyear'] = (datetime.date.today().year) - 5
+        
 
         #Ajouter les groupes
         context['DirecteurGroup'] = Group.objects.get(name='Directeur')
@@ -115,6 +116,15 @@ class TbDetail(LoginRequiredMixin,SingleObjectMixin ,ListView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         #liste d interpretation
         context['ListeInter'] = Interpretation.objects.all()
+
+        #pour graphes par types de données
+        context['ListeFiliales'] = Filiale.objects.all()
+        context['ListeDonFiliales'] = DonneeFiliale.objects.all()
+        context['ListeApplications'] = Application.objects.all()
+        context['ListeDonApplications'] = DonneeApplication.objects.all()
+        context['ListeMesures'] = Mesure.objects.all()
+        context['ListeDonMesures'] = DonneeMesure.objects.all()
+
         return context
 
     def get_queryset(self):
@@ -125,6 +135,7 @@ class TbCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = TB
     template_name = 'home/tbb_new.html'
+    permission_required = "home.create_tb"
     fields = ['Intitule', 'Objectif']
     def get_context_data(self,*args, **kwargs):
         context = super(TbCreateView, self).get_context_data(*args,**kwargs)
@@ -179,7 +190,7 @@ class TbDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
 class IndicateurCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = Indicateur
-    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
     template_name = 'home/indicateur_new.html'
 
     def form_valid(self, form):
@@ -214,6 +225,7 @@ class IndicateurDetailView(LoginRequiredMixin,PermissionRequiredMixin, DetailVie
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
+@login_required(login_url="/login/")
 def listeindicateurview(request):
     return render(request, 'home/listeIndicateur.html', 
     {'ListeInd' : Indicateur.objects.all,
@@ -225,12 +237,11 @@ def listeindicateurview(request):
     'ChefDeptGroup' : Group.objects.get(name='Chef département')})
 
 
-class IndicateurUpdateView(LoginRequiredMixin,PermissionRequiredMixin ,UpdateView):
-    login_url = '/login/'
+class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
     permission_required = "home.change_indicateur"
-    fields = ['Intitule_Indicateur', 'Periodicite', 'Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -242,8 +253,7 @@ class IndicateurUpdateView(LoginRequiredMixin,PermissionRequiredMixin ,UpdateVie
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class IndicateurDeleteView(LoginRequiredMixin,PermissionRequiredMixin ,DeleteView):
-    login_url = '/login/'
+class IndicateurDeleteView(PermissionRequiredMixin ,DeleteView):
     model = Indicateur
     template_name = 'home/indicateur_delete.html'
     permission_required = "home.delete_indicateur"
@@ -284,6 +294,81 @@ class DataCreateView(LoginRequiredMixin,CreateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
+class DataFilialeCreateView(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
+    model = DonneeFiliale
+    template_name = 'home/data_new.html'
+    fields = ['Date','Valeur', 'filiale']
+     
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(DataFilialeCreateView, self).form_valid(form)
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataFilialeCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class DataAppCreateView(LoginRequiredMixin,CreateView):
+    login_url = '/login/'
+    model = DonneeApplication
+    template_name = 'home/data_new.html'
+    fields = ['Date','Valeur', 'application']
+     
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(DataAppCreateView, self).form_valid(form)
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataAppCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+class DataMesureCreateView(LoginRequiredMixin,CreateView):
+    login_url = '/login/'
+    model = DonneeMesure
+    template_name = 'home/data_new.html'
+    fields = ['Date','Valeur', 'mesure']
+     
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        myurl = self.request.get_full_path()
+        myurldos = myurl.rsplit('/', 1)[-1]
+        print(myurldos)
+        form.instance.Id_Indicateur_id = int(myurldos) 
+        return super(DataMesureCreateView, self).form_valid(form)
+
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataCreateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+@login_required(login_url="/login/")
 def listedonneesview(request):
     return render(request,'home/listeDonnees.html',
     {'all_data_list' : Donnee.objects.all(),
@@ -299,6 +384,7 @@ class DataDetailView(LoginRequiredMixin,DetailView):
     login_url = '/login/'
     model = Donnee
     template_name = 'home/data_detail.html'
+    permission_required = "home.view_data"
     def get_context_data(self,*args, **kwargs):
         context = super(DataDetailView, self).get_context_data(*args,**kwargs)
         context['all_data_list'] = Donnee.objects.all()
@@ -310,10 +396,17 @@ class DataDetailView(LoginRequiredMixin,DetailView):
         context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
         context['PDGGroup'] = Group.objects.get(name='PDG')
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+
+         #pour graphes par types de données
+        context['ListeFiliales'] = Filiale.objects.all()
+        context['ListeDonFiliales'] = DonneeFiliale.objects.all()
+        context['ListeApplications'] = Application.objects.all()
+        context['ListeDonApplications'] = DonneeApplication.objects.all()
+        context['ListeMesures'] = Mesure.objects.all()
+        context['ListeDonMesures'] = DonneeMesure.objects.all()
         return context
 
-class DataDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
-    login_url = '/login/'
+class DataDeleteView(PermissionRequiredMixin, DeleteView):
     model = Donnee
     template_name = 'home/data_delete.html'
     permission_required = "home.delete_donnee"
@@ -329,12 +422,58 @@ class DataDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
-class DataUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
-    login_url = '/login/'
+class DataFilialeDeleteView(PermissionRequiredMixin, DeleteView):
+    model = DonneeFiliale
+    template_name = 'home/data_delete.html'
+    permission_required = "home.delete_donnee"
+    success_url = reverse_lazy('liste_donnees')
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataFilialeDeleteView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class DataAppDeleteView(PermissionRequiredMixin, DeleteView):
+    model = DonneeApplication
+    template_name = 'home/data_delete.html'
+    permission_required = "home.delete_donneeapplication"
+    success_url = reverse_lazy('liste_donnees')
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataAppDeleteView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class DataMesureDeleteView(PermissionRequiredMixin, DeleteView):
+    model = DonneeMesure
+    template_name = 'home/data_delete.html'
+    permission_required = "home.delete_donneemesure"
+    success_url = reverse_lazy('liste_donnees')
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataMesureDeleteView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+class DataUpdateView(PermissionRequiredMixin, UpdateView):
     model = Donnee
     template_name = 'home/data_update.html'
     permission_required = "home.change_donnee"
-    fields = ['Date','Valeur','Id_Indicateur']
+    fields = ['Date','Valeur']
     def get_context_data(self,*args, **kwargs):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -346,8 +485,80 @@ class DataUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
         context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
         return context
 
+class DataFilialeUpdateView(PermissionRequiredMixin, UpdateView):
+    model = DonneeFiliale
+    template_name = 'home/data_update.html'
+    permission_required = "home.change_donneefiliale"
+    fields = ['Date','Valeur','Id_Indicateur', 'filiale']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataFilialeUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class DataAppUpdateView(PermissionRequiredMixin, UpdateView):
+    model = DonneeApplication
+    template_name = 'home/data_update.html'
+    permission_required = "home.change_donneeapplication"
+    fields = ['Date','Valeur','Id_Indicateur', 'filiale']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataAppUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+class DataMesureUpdateView(PermissionRequiredMixin, UpdateView):
+    model = DonneeMesure
+    template_name = 'home/data_update.html'
+    permission_required = "home.change_donneemesure"
+    fields = ['Date','Valeur','Id_Indicateur', 'filiale']
+    def get_context_data(self,*args, **kwargs):
+        context = super(DataMesureUpdateView, self).get_context_data(*args,**kwargs)
+        context['ListeTb'] = TB.objects.all()
+        #Ajouter les groupes
+        context['DirecteurGroup'] = Group.objects.get(name='Directeur')
+        context['AdminGroup'] = Group.objects.get(name='Admin')
+        context['IngenieurGroup'] = Group.objects.get(name='Ingénieur')
+        context['PDGGroup'] = Group.objects.get(name='PDG')
+        context['ChefDeptGroup'] = Group.objects.get(name='Chef département')
+        return context
+
+#for graphe
+
+class GrapheCreateView(CreateView):
+
+    model = Graphe
+    template_name = 'administration/graphe_new.html'
+    fields = ['Type']
+
+class GrapheDeleteView(DeleteView):
+    
+    model = Graphe
+    template_name = 'administration/graphe_delete.html'
+    success_url = reverse_lazy('graphe_list')
+
+class GrapheListView(ListView):
+
+    model = Graphe
+    template_name = 'administration/graphe_list.html'
+
+class GrapheDetailView(DetailView):
+
+    model = Graphe
+    template_name = 'administration/graphe_detail.html'
 
 #for administration
+@login_required(login_url="/login/")
 def administrationView(request):
     return render(request,'administration/administration.html',
     {'ListeInd' : Indicateur.objects.all(),
@@ -355,9 +566,10 @@ def administrationView(request):
 })
 
 #for interpretation
-class InterpretationCreateView(LoginRequiredMixin,CreateView):
+class InterpretationCreateView(LoginRequiredMixin, CreateView):
     login_url = '/login/'
     model = Interpretation
+    permission_required = "home.create_interpretation"
     template_name = 'home/interpretation_new.html'
     fields = ['Contenu']
 
@@ -384,9 +596,10 @@ class InterpretationCreateView(LoginRequiredMixin,CreateView):
         return context  
 
     
-class InterpretationDetailView(LoginRequiredMixin,DetailView):
+class InterpretationDetailView(LoginRequiredMixin, DetailView):
     login_url = '/login/'
     model = Interpretation
+    permission_required = "home.view_interpretation"
     template_name = 'home/interpretation_detail.html'
     def get_context_data(self,*args, **kwargs):
         context = super(InterpretationDetailView, self).get_context_data(*args,**kwargs)
@@ -405,6 +618,7 @@ class InterpretationDetailView(LoginRequiredMixin,DetailView):
 class InterpretationUpdateView(LoginRequiredMixin,UpdateView):
     login_url = '/login/'
     model = Interpretation
+    permission_required = "home.change_interpretation"
     template_name = 'home/interpretation_edit.html'
     fields = ['Contenu']
     def get_context_data(self,*args, **kwargs):
