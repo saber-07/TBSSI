@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
-from .models import CustomUser, Direction, Departement, Filiale
+from .models import CustomUser, Direction, Departement, Filiale, Application, Mesure, Categorie, Domaine, Referentiel
 from .forms import CustomUserCreationForm, EditUserForm
 # Create your views here.
 
@@ -116,3 +116,143 @@ class DepartementDetailView(DetailView):
 
     model = Departement
     template_name = 'administration/departement_detail.html'
+
+class ApplicationCreateView(CreateView):
+
+    model = Application
+    template_name = 'administration/application_new.html'
+    fields = ['nom_app']
+
+class ApplicationUpdateView(UpdateView):
+
+    model = Application
+    template_name = 'administration/application_edit.html'
+    fields = ['nom_app']
+
+class ApplicationDeleteView(DeleteView):
+    
+    model = Application
+    template_name = 'administration/application_delete.html'
+    success_url = reverse_lazy('application_list')
+
+class ApplicationListView(ListView):
+
+    model = Application
+    template_name = 'administration/application_list.html'
+
+class ApplicationDetailView(DetailView):
+
+    model = Application
+    template_name = 'administration/application_detail.html'
+
+class ReferentielCreateView(CreateView):
+
+    model = Referentiel
+    template_name = 'administration/referentiel_new.html'
+    fields = ['nom_referentiel']
+
+class ReferentielUpdateView(UpdateView):
+
+    model = Referentiel
+    template_name = 'administration/referentiel_edit.html'
+    fields = ['nom_referentiel']
+
+class ReferentielDeleteView(DeleteView):
+    
+    model = Referentiel
+    template_name = 'administration/referentiel_delete.html'
+    success_url = reverse_lazy('referentiel_list')
+
+class ReferentielListView(ListView):
+
+    model = Referentiel
+    template_name = 'administration/referentiel_list.html'
+
+class ReferentielDetailView(DetailView):
+
+    model = Referentiel
+    template_name = 'administration/referentiel_detail.html'
+
+class DomaineCreateView(CreateView):
+
+    model = Domaine
+    template_name = 'administration/domaine_new.html'
+    fields = ['nom_domaine', 'referentiel']
+
+class DomaineUpdateView(UpdateView):
+
+    model = Domaine
+    template_name = 'administration/domaine_edit.html'
+    fields = ['nom_domaine', 'referentiel']
+
+class DomaineDeleteView(DeleteView):
+    
+    model = Domaine
+    template_name = 'administration/domaine_delete.html'
+    success_url = reverse_lazy('domaine_list')
+
+class DomaineListView(ListView):
+
+    model = Domaine
+    template_name = 'administration/domaine_list.html'
+
+class DomaineDetailView(DetailView):
+
+    model = Domaine
+    template_name = 'administration/domaine_detail.html'
+
+class CategorieCreateView(CreateView):
+
+    model = Categorie
+    template_name = 'administration/categorie_new.html'
+    fields = ['nom_categorie', 'domaine']
+
+class CategorieUpdateView(UpdateView):
+
+    model = Categorie
+    template_name = 'administration/categorie_edit.html'
+    fields = ['nom_categorie', 'domaine']
+
+class CategorieDeleteView(DeleteView):
+    
+    model = Categorie
+    template_name = 'administration/categorie_delete.html'
+    success_url = reverse_lazy('categorie_list')
+
+class CategorieListView(ListView):
+
+    model = Categorie
+    template_name = 'administration/categorie_list.html'
+
+class CategorieDetailView(DetailView):
+
+    model = Categorie
+    template_name = 'administration/categorie_detail.html'
+
+class MesureCreateView(CreateView):
+
+    model = Mesure
+    template_name = 'administration/mesure_new.html'
+    fields = ['nom_mesure', 'categorie']
+
+class MesureUpdateView(UpdateView):
+
+    model = Mesure
+    template_name = 'administration/mesure_edit.html'
+    fields = ['nom_mesure', 'categorie']
+
+class MesureDeleteView(DeleteView):
+    
+    model = Mesure
+    template_name = 'administration/mesure_delete.html'
+    success_url = reverse_lazy('mesure_list')
+
+class MesureListView(ListView):
+
+    model = Mesure
+    template_name = 'administration/mesure_list.html'
+
+class MesureDetailView(DetailView):
+
+    model = Mesure
+    template_name = 'administration/mesure_detail.html'

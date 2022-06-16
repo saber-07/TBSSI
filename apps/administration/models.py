@@ -78,6 +78,9 @@ class Application(models.Model):
 
     def __str__(self):
         return self.nom_app
+
+    def get_absolute_url(self):
+        return reverse("application_detail", kwargs={"pk": self.pk})
  
 class Referentiel(models.Model):
 
@@ -85,6 +88,9 @@ class Referentiel(models.Model):
 
     def __str__(self):
         return self.nom_referentiel
+
+    def get_absolute_url(self):
+        return reverse("referentiel_detail", kwargs={"pk": self.pk})
 
 class Domaine(models.Model):
 
@@ -94,6 +100,9 @@ class Domaine(models.Model):
     def __str__(self):
         return self.nom_domaine
 
+    def get_absolute_url(self):
+        return reverse("domaine_detail", kwargs={"pk": self.pk})
+
 class Categorie(models.Model):
 
     nom_categorie = models.CharField(max_length=20)
@@ -101,6 +110,9 @@ class Categorie(models.Model):
 
     def __str__(self):
         return self.nom_categorie
+
+    def get_absolute_url(self):
+        return reverse("categorie_detail", kwargs={"pk": self.pk})
 class Mesure(models.Model):
 
     nom_mesure = models.CharField(max_length=20)
@@ -109,6 +121,8 @@ class Mesure(models.Model):
     def __str__(self):
         return self.nom_mesure
 
+    def get_absolute_url(self):
+        return reverse("mesure_detail", kwargs={"pk": self.pk})
 
 @receiver(post_save, sender=CustomUser)
 def user_post_save(sender, instance, created, *args, **kargs):
@@ -147,4 +161,5 @@ def pdg_affect(sender, instance, created, *args, **kargs):
 
 @receiver(pre_save, sender=CustomUser)
 def username_affect(sender, instance, *args, **kargs):
-    instance.username = f"{instance.last_name}.{instance.first_name}"
+    if(f"{instance.last_name}{instance.first_name}" != ""):
+        instance.username = f"{instance.last_name}.{instance.first_name}"

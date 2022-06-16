@@ -9,5 +9,5 @@ urlpatterns = [
 ]
 
 handler404 = "apps.home.views.page_not_found_view"
-handler404 = "apps.home.views.custom_error_403"
+handler403 = "apps.home.views.custom_error_403"
 handler500 = 'apps.home.views.custom_error_500'
