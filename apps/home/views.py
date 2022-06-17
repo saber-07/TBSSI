@@ -190,7 +190,7 @@ class TbDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
 class IndicateurCreateView(LoginRequiredMixin,CreateView):
     login_url = '/login/'
     model = Indicateur
-    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'TypeMiniGraphe','Id_TB']
     template_name = 'home/indicateur_new.html'
 
     def form_valid(self, form):
@@ -241,7 +241,7 @@ class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
     permission_required = "home.change_indicateur"
-    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'Id_TB']
+    fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'TypeMiniGraphe', 'Id_TB']
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -505,7 +505,7 @@ class DataAppUpdateView(PermissionRequiredMixin, UpdateView):
     model = DonneeApplication
     template_name = 'home/data_update.html'
     permission_required = "home.change_donneeapplication"
-    fields = ['Date','Valeur','Id_Indicateur', 'filiale']
+    fields = ['Date','Valeur','Id_Indicateur', 'application']
     def get_context_data(self,*args, **kwargs):
         context = super(DataAppUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()
@@ -521,7 +521,7 @@ class DataMesureUpdateView(PermissionRequiredMixin, UpdateView):
     model = DonneeMesure
     template_name = 'home/data_update.html'
     permission_required = "home.change_donneemesure"
-    fields = ['Date','Valeur','Id_Indicateur', 'filiale']
+    fields = ['Date','Valeur','Id_Indicateur', 'mesure']
     def get_context_data(self,*args, **kwargs):
         context = super(DataMesureUpdateView, self).get_context_data(*args,**kwargs)
         context['ListeTb'] = TB.objects.all()

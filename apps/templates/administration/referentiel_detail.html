@@ -1,0 +1,22 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{referentiel.nom_referentiel}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Reférentiel {{referentiel.nom_referentiel}}</a></h1>
+    <h3>Nom Referentiel : {{referentiel.nom_referentiel}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'referentiel_edit' referentiel.pk%}">Modifier Referentiel</a>
+    <a class = "btn btn-danger" href="{% url 'referentiel_delete' referentiel.pk%}">Supprimer Referentiel</a></p>
+
+
+{% endblock %}

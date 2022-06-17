@@ -1,0 +1,9 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block content %}
+    <h1>Supprimer Referentiel</h1>
+    <form action="" method="post"> {% csrf_token %}
+        <p>Êtes vous sûr de vouloir supprimer le Referentiel "{{referentiel.nom_referentiel}}"?</p>
+        <input type="submit" value="Confirmer">
+    </form>
+{% endblock content %}

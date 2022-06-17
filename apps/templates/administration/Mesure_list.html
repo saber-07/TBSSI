@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Mesures {% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Mesures </h2>
+    {% for mesure in object_list %}
+        <h2><a href="{% url 'mesure_detail' mesure.pk%}">{{mesure.nom_mesure}}</h2>
+    {% endfor %}
+{% endblock content %}

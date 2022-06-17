@@ -48,6 +48,17 @@ class Indicateur(models.Model):
         ('Standard', 'Standard'),
     )
 
+    TYPE_MiniGraphe_CHOICES = (
+        ('Lineaire', 'Lineaire'),
+        ('Barres', 'Barres'),
+        ('Camembert', 'Camembert'),
+        ('Beignet', 'Beignet'),
+        ('Radar', 'Radar'),
+
+
+
+    )
+
     Intitule_Indicateur = models.CharField(max_length=100, blank=False, unique=True)
     Objectif = models.CharField(max_length=100, blank=False)
     Domaine = models.CharField(max_length=100, blank=False)
@@ -59,6 +70,8 @@ class Indicateur(models.Model):
     validation_directeur = models.BooleanField(default=False)
 
     type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False)
+    TypeMiniGraphe = models.CharField(max_length=100, default='Barres', choices=TYPE_MiniGraphe_CHOICES, blank=False)
+
     #cle etrangere -> Graphe + TB
     Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
     Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)

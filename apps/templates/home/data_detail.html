@@ -18,9 +18,17 @@
     {% endif %}
     {% endfor %}
     {% elif donnee.Id_Indicateur.type_donnees == "Application" %}
-    <h3> Application : </h3>
+    {% for donapp in ListeDonApplications %}
+    {% if donapp.pk == donnee.pk %}
+    <h3> Application : {{donapp.application}}</h3>
+    {% endif %}
+    {% endfor %}
     {% elif donnee.Id_Indicateur.type_donnees == "Mesure" %}
-    <h3> Mesure : </h3>
+    {% for donmes in ListeDonMesures %}
+    {% if donmes.pk == donnee.pk %}
+    <h3> Mesure : {{donmes.mesure}}</h3>
+     {% endif %}
+     {% endfor %}
     {% endif %}
 
 
@@ -42,8 +50,18 @@
     <p><a class = "btn btn-light" href="{% url 'data_mesure_update' donnee.pk%}">+ Modifier donnée</a>
       <a class = "btn btn-danger" href="{% url 'data_mesure_delete' donnee.pk%}">+ Supprimer donnée</a></p>
 
-
+    {% else %}
+    <p><a class = "btn btn-light" href="{% url 'data_update' donnee.pk%}">+ Modifier donnée</a>
+        <a class = "btn btn-danger" href="{% url 'data_delete' donnee.pk%}">+ Supprimer donnée</a></p>
 
 
     {% endif %}
+
+    <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' donnee.Id_Indicateur.Id_TB.pk%}">Revenir au tableau de bord</a> 
+
+
+
+
+
+    
 {% endblock content %}

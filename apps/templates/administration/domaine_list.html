@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Domaines{% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Domaines </h2>
+    {% for domaine in object_list %}
+        <h2><a href="{% url 'domaine_detail' domaine.pk%}">{{domaine.nom_domaine}}</h2>
+    {% endfor %}
+{% endblock content %}
