@@ -241,6 +241,7 @@ class IndicateurUpdateView(PermissionRequiredMixin ,UpdateView):
     model = Indicateur
     template_name = 'home/indicateur_edit.html'
     permission_required = "home.change_indicateur"
+    return_403=True
     fields = ['Intitule_Indicateur', 'Objectif', 'Domaine' , 'type_donnees' , 'Type', 'Methode_calcul' , 'Source' , 'Periodicite','Id_Graphe', 'TypeMiniGraphe', 'Id_TB']
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurUpdateView, self).get_context_data(*args,**kwargs)
@@ -257,6 +258,7 @@ class IndicateurDeleteView(PermissionRequiredMixin ,DeleteView):
     model = Indicateur
     template_name = 'home/indicateur_delete.html'
     permission_required = "home.delete_indicateur"
+    return_403=True
     success_url = reverse_lazy('liste_indicateurs')
     def get_context_data(self,*args, **kwargs):
         context = super(IndicateurDeleteView, self).get_context_data(*args,**kwargs)
@@ -410,6 +412,7 @@ class DataDeleteView(PermissionRequiredMixin, DeleteView):
     model = Donnee
     template_name = 'home/data_delete.html'
     permission_required = "home.delete_donnee"
+    return_403=True
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataDeleteView, self).get_context_data(*args,**kwargs)
@@ -426,6 +429,8 @@ class DataFilialeDeleteView(PermissionRequiredMixin, DeleteView):
     model = DonneeFiliale
     template_name = 'home/data_delete.html'
     permission_required = "home.delete_donnee"
+    return_403=True
+
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataFilialeDeleteView, self).get_context_data(*args,**kwargs)
@@ -442,6 +447,7 @@ class DataAppDeleteView(PermissionRequiredMixin, DeleteView):
     model = DonneeApplication
     template_name = 'home/data_delete.html'
     permission_required = "home.delete_donneeapplication"
+    return_403=True
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataAppDeleteView, self).get_context_data(*args,**kwargs)
@@ -458,6 +464,7 @@ class DataMesureDeleteView(PermissionRequiredMixin, DeleteView):
     model = DonneeMesure
     template_name = 'home/data_delete.html'
     permission_required = "home.delete_donneemesure"
+    return_403=True
     success_url = reverse_lazy('liste_donnees')
     def get_context_data(self,*args, **kwargs):
         context = super(DataMesureDeleteView, self).get_context_data(*args,**kwargs)
@@ -473,6 +480,7 @@ class DataUpdateView(PermissionRequiredMixin, UpdateView):
     model = Donnee
     template_name = 'home/data_update.html'
     permission_required = "home.change_donnee"
+    return_403=True
     fields = ['Date','Valeur']
     def get_context_data(self,*args, **kwargs):
         context = super(DataUpdateView, self).get_context_data(*args,**kwargs)
@@ -489,6 +497,7 @@ class DataFilialeUpdateView(PermissionRequiredMixin, UpdateView):
     model = DonneeFiliale
     template_name = 'home/data_update.html'
     permission_required = "home.change_donneefiliale"
+    return_403=True
     fields = ['Date','Valeur','Id_Indicateur', 'filiale']
     def get_context_data(self,*args, **kwargs):
         context = super(DataFilialeUpdateView, self).get_context_data(*args,**kwargs)
@@ -505,6 +514,7 @@ class DataAppUpdateView(PermissionRequiredMixin, UpdateView):
     model = DonneeApplication
     template_name = 'home/data_update.html'
     permission_required = "home.change_donneeapplication"
+    return_403=True
     fields = ['Date','Valeur','Id_Indicateur', 'application']
     def get_context_data(self,*args, **kwargs):
         context = super(DataAppUpdateView, self).get_context_data(*args,**kwargs)
@@ -521,6 +531,7 @@ class DataMesureUpdateView(PermissionRequiredMixin, UpdateView):
     model = DonneeMesure
     template_name = 'home/data_update.html'
     permission_required = "home.change_donneemesure"
+    return_403=True
     fields = ['Date','Valeur','Id_Indicateur', 'mesure']
     def get_context_data(self,*args, **kwargs):
         context = super(DataMesureUpdateView, self).get_context_data(*args,**kwargs)

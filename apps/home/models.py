@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser, Application, Filiale, Mesure, Departement
@@ -69,12 +70,12 @@ class Indicateur(models.Model):
     validation_chef_dep = models.BooleanField(default=False)
     validation_directeur = models.BooleanField(default=False)
 
-    type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False)
-    TypeMiniGraphe = models.CharField(max_length=100, default='Barres', choices=TYPE_MiniGraphe_CHOICES, blank=False)
+    type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False,verbose_name='Type Données')
+    TypeMiniGraphe = models.CharField(max_length=100, default='Barres', choices=TYPE_MiniGraphe_CHOICES, blank=False,verbose_name='Type Mini Graphe')
 
     #cle etrangere -> Graphe + TB
-    Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
-    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)
+    Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False, verbose_name='Graphe Bilan')
+    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE, verbose_name='Tableau de bord')
 
 
     def __str__(self):
