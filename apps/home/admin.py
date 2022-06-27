@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TB, Indicateur, Interpretation, Graphe, Donnee, DonneeFilliale
+from .models import TB, Indicateur, Interpretation, Graphe, Donnee, DonneeFiliale
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
 
@@ -94,7 +94,7 @@ class IndicateurAdmin(GuardedModelAdmin):
         return self.has_permission(request, obj, 'delete')
 
 
-@admin.register(DonneeFilliale)
+@admin.register(DonneeFiliale)
 class IndicateurAdmin(GuardedModelAdmin):
     list_display = ('Valeur',)
 

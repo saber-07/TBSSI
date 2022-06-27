@@ -1,1 +1,9 @@
 {% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block content %}
+    <h1>Supprimer le Departement</h1>
+    <form action="" method="post"> {% csrf_token %}
+        <p>Êtes vous sûr de vouloir supprimer le département "{{departement.nom_dep}}"?</p>
+        <input type="submit" value="Confirmer">
+    </form>
+{% endblock content %}

@@ -1,0 +1,80 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Ajouter Mesure {% endblock title%}
+
+{% block content %} 
+
+<style>
+
+
+    form > label {
+        text-align: center;
+        font-size: 5em;
+        box-sizing: border-box;
+        width:200%;
+        
+    }
+
+
+    input{
+    
+
+      width : 50%;
+      border-radius: 4px;
+      border: 2px solid #1c709b;
+      box-sizing: border-box;
+      padding : 5px 20px;
+      margin : 8px 0;
+      
+
+    
+    }
+    
+    input[type=submit]{
+        
+        text-align: center;
+        padding : 5px 1px;
+
+    }
+    input[type=text]{
+        font-size: 1em;
+        width: 40%;
+    }
+    
+    select{
+        font-size:1em;
+        margin : 40px 40px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border: 2px solid #1c709b;
+
+
+
+    }
+    
+
+
+    
+    
+       </style>
+
+    
+       <div class="col-lg-7">
+        <div class = "card card-chart">
+            <div class="card-header">
+                <h2 style= "color: #1d8cf8;" class="card-title"> Ajouter Mesure </h2>
+              </div>
+            <div style= "height: auto;" class = "card-body">
+                
+                    <form action="" method="post"> {% csrf_token %}
+                    {{form.as_p}}
+                    <br>
+    
+                </div>
+    
+            </div>
+        </div>
+    
+                    <input class= "btn btn-info" type="submit" value="Ajouter">
+                </form>
+{% endblock content %}

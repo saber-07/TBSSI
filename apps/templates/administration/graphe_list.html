@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Graphes{% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Graphes </h2>
+    {% for graphe in object_list %}
+        <h2><a href="{% url 'graphe_detail' graphe.pk%}">{{graphe.id}}</h2>
+    {% endfor %}
+{% endblock content %}

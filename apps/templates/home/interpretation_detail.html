@@ -26,16 +26,44 @@
 
 </div>
 
+{% if interpretation.validation_directeur and interpretation.validation_chef_dep  %}
+
+      <div style= "text-align:right;width: 80%; height: auto;" class = "card-body">
+        <h3><a style= "color: green;" href="">Validé</h3></a>
+
+        <h1> <i style="color:#23DC3D;" class="tim-icons icon-check-2"></i> <h2>
+       
+          
+
+  
+  </div>
+
+  {% elif interpretation.validation_chef_dep %}
+  <div style= "text-align:right;width: 80%; height: auto;" class = "card-body">
+    <h3><a style= "color: green;" href="">Validé par le chef département</h3></a>
+
+    <h1> <i style="color:#23DC3D;" class="tim-icons icon-check-2"></i> <h2>
+   
+      
+
+
+</div>
+
+{% endif%}
+
+
+
 {% if IngenieurGroup in user.groups.all %}
 <p><a class = "btn btn-light" href="{% url 'interpretation_edit' interpretation.pk%}">Modifier Interpretation</a>
 
-  <a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' interpretation.Id_Indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
 
 
 </p>
 {% else %}
 
-{% if DirecteurGroup in user.groups.all%}
+
+
+{% if DirecteurGroup in user.groups.all and not interpretation.validation_directeur%}
 <p>
  
   <a class = "btn btn-success" href="{% url 'valider-inter' interpretation.pk %}">Valider interpretation</a>
@@ -43,8 +71,9 @@
   <a class = "btn btn-danger" href="{% url 'refus-inter' interpretation.pk %}">Refuser interpretation</a>
 
 
+
 </p>
-{% elif ChefDeptGroup in user.groups.all %}
+{% elif ChefDeptGroup in user.groups.all and not interpretation.validation_chef_dep%}
 <p>
  
   <a class = "btn btn-success" href="{% url 'valider-inter-bis' interpretation.pk %}">Valider interpretation</a>
@@ -52,11 +81,15 @@
   <a class = "btn btn-danger" href="{% url 'refus-inter' interpretation.pk %}">Refuser interpretation</a>
 
 
+
 </p>
 
 
 {% endif %}
 
 {% endif %}
+
+<a class = "btn btn-alert btn-simple" href="{% url 'tbb_detail' interpretation.Id_Indicateur.Id_TB.pk%}">Revenir au tableau de bord</a>
+
 
 {% endblock content %}

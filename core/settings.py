@@ -10,8 +10,8 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG = True
+#DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = False
 # load production server from .env
 ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1', config('SERVER', default='127.0.0.1')]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + config('SERVER', default='127.0.0.1')]
@@ -133,6 +133,9 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
+GUARDIAN_RENDER_403 = True
+
+
 #############################################################
 #############################################################
 
@@ -141,5 +144,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'sonalgaz.elit.2022@gmail.com'
-EMAIL_HOST_PASSWORD = 'izqefpjnteuvxvtn'
+EMAIL_HOST_USER = 'tbssielit@gmail.com'
+EMAIL_HOST_PASSWORD = 'cipvvqzppndnjxxv'

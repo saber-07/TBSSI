@@ -1,0 +1,10 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} Liste des Catégories {% endblock title%}
+{% block content %}
+    
+    <h2> Liste des Catégories </h2>
+    {% for categorie in object_list %}
+        <h2><a href="{% url 'categorie_detail' categorie.pk%}">{{categorie.nom_categorie}}</h2>
+    {% endfor %}
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{domaine.nom_domaine}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Domaine {{domaine.nom_domaine}}</a></h1>
+    <h3>Nom Domaine : {{domaine.nom_domaine}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'domaine_edit' domaine.pk%}">Modifier Domaine</a>
+    <a class = "btn btn-danger" href="{% url 'domaine_delete' domaine.pk%}">Supprimer Domaine</a></p>
+
+
+{% endblock %}

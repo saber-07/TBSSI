@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
 from apps.administration.models import CustomUser, Application, Filiale, Mesure, Departement
@@ -48,6 +49,20 @@ class Indicateur(models.Model):
         ('Standard', 'Standard'),
     )
 
+<<<<<<< HEAD
+=======
+    TYPE_MiniGraphe_CHOICES = (
+        ('Lineaire', 'Lineaire'),
+        ('Barres', 'Barres'),
+        ('Camembert', 'Camembert'),
+        ('Beignet', 'Beignet'),
+        ('Radar', 'Radar'),
+
+
+
+    )
+
+>>>>>>> master
     Intitule_Indicateur = models.CharField(max_length=100, blank=False, unique=True)
     Objectif = models.CharField(max_length=100, blank=False)
     Domaine = models.CharField(max_length=100, blank=False)
@@ -58,10 +73,16 @@ class Indicateur(models.Model):
     validation_chef_dep = models.BooleanField(default=False)
     validation_directeur = models.BooleanField(default=False)
 
+<<<<<<< HEAD
     type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False)
+=======
+    type_donnees = models.CharField(max_length=100, default='Standard', choices=TYPE_DONNEES_CHOICES, blank=False,verbose_name='Type Données')
+    TypeMiniGraphe = models.CharField(max_length=100, default='Barres', choices=TYPE_MiniGraphe_CHOICES, blank=False,verbose_name='Type Mini Graphe')
+
+>>>>>>> master
     #cle etrangere -> Graphe + TB
-    Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False)
-    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE)
+    Id_Graphe = models.ForeignKey('Graphe', on_delete=models.CASCADE, blank=False, verbose_name='Graphe Bilan')
+    Id_TB = models.ForeignKey(TB, on_delete=models.CASCADE, verbose_name='Tableau de bord')
 
 
     def __str__(self):
@@ -106,7 +127,7 @@ class Donnee(models.Model):
 class DonneeApplication(Donnee):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
 
-class DonneeFilliale(Donnee):
+class DonneeFiliale(Donnee):
     filiale = models.ForeignKey(Filiale, on_delete=models.CASCADE)
 
 class DonneeMesure(Donnee):
@@ -166,7 +187,11 @@ def set_permission(sender, instance, **kwargs):
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
+<<<<<<< HEAD
         "change_donnee",  # The permission we want to assign.
+=======
+        "change_donneeapplication",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
@@ -175,25 +200,45 @@ def set_permission(sender, instance, **kwargs):
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
+<<<<<<< HEAD
         "delete_donnee",  # The permission we want to assign.
+=======
+        "delete_donneeapplication",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
 
+<<<<<<< HEAD
 @receiver(post_save, sender=DonneeFilliale)
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
         "change_donnee",  # The permission we want to assign.
+=======
+@receiver(post_save, sender=DonneeFiliale)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "change_donneefiliale",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
 
+<<<<<<< HEAD
 @receiver(post_save, sender=DonneeFilliale)
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
         "delete_donnee",  # The permission we want to assign.
+=======
+@receiver(post_save, sender=DonneeFiliale)
+def set_permission(sender, instance, **kwargs):
+    """Add object specific permission to the author"""
+    assign_perm(
+        "delete_donneefiliale",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
@@ -202,7 +247,11 @@ def set_permission(sender, instance, **kwargs):
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
+<<<<<<< HEAD
         "change_donnee",  # The permission we want to assign.
+=======
+        "change_donneemesure",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )
@@ -211,7 +260,11 @@ def set_permission(sender, instance, **kwargs):
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
+<<<<<<< HEAD
         "delete_donnee",  # The permission we want to assign.
+=======
+        "delete_donneemesure",  # The permission we want to assign.
+>>>>>>> master
         instance.user,  # The user object.
         instance  # The object we want to assign the permission to.
    )

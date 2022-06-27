@@ -11,7 +11,7 @@
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header">
-        <h4 class="card-title"> Liste des Indicateurs </h4>
+        <h2 class="card-title"> Liste des Indicateurs </h2>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -36,13 +36,15 @@
                 <th>
                   Periodicité de calcul
                 </th>
+              
                 <th>
-                  Source de données
+                  Type de données
                 </th>
+
                 <th>
                   Presentation Graphique
                 </th>
-                <th class="text-center">
+                <th>
                   Tableau de Bord
                 </th>
                 <th class="text-center">
@@ -78,13 +80,14 @@
                 <td>
                     {{ ind.Periodicite }}
                 </td>
+              
                 <td>
-                    {{ ind.Source }}
+                  {{ ind.type_donnees }}
+              </td>
+                <td>
+                  {{ ind.TypeMiniGraphe}}
                 </td>
                 <td>
-                  {{ ind.Id_Graphe}}
-                </td>
-                <td class="text-center">
                   {{ ind.Id_TB}}
                 </td>
 

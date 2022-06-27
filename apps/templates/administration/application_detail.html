@@ -1,0 +1,22 @@
+{% extends 'administration/layouts/baseAdmin.html' %}
+
+{% block title %} {{application.nom_app}} {% endblock title %}
+
+{% block content %}
+
+<div class = "card card-chart">
+    <div style = "height: 270px;" class = "card-body">
+    <h1><a style= "color: #1d8cf8;" href="">Application {{application.nom_app}}</a></h1>
+    <h3>Nom Application : {{application.nom_app}}</h3>
+    
+
+
+    </div>
+
+</div>
+
+<p><a class = "btn btn-light" href="{% url 'application_edit' application.pk%}">Modifier Application</a>
+    <a class = "btn btn-danger" href="{% url 'application_delete' application.pk%}">Supprimer Application</a></p>
+
+
+{% endblock %}
