@@ -141,7 +141,7 @@ class Interpretation(models.Model):
         return reverse("interpretation_detail", kwargs={"pk": self.pk})
 
 
-@receiver(post_save, sender=Indicateur)
+@receiver(post_save, sender=Indicateur, weak=False)
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
@@ -150,7 +150,7 @@ def set_permission(sender, instance, **kwargs):
         instance  # The object we want to assign the permission to.
     )
 
-@receiver(post_save, sender=Indicateur)
+@receiver(post_save, sender=Indicateur, weak=False)
 def set_permission(sender, instance, **kwargs):
     """Add object specific permission to the author"""
     assign_perm(
