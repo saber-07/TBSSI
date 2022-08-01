@@ -22,8 +22,7 @@
 ```bash
 $ # Get the code
 $ git clone https://github.com/saber-07/TBSSI_.git
-$ cd django-black-dashboard
-$
+
 $ # Virtualenv modules installation (Unix based systems)
 $ virtualenv env
 $ source env/bin/activate
@@ -53,7 +52,7 @@ $ # Access the web app in browser: http://127.0.0.1:8000/
 
 ## ✨  Structure de base du code 
 
-The project is coded using a simple and intuitive structure presented below:
+Le projet est codé selon une structure simple et intuitive présentée ci-dessous :
 
 ```bash
 < PROJECT ROOT >
@@ -107,16 +106,9 @@ The project is coded using a simple and intuitive structure presented below:
    |-- ************************************************************************
 ```
 
-<br />
 
-> The bootstrap flow
 
-- Django bootstrapper `manage.py` uses `core/settings.py` as the main configuration file
-- `core/settings.py` loads the app magic from `.env` file
-- Redirect the guest users to Login page
-- Unlock the pages served by *app* node for authenticated users
 
-<br />
 
 
 
@@ -124,12 +116,13 @@ The project is coded using a simple and intuitive structure presented below:
 
 .
 
+## ✨   Technologies utilisés
 
 
 ### [ChartJs](https://www.chartjs.org/)
 ---
 
-Chart.js is a free, open-source JavaScript library for data visualization, which supports eight chart types: bar, line, area, pie, bubble, radar, polar, and scatter.
+Chart.js est une bibliothèque JavaScript gratuite et open source pour la visualisation de données, qui prend en charge huit types de graphiques : barres, lignes, aires, secteurs, bulles, radar, polaires et nuages de points.
 
 > Install using pip
 
@@ -142,7 +135,7 @@ $ pip install django-chartjs
 
 ---
 
-django-guardian is an implementation of per object permissions on top of Django's authorization backend
+django-guardian est une implémentation des autorisations par objet en plus du backend d'autorisation de Django
 
 
 > Install using pip
